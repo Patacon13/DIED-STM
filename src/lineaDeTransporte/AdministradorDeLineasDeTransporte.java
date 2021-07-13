@@ -19,29 +19,29 @@ public class AdministradorDeLineasDeTransporte {
 		return lineas.add(linea);  
 	}
 	
-	public boolean modificarLineaDeTransporte(LineaDeTransporte linea,String nombre, Color color, EstadoLinea estado) {
+	public boolean modifyLineaDeTransporte(LineaDeTransporte linea,String nombre, Color color, EstadoLinea estado) {
 		linea.nombre= nombre;
 		linea.color= color;
 		linea.estado=estado;
 		return true; 
 	}
 	
-	public boolean borrarLineaDeTransporte(LineaDeTransporte linea) {
+	public boolean deleteLineaDeTransporte(LineaDeTransporte linea) {
 		return lineas.remove(linea); 
 	}
 	
-	public List<LineaDeTransporte> buscarLineaDeTransporte(String nombre) {
+	public List<LineaDeTransporte> searchLineaDeTransporte(String nombre) {
 		return lineas.stream().
 					  filter(linea -> linea.nombre.compareTo(nombre) == 0).
 					  collect(Collectors.toList());
 	}
-	public List<LineaDeTransporte> buscarLineaDeTransporte(Color color) {
+	public List<LineaDeTransporte> searchLineaDeTransporte(Color color) {
 		return lineas.stream().
 					  filter(linea -> linea.color.equals(color)).
 					  collect(Collectors.toList());
 	}
 	
-	public List<LineaDeTransporte> buscarLineaDeTransporte(EstadoLinea estado) {
+	public List<LineaDeTransporte> searchLineaDeTransporte(EstadoLinea estado) {
 		return lineas.stream().
 					  filter(linea -> linea.estado.compareTo(estado) == 0).
 					  collect(Collectors.toList());
