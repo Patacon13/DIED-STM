@@ -10,7 +10,7 @@ public class AdministradorDeLineasDeTransporte {
 	public ArrayList<LineaDeTransporte> lineas = new ArrayList<>(); 
 	
 	public LineaDeTransporte crearLineaDeTransporte(String nombre, Color color, EstadoLinea estado) {
-		LineaDeTransporte linea = new LineaDeTransporte();
+		LineaDeTransporte linea = new LineaDeTransporte(nombre,color,estado);
 		addlinea(linea);
 		return linea;
 	}
@@ -26,7 +26,7 @@ public class AdministradorDeLineasDeTransporte {
 		return true; 
 	}
 	
-	public boolean borraLineaDeTransporte(LineaDeTransporte linea) {
+	public boolean borrarLineaDeTransporte(LineaDeTransporte linea) {
 		return lineas.remove(linea); 
 	}
 	
