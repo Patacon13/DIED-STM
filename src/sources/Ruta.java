@@ -6,11 +6,11 @@ public class Ruta {
 	private Double kilometros;
 	private Integer duracion;
 	private Integer cantMax;
-	private Estado estado;
+	private EstadoLinea estado;
 	private Double costo;
 	
 	
-	public Ruta(Estacion origen, Estacion destino, Double kilometros, Integer duracion, Integer cantMax, Estado estado,
+	public Ruta(Estacion origen, Estacion destino, Double kilometros, Integer duracion, Integer cantMax, EstadoLinea estado,
 			Double costo) {
 		super();
 		this.origen = origen;
@@ -48,7 +48,7 @@ public class Ruta {
 	}
 
 
-	public Estado getEstado() {
+	public EstadoLinea getEstado() {
 		return estado;
 	}
 

@@ -1,5 +1,5 @@
 package sources;
 
-public enum Estado {
+public enum EstadoLinea {
 	ACTIVO, INACTIVO;
 }
