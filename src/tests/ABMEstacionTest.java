@@ -41,6 +41,17 @@ class ABMEstacionTest {
 		
 	}
 	
+	void modifyTest() {
+		AdministradorDeEstaciones adminEstaciones = new AdministradorDeEstaciones();
+		Estacion e4 = adminEstaciones.createEstacion(Integer.valueOf(4), "Rosas", LocalTime.of(06, 55), LocalTime.of(20, 55), EstadoEstacion.OPERATIVA);
+				
+		assertEquals(adminEstaciones.searchEstacion(4), e4);
+		
+		adminEstaciones.modifyEstacion(e4, 4, "Alberdi", LocalTime.of(04, 56), LocalTime.of(22, 15), EstadoEstacion.EN_MANTENIMIENTO);
+
+		assertEquals(adminEstaciones.searchEstacion(4), adminEstaciones.searchEstacion("Alberdi"));
+	}
+	
 	@Test
 	void Deletetest() {
 		AdministradorDeEstaciones adminEstaciones = new AdministradorDeEstaciones();
@@ -50,7 +61,6 @@ class ABMEstacionTest {
 		
 		adminEstaciones.deleteEstacion(e4);
 
-		System.out.println(adminEstaciones.estaciones);
 		assertEquals(adminEstaciones.searchEstacion(4), null);
 	}
 	
