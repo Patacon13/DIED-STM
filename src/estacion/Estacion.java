@@ -1,15 +1,15 @@
 package estacion;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Estacion {
 	protected Integer id;
 	protected String nombre;
-	protected LocalDate horarioApertura;
-	protected LocalDate horarioCierre;
+	protected LocalTime horarioApertura;
+	protected LocalTime horarioCierre;
 	protected EstadoEstacion estado;
 	
-	protected Estacion(Integer id, String nombre, LocalDate horarioApertura, LocalDate horarioCierre, EstadoEstacion estado) {
+	protected Estacion(Integer id, String nombre, LocalTime horarioApertura, LocalTime horarioCierre, EstadoEstacion estado) {
 		this.id = id;
 		this.nombre = nombre;
 		this.horarioApertura = horarioApertura;
