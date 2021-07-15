@@ -1,5 +1,7 @@
 package sources;
 
+import estacion.Estacion;
+
 public class Ruta {
 	private Estacion origen;
 	private Estacion destino;
