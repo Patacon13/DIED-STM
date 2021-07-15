@@ -31,9 +31,16 @@ observaciones varchar(512)
 CREATE TABLE lineadetransporte(
 id integer primary key,
 nombre varchar(256),
-color varchar(40),
-estado varchar(20),
-listaestaciones varchar(512)
+color_rojo integer,
+color_verde integer,
+color_azul integer,
+estado varchar(20)
+);
+
+CREATE TABLE listaestacioneslinea(
+linea integer references lineadetransporte(id),
+ruta integer references ruta(id),
+primary key(linea, ruta)
 );
 
 CREATE TABLE venta(
@@ -43,6 +50,11 @@ nombre_cliente varchar(256),
 fecha_venta date,
 origen references estacion(nombre),
 destino references estacion(nombre),
-costo_boleto numeric,
-camino_a_seguir varchar(512)
+costo_boleto numeric
+);
+
+CREATE TABLE caminoaseguir(
+nro_boleto integer references venta(nro_boleto),
+ruta integer references ruta(id),
+primary key(nro_boleto, ruta)
 );
