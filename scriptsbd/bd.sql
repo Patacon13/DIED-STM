@@ -6,8 +6,8 @@ email varchar(256)
 
 CREATE TABLE estacion (
 nombre varchar(64) primary key,
-horario_apertura varchar(12),
-horario_cierre varchar(12)
+horario_apertura time,
+horario_cierre time
 );
 
 CREATE TABLE ruta(
