@@ -12,7 +12,7 @@ class ABMLineaDeTransporte {
 
 	
 	@Test
-	void SearchNombreTest() {
+	void searchNombreTest() {
 		AdministradorDeLineasDeTransporte adminLineas = new AdministradorDeLineasDeTransporte();
 		ArrayList<LineaDeTransporte> l=new ArrayList<LineaDeTransporte>();
 		LineaDeTransporte l1 = adminLineas.crearLineaDeTransporte("Linea 1",Color.RED, EstadoLinea.ACTIVO);
@@ -30,7 +30,7 @@ class ABMLineaDeTransporte {
 	}
 	
 	@Test
-	void SearchColorTest() {
+	void searchColorTest() {
 		AdministradorDeLineasDeTransporte adminLineas = new AdministradorDeLineasDeTransporte();
 		ArrayList<LineaDeTransporte> l=new ArrayList<LineaDeTransporte>();
 		LineaDeTransporte l1 = adminLineas.crearLineaDeTransporte("Linea 1",Color.RED, EstadoLinea.ACTIVO);
@@ -59,7 +59,7 @@ class ABMLineaDeTransporte {
 	}
 	
 	@Test
-	void Deletetest() {
+	void deleteTest() {
 		AdministradorDeLineasDeTransporte adminLineas = new AdministradorDeLineasDeTransporte();
 		ArrayList<LineaDeTransporte> l = new ArrayList<LineaDeTransporte>();
 		LineaDeTransporte l1 = adminLineas.crearLineaDeTransporte("Linea 1",Color.RED, EstadoLinea.ACTIVO);
