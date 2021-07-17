@@ -34,10 +34,9 @@ public class AdministradorDeEstaciones {
 		return estaciones.remove(e); //FIXME: debera revisar si pudo ser correctamente insertado en la base de datos
 	}
 	
-	public List<Estacion> searchEstacion(Integer id) {
-		return estaciones.stream().
-				  filter(estacion -> estacion.id.compareTo(id) == 0).
-				  collect(Collectors.toList());
+	public Estacion searchEstacion(Integer id) {
+		for(Estacion e : estaciones) if(e.id.equals(id)) return e;
+		return null;
 	}
 	public List<Estacion> searchEstacion(String nombre) {
 		return estaciones.stream().

@@ -5,16 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import sources.Trayecto;
+
 
 public class AdministradorDeLineasDeTransporte {
 	public ArrayList<LineaDeTransporte> lineas = new ArrayList<>(); 
 	
-	public LineaDeTransporte crearLineaDeTransporte(String nombre, Color color, EstadoLinea estado) {
-		LineaDeTransporte linea = new LineaDeTransporte(nombre,color,estado);
+	public LineaDeTransporte crearLineaDeTransporte(String nombre, Color color, EstadoLinea estado, Trayecto trayecto) {
+		LineaDeTransporte linea = new LineaDeTransporte(nombre,color,estado, trayecto);
 		addlinea(linea);
 		return linea;
 	}
-	
+		
 	public boolean addlinea(LineaDeTransporte linea) {
 		return lineas.add(linea);  
 	}

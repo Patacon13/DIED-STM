@@ -16,4 +16,9 @@ public class Estacion {
 		this.horarioCierre = horarioCierre;
 		this.estado = estado;
 	}
+	
+	@Override
+	public String toString() {
+		return id.toString();
+	}
 }

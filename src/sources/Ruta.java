@@ -30,16 +30,13 @@ public class Ruta {
 		return origen;
 	}
 
-
-	public Estacion getDestino() {
-		return destino;
-	}
-
-
 	public Double getKilometros() {
 		return kilometros;
 	}
-
+	
+	public Estacion getDestino() {
+		return destino;
+	}
 
 	public Integer getDuracion() {
 		return duracion;
