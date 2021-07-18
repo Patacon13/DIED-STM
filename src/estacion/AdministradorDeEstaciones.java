@@ -1,9 +1,13 @@
 package estacion;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import tareaDeMantenimiento.AdministradorDeTareas;
+
 
 
 public class AdministradorDeEstaciones {
@@ -43,5 +47,19 @@ public class AdministradorDeEstaciones {
 		return estaciones.stream().
 				  filter(estacion -> estacion.nombre.compareTo(nombre) == 0).
 				  collect(Collectors.toList());
+	}
+	
+	public void modifyState(Estacion e, AdministradorDeTareas a) {
+		if(e.estado==EstadoEstacion.OPERATIVA) {
+			a.createTareaDeMantenimiento(LocalDate.now(),null,"",e);
+			e.estado = EstadoEstacion.EN_MANTENIMIENTO;
+		}
+		else {
+			if(e.estado==EstadoEstacion.EN_MANTENIMIENTO) {
+				a.registrarFin(e);
+				e.estado = EstadoEstacion.OPERATIVA;
+			}
+			
+		}
 	}
 }
