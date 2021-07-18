@@ -2,6 +2,8 @@ package sources;
 
 import java.util.ArrayList;
 
+import lineaDeTransporte.LineaDeTransporte;
+
 public class Trayecto {
 private ArrayList<Ruta> rutas; //tramos del trayecto
 private LineaDeTransporte lineaDeTransporte; // a que linea de transporte pertenece el trayecto, aunque en lineaDeTransporte deberia estar

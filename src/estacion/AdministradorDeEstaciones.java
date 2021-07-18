@@ -2,6 +2,8 @@ package estacion;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class AdministradorDeEstaciones {
@@ -32,14 +34,14 @@ public class AdministradorDeEstaciones {
 		return estaciones.remove(e); //FIXME: debera revisar si pudo ser correctamente insertado en la base de datos
 	}
 	
-	public Estacion searchEstacion(Integer id) {
-		for(Estacion e : estaciones) 
-			if(e.id.compareTo(id) == 0) return e;
-		return null; //FIXME: Se podria aplicar optional. Pero como es un boceto sin bases de datos lo hice con null
+	public List<Estacion> searchEstacion(Integer id) {
+		return estaciones.stream().
+				  filter(estacion -> estacion.id.compareTo(id) == 0).
+				  collect(Collectors.toList());
 	}
-	public Estacion searchEstacion(String nombre) {
-		for(Estacion e : estaciones) 
-			if(e.nombre.compareTo(nombre) == 0) return e;
-		return null; //FIXME: Se podria aplicar optional. Pero como es un boceto sin bases de datos lo hice con null
+	public List<Estacion> searchEstacion(String nombre) {
+		return estaciones.stream().
+				  filter(estacion -> estacion.nombre.compareTo(nombre) == 0).
+				  collect(Collectors.toList());
 	}
 }
