@@ -29,6 +29,14 @@ public class LineaDeTransporte {
 		return trayecto.costoAAdyacente(origen);
 	}
 	
+	public Double distanciaAAdyacente(Estacion origen) {
+		return trayecto.distanciaAAdyacente(origen);
+	}
+	
+	public Integer duracionAAdyacente(Estacion origen) {
+		return trayecto.duracionAAdyacente(origen);
+	}
+	
 	public Trayecto getTrayecto() {
 		return trayecto;
 	}

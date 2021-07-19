@@ -46,13 +46,8 @@ public class AdministradorDeCaminos {
 		return recorridos.get(destino);
 	}
 		
-	private void init(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen) {
-		grafo = new HashMap<>();
-		for(int i = 0; i<adminEstaciones.estaciones.size(); i++) {
-			visitado.add(Boolean.FALSE);
-			costos.add(Double.valueOf(Double.MAX_VALUE));
-			padre.add(i);
-		}
+	
+	private void initMatriz(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Pedido datoQueRequiere) {
 		for(Estacion estacionA : adminEstaciones.estaciones) {
 			grafo.put(estacionA, new HashMap<>());
 			for(Estacion estacionB : adminEstaciones.estaciones) {
@@ -61,14 +56,38 @@ public class AdministradorDeCaminos {
 				else {
 					for(LineaDeTransporte linea : adminLineas.lineas) {
 						if(linea.contieneA(estacionA) && linea.llegaA(estacionA).equals(estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
-							if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
-							else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
+							switch(datoQueRequiere) {
+							case MASRAPIDO:
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.duracionAAdyacente(estacionA).doubleValue());
+								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.duracionAAdyacente(estacionA).doubleValue());
+								break;
+							case MENORDISTANCIA:
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(estacionA));
+								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(estacionA));
+								break;
+							default:
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
+								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
+							}
 						}
 					}
 				}
 				
 			}
 			
+		}
+	}
+	
+	
+	private void init(AdministradorDeEstaciones adminEstaciones, Estacion origen) {
+		padre = new ArrayList<>();
+		costos = new ArrayList<>();
+		visitado = new ArrayList<>();
+		grafo = new HashMap<>();
+		for(int i = 0; i<adminEstaciones.estaciones.size(); i++) {
+			visitado.add(Boolean.FALSE);
+			costos.add(Double.valueOf(Double.MAX_VALUE));
+			padre.add(i);
 		}
 		costos.set(origen.id, Double.valueOf(0));
 	}
@@ -86,11 +105,6 @@ public class AdministradorDeCaminos {
 	}
 	
 	private void dijkstra(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) {
-		padre = new ArrayList<>();
-		costos = new ArrayList<>();
-		visitado = new ArrayList<>();
-		grafo = new HashMap<>();
-		init(adminEstaciones, adminLineas, origen);
 		
 		for(Double costo : costos) {
 			int cercanaId = getCercano(costos);
@@ -110,9 +124,13 @@ public class AdministradorDeCaminos {
 		
 	}	
 	
-	public List<Estacion> caminoMasBarato(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) {
+	public List<Estacion> caminoMasBarato(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino, Pedido datoQueRequiere) {
 		Deque<Estacion> retorno = new LinkedList<>();
+		
+		init(adminEstaciones, origen);
+		initMatriz(adminEstaciones, adminLineas, datoQueRequiere);
 		dijkstra(adminEstaciones, adminLineas, origen, destino);
+		
 		Integer iteracion = padre.get(destino.id);
 		retorno.addFirst(destino);
 		while(!iteracion.equals(origen.id)) {

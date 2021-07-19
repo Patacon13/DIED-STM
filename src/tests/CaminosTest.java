@@ -13,6 +13,7 @@ import estacion.AdministradorDeCaminos;
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
 import estacion.EstadoEstacion;
+import estacion.Pedido;
 import lineaDeTransporte.AdministradorDeLineasDeTransporte;
 import lineaDeTransporte.EstadoLinea;
 import sources.Ruta;
@@ -38,18 +39,18 @@ class CaminosTest {
 		ArrayList<Ruta> rutasT1 = new ArrayList<Ruta>();
 		ArrayList<Ruta> rutasT2 = new ArrayList<Ruta>();
 		
-		Ruta e1Ae3 = new Ruta(e1, e3, null, null, null, null, Double.valueOf(10));
-		Ruta e3Ae6 = new Ruta(e3, e6, null, null, null, null, Double.valueOf(10));
-		Ruta e6Ae7 = new Ruta(e6, e7, null, null, null, null, Double.valueOf(10));
-		Ruta e7Ae2 = new Ruta(e7, e2, null, null, null, null, Double.valueOf(10));
+		Ruta e1Ae3 = new Ruta(e1, e3, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
+		Ruta e3Ae6 = new Ruta(e3, e6, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
+		Ruta e6Ae7 = new Ruta(e6, e7, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
+		Ruta e7Ae2 = new Ruta(e7, e2, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
 		rutasT1.add(e1Ae3);
 		rutasT1.add(e3Ae6);
 		rutasT1.add(e6Ae7);
 		rutasT1.add(e7Ae2);
 		
-		Ruta e1Ae4 = new Ruta(e1, e4, null, null, null, null, Double.valueOf(10));
-		Ruta e4Ae5 = new Ruta(e4, e5, null, null, null, null, Double.valueOf(5));
-		Ruta e5Ae2 = new Ruta(e5, e2, null, null, null, null, Double.valueOf(5));
+		Ruta e1Ae4 = new Ruta(e1, e4, Double.valueOf(20), Integer.valueOf(6), null, null, Double.valueOf(10));
+		Ruta e4Ae5 = new Ruta(e4, e5, Double.valueOf(20), Integer.valueOf(6), null, null, Double.valueOf(5));
+		Ruta e5Ae2 = new Ruta(e5, e2, Double.valueOf(20), Integer.valueOf(6), null, null, Double.valueOf(5));
 		rutasT2.add(e1Ae4);
 		rutasT2.add(e4Ae5);
 		rutasT2.add(e5Ae2);
@@ -60,18 +61,22 @@ class CaminosTest {
 		adminLineasDeTransporte.crearLineaDeTransporte("Sol", null, EstadoLinea.ACTIVO, t1);
 		adminLineasDeTransporte.crearLineaDeTransporte("Tierra", null, EstadoLinea.ACTIVO, t2);
 		
-		ArrayList<Estacion> listaEsperada = new ArrayList<>();
-		listaEsperada.add(e1);
-		listaEsperada.add(e4);
-		listaEsperada.add(e5);
+		ArrayList<Estacion> listaUno = new ArrayList<>();
+		listaUno.add(e1);
+		listaUno.add(e3);
+		listaUno.add(e6);
+		listaUno.add(e7);
+		listaUno.add(e2);
 		
-		List<Estacion> esperada = new ArrayList<>();
-		esperada.add(e1);
-		esperada.add(e4);
-		esperada.add(e5);
-		esperada.add(e2);
+		List<Estacion> listaDos = new ArrayList<>();
+		listaDos.add(e1);
+		listaDos.add(e4);
+		listaDos.add(e5);
+		listaDos.add(e2);
 		
-		assertEquals(adminCaminos.caminoMasBarato(adminEstaciones, adminLineasDeTransporte, e1, e2), esperada);
+		assertEquals(adminCaminos.caminoMasBarato(adminEstaciones, adminLineasDeTransporte, e1, e2, Pedido.MASBARATO), listaDos);
+		assertEquals(adminCaminos.caminoMasBarato(adminEstaciones, adminLineasDeTransporte, e1, e2, Pedido.MASRAPIDO), listaDos);
+		assertEquals(adminCaminos.caminoMasBarato(adminEstaciones, adminLineasDeTransporte, e1, e2, Pedido.MENORDISTANCIA), listaUno);
 	}
 	
 }

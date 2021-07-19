@@ -58,6 +58,23 @@ public Double costoAAdyacente(Estacion estacion) {
 	return null;
 }
 
+public Double distanciaAAdyacente(Estacion estacion) {
+	for(Ruta r : rutas) {
+		if(r.getOrigen().equals(estacion)) return r.getKilometros();
+	}
+	return null;
+}
+
+
+public Integer duracionAAdyacente(Estacion estacion) {
+	for(Ruta r : rutas) {
+		if(r.getOrigen().equals(estacion)) return r.getDuracion();
+	}
+	return null;
+}
+
+
+
 }
 
 
