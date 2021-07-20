@@ -6,7 +6,7 @@ import sources.Trayecto;
 
 public class LineaDeTransporte {
 
-	public LineaDeTransporte(String nombre, Color color, EstadoLinea estado, Trayecto trayecto) {
+	public LineaDeTransporte(String nombre, Color color, EstadoTransporte estado, Trayecto trayecto) {
 		this.nombre=nombre;
 		this.color=color;
 		this.estado=estado;
@@ -14,7 +14,7 @@ public class LineaDeTransporte {
 	}
 	protected String nombre;
 	protected Color color; //Se utilizo awt ya que no es para la parte grafica, es solo la definicion de un atributo de la linea.
-	protected EstadoLinea estado;
+	protected EstadoTransporte estado;
 	protected Trayecto trayecto;
 	
 	public boolean contieneA(Estacion estacion) {
@@ -42,6 +42,6 @@ public class LineaDeTransporte {
 	}
 	
 	public boolean estaActiva() {
-		return estado == EstadoLinea.ACTIVO;
+		return estado == EstadoTransporte.ACTIVO;
 	}
 }

@@ -1,5 +1,5 @@
 package lineaDeTransporte;
 
-public enum EstadoLinea {
+public enum EstadoTransporte {
 	ACTIVO, INACTIVO;
 }
