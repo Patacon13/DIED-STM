@@ -39,18 +39,18 @@ class CaminosTest {
 		ArrayList<Ruta> rutasT1 = new ArrayList<Ruta>();
 		ArrayList<Ruta> rutasT2 = new ArrayList<Ruta>();
 		
-		Ruta e1Ae3 = new Ruta(e1, e3, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
-		Ruta e3Ae6 = new Ruta(e3, e6, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
-		Ruta e6Ae7 = new Ruta(e6, e7, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
-		Ruta e7Ae2 = new Ruta(e7, e2, Double.valueOf(3), Integer.valueOf(6), null, null, Double.valueOf(10));
+		Ruta e1Ae3 = new Ruta(e1, e3, Double.valueOf(3), Integer.valueOf(6), null, EstadoLinea.ACTIVO, Double.valueOf(10));
+		Ruta e3Ae6 = new Ruta(e3, e6, Double.valueOf(3), Integer.valueOf(6), null, EstadoLinea.ACTIVO, Double.valueOf(10));
+		Ruta e6Ae7 = new Ruta(e6, e7, Double.valueOf(3), Integer.valueOf(6), null, EstadoLinea.ACTIVO, Double.valueOf(10));
+		Ruta e7Ae2 = new Ruta(e7, e2, Double.valueOf(3), Integer.valueOf(6), null, EstadoLinea.ACTIVO, Double.valueOf(10));
 		rutasT1.add(e1Ae3);
 		rutasT1.add(e3Ae6);
 		rutasT1.add(e6Ae7);
 		rutasT1.add(e7Ae2);
 		
-		Ruta e1Ae4 = new Ruta(e1, e4, Double.valueOf(20), Integer.valueOf(6), null, null, Double.valueOf(10));
-		Ruta e4Ae5 = new Ruta(e4, e5, Double.valueOf(20), Integer.valueOf(6), null, null, Double.valueOf(5));
-		Ruta e5Ae2 = new Ruta(e5, e2, Double.valueOf(20), Integer.valueOf(6), null, null, Double.valueOf(5));
+		Ruta e1Ae4 = new Ruta(e1, e4, Double.valueOf(20), Integer.valueOf(6), null, EstadoLinea.ACTIVO, Double.valueOf(10));
+		Ruta e4Ae5 = new Ruta(e4, e5, Double.valueOf(20), Integer.valueOf(6), null, EstadoLinea.ACTIVO, Double.valueOf(5));
+		Ruta e5Ae2 = new Ruta(e5, e2, Double.valueOf(20), Integer.valueOf(6), null, EstadoLinea.ACTIVO, Double.valueOf(5));
 		rutasT2.add(e1Ae4);
 		rutasT2.add(e4Ae5);
 		rutasT2.add(e5Ae2);

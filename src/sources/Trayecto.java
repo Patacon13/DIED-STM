@@ -41,26 +41,26 @@ public LineaDeTransporte getLineaDeTransporte() {
 }
 
 public boolean contieneA(Estacion estacion) {
-	return rutas.stream().anyMatch(ruta -> ruta.getOrigen().equals(estacion));
+	return rutas.stream().anyMatch(ruta -> ruta.getOrigen().equals(estacion) && ruta.estaActiva());
 }
 
 public Estacion llegaA(Estacion estacion) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion)) return r.getDestino();
+		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getDestino();
 	}
 	return null;
 }
 
 public Double costoAAdyacente(Estacion estacion) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion)) return r.getCosto();
+		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getCosto();
 	}
 	return null;
 }
 
 public Double distanciaAAdyacente(Estacion estacion) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion)) return r.getKilometros();
+		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getKilometros();
 	}
 	return null;
 }
@@ -68,7 +68,7 @@ public Double distanciaAAdyacente(Estacion estacion) {
 
 public Integer duracionAAdyacente(Estacion estacion) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion)) return r.getDuracion();
+		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getDuracion();
 	}
 	return null;
 }

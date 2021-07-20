@@ -51,6 +51,10 @@ public class Ruta {
 	public EstadoLinea getEstado() {
 		return estado;
 	}
+	
+	public boolean estaActiva() {
+		return estado == EstadoLinea.ACTIVO;
+	}
 
 
 	public Double getCosto() {
