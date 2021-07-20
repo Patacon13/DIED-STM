@@ -37,6 +37,10 @@ public class LineaDeTransporte {
 		return trayecto.duracionAAdyacente(origen);
 	}
 	
+	public Integer pesoAAdyacente(Estacion origen) {
+		return trayecto.pesoAAdyacente(origen);
+	}
+	
 	public Trayecto getTrayecto() {
 		return trayecto;
 	}

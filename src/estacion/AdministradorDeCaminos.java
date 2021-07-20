@@ -45,9 +45,9 @@ public class AdministradorDeCaminos {
 		}
 		return recorridos.get(destino);
 	}
-		
 	
 	private void initMatriz(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Pedido datoQueRequiere) {
+		grafo = new HashMap<>();
 		for(Estacion estacionA : adminEstaciones.estaciones) {
 			grafo.put(estacionA, new HashMap<>());
 			for(Estacion estacionB : adminEstaciones.estaciones) {
@@ -65,9 +65,12 @@ public class AdministradorDeCaminos {
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(estacionA));
 								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(estacionA));
 								break;
-							default:
+							case MASBARATO:
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
 								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
+							default:
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.pesoAAdyacente(estacionA).doubleValue());
+								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoAAdyacente(estacionA).doubleValue());
 							}
 						}
 					}
@@ -83,7 +86,6 @@ public class AdministradorDeCaminos {
 		padre = new ArrayList<>();
 		costos = new ArrayList<>();
 		visitado = new ArrayList<>();
-		grafo = new HashMap<>();
 		for(int i = 0; i<adminEstaciones.estaciones.size(); i++) {
 			visitado.add(Boolean.FALSE);
 			costos.add(Double.valueOf(Double.MAX_VALUE));
@@ -124,6 +126,20 @@ public class AdministradorDeCaminos {
 		
 	}	
 	
+	private void floydwarshall(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) {
+		for(Estacion estacionA : adminEstaciones.estaciones) {
+			for(Estacion estacionB : adminEstaciones.estaciones) {
+				for(Estacion estacionC : adminEstaciones.estaciones) {
+					if(grafo.get(estacionB) != null && grafo.get(estacionA) != null)
+						if(grafo.get(estacionB).get(estacionA) != null && grafo.get(estacionA).get(estacionC) != null) {
+							if(grafo.get(estacionB).get(estacionC) != null) grafo.get(estacionB).put(estacionC, Math.min(grafo.get(estacionB).get(estacionC),grafo.get(estacionB).get(estacionA) + grafo.get(estacionA).get(estacionC)));
+							else grafo.get(estacionB).put(estacionC, grafo.get(estacionB).get(estacionA) + grafo.get(estacionA).get(estacionC));
+						}
+				}
+			}
+		}
+	}
+	
 	public List<Estacion> caminoMasBarato(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino, Pedido datoQueRequiere) {
 		Deque<Estacion> retorno = new LinkedList<>();
 		
@@ -140,5 +156,20 @@ public class AdministradorDeCaminos {
 		retorno.addFirst(origen);
 		return retorno.stream().collect(Collectors.toList());
 	}
+	
+	public List<Estacion> mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) {
+		initMatriz(adminEstaciones, adminLineas, Pedido.MAXIMOPESO);
+		floydwarshall(adminEstaciones, adminLineas);
+		for(Estacion estacionA : adminEstaciones.estaciones) {
+			for(Estacion estacionB : adminEstaciones.estaciones) {
+				System.out.print(grafo.get(estacionA).get(estacionB) + " ");
+			}
+			System.out.println("");
+		}
+		return null;
+	}
+	
+	
+	
 	
 }

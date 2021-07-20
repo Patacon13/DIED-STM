@@ -73,7 +73,12 @@ public Integer duracionAAdyacente(Estacion estacion) {
 	return null;
 }
 
-
+public Integer pesoAAdyacente(Estacion estacion) {
+	for(Ruta r : rutas) {
+		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getCantMax();
+	}
+	return null;
+}
 
 }
 
