@@ -74,7 +74,7 @@ class AlgoritmosDeGrafosTest {
 		listaDos.add(e5);
 		listaDos.add(e2);
 		
-		adminCaminos.mayorPesoDeAaB(adminEstaciones, adminLineasDeTransporte, e1, e2);
+		adminCaminos.mayorPesoDeAaB(adminEstaciones, adminLineasDeTransporte, e1, e7);
 	}
 	
 }

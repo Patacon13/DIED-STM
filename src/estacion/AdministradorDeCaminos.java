@@ -15,7 +15,7 @@ import sources.Trayecto;
 
 public class AdministradorDeCaminos {
 	
-	public Map<Estacion,Map<Estacion,Double>> grafo;
+	public HashMap<Estacion,HashMap<Estacion,Double>> grafo;
 	public List<Integer> padre;
 	public List<Double> costos;
 	public List<Boolean> visitado;
@@ -126,18 +126,36 @@ public class AdministradorDeCaminos {
 		
 	}	
 	
-	private void floydwarshall(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) {
+	private HashMap<Estacion, HashMap<Estacion, Double>> copyGrafo(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) {
+		HashMap<Estacion,HashMap<Estacion,Double>> grafoRetorno = new HashMap<Estacion,HashMap<Estacion,Double>>(grafo);
+		for(Estacion estacionA : adminEstaciones.estaciones)
+			grafoRetorno.put(estacionA, new HashMap<Estacion, Double>(grafoRetorno.get(estacionA)));
+		return grafoRetorno;
+	}
+	
+	private HashMap<Estacion,HashMap<Estacion,Double>> floydwarshall(HashMap<Estacion,HashMap<Estacion,Double>> grafoRetorno, AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) {
 		for(Estacion estacionA : adminEstaciones.estaciones) {
+			grafoRetorno.put(estacionA, new HashMap<Estacion, Double>(grafoRetorno.get(estacionA)));
 			for(Estacion estacionB : adminEstaciones.estaciones) {
 				for(Estacion estacionC : adminEstaciones.estaciones) {
-					if(grafo.get(estacionB) != null && grafo.get(estacionA) != null)
-						if(grafo.get(estacionB).get(estacionA) != null && grafo.get(estacionA).get(estacionC) != null) {
-							if(grafo.get(estacionB).get(estacionC) != null) grafo.get(estacionB).put(estacionC, Math.min(grafo.get(estacionB).get(estacionC),grafo.get(estacionB).get(estacionA) + grafo.get(estacionA).get(estacionC)));
-							else grafo.get(estacionB).put(estacionC, grafo.get(estacionB).get(estacionA) + grafo.get(estacionA).get(estacionC));
+					if(grafoRetorno.get(estacionB) != null && grafoRetorno.get(estacionA) != null)
+						if(grafoRetorno.get(estacionB).get(estacionA) != null && grafoRetorno.get(estacionA).get(estacionC) != null) {
+							if(grafoRetorno.get(estacionB).get(estacionC) != null) grafoRetorno.get(estacionB).put(estacionC, Math.min(grafoRetorno.get(estacionB).get(estacionC),grafoRetorno.get(estacionB).get(estacionA) + grafoRetorno.get(estacionA).get(estacionC)));
+							else grafoRetorno.get(estacionB).put(estacionC, grafoRetorno.get(estacionB).get(estacionA) + grafoRetorno.get(estacionA).get(estacionC));
 						}
 				}
 			}
 		}
+		return grafoRetorno;
+	}
+	
+	private List<Estacion> subGrafoAB(HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd, Estacion origen, Estacion destino, AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) {
+		List<Estacion> estaciones = new ArrayList<>();
+		
+		for(Estacion estacion : adminEstaciones.estaciones) 
+			if(grafoFloyd.get(origen).get(estacion) != null && grafoFloyd.get(estacion).get(destino) != null) estaciones.add(estacion);
+		
+		return estaciones;	
 	}
 	
 	public List<Estacion> caminoMasBarato(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino, Pedido datoQueRequiere) {
@@ -159,13 +177,26 @@ public class AdministradorDeCaminos {
 	
 	public List<Estacion> mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) {
 		initMatriz(adminEstaciones, adminLineas, Pedido.MAXIMOPESO);
-		floydwarshall(adminEstaciones, adminLineas);
+		System.out.println("Grafo original:");
 		for(Estacion estacionA : adminEstaciones.estaciones) {
 			for(Estacion estacionB : adminEstaciones.estaciones) {
 				System.out.print(grafo.get(estacionA).get(estacionB) + " ");
 			}
 			System.out.println("");
 		}
+		HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd = floydwarshall(copyGrafo(adminEstaciones, adminLineas), adminEstaciones, adminLineas);
+		
+		System.out.println("Retorno de floyd:");
+		
+		for(Estacion estacionA : adminEstaciones.estaciones) {
+			for(Estacion estacionB : adminEstaciones.estaciones) {
+				System.out.print(grafoFloyd.get(estacionA).get(estacionB) + " ");
+			}
+			System.out.println("");
+		}
+		
+		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, adminEstaciones, adminLineas);
+		System.out.println("Lista de estaciones: " + listaDeEstaciones);
 		return null;
 	}
 	
