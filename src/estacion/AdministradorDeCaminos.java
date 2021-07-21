@@ -19,6 +19,7 @@ public class AdministradorDeCaminos {
 	public List<Integer> padre;
 	public List<Double> costos;
 	public List<Boolean> visitado;
+	HashMap<Estacion, Boolean> recorridosDFS;
 	//el admin se debe reemplazar por la base de datos
 	public List<Estacion> getCaminoMasRapido(AdministradorDeLineasDeTransporte admin, Estacion origen, Estacion destino) {
 		Queue<Estacion> aProcesar = new LinkedList<>();
@@ -70,7 +71,7 @@ public class AdministradorDeCaminos {
 								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
 							default:
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.pesoAAdyacente(estacionA).doubleValue());
-								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoAAdyacente(estacionA).doubleValue());
+								else if(linea.costoAAdyacente(estacionA) > grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoAAdyacente(estacionA).doubleValue());
 							}
 						}
 					}
@@ -158,6 +159,39 @@ public class AdministradorDeCaminos {
 		return estaciones;	
 	}
 	
+	private int dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, int flux) {
+		System.out.println("flujo: " + flux);
+		recorridosDFS = new HashMap<>();
+		if(!origen.equals(destino)) {
+			recorridosDFS.put(origen, Boolean.TRUE);
+			for(Estacion vecina : estaciones) {
+			if(!recorridosDFS.containsKey(vecina) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).intValue() > 0) {
+				if(grafo.get(origen).get(vecina).intValue() == 0) System.out.println("Vamos a pasar 0 en " + origen + " destino " + vecina);
+				int retornoDFS = dfs(vecina, destino, estaciones, Math.min(flux, grafo.get(origen).get(vecina).intValue()));
+				if(retornoDFS != -1) 
+					grafo.get(origen).put(destino, grafo.get(origen).get(vecina) - Math.min(retornoDFS, flux));
+					return retornoDFS;
+				}
+			}
+		}
+		else {
+			return flux;
+		}
+		return -1;
+	}
+	
+	private int fordFulkerson(List<Estacion> estaciones, Estacion origen, Estacion destino) {
+		int retornoDFS = dfs(origen, destino, estaciones, 100000);
+		int flujoMaximo = 0;
+		while(retornoDFS != -1) {
+			recorridosDFS.clear();
+			System.out.println("comparando " + flujoMaximo + " con " + retornoDFS);
+			flujoMaximo = Math.max(flujoMaximo, retornoDFS);
+			retornoDFS = dfs(origen, destino, estaciones, 100000);
+		}
+		return flujoMaximo;
+	}
+	
 	public List<Estacion> caminoMasBarato(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino, Pedido datoQueRequiere) {
 		Deque<Estacion> retorno = new LinkedList<>();
 		
@@ -175,29 +209,11 @@ public class AdministradorDeCaminos {
 		return retorno.stream().collect(Collectors.toList());
 	}
 	
-	public List<Estacion> mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) {
+	public int mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) {
 		initMatriz(adminEstaciones, adminLineas, Pedido.MAXIMOPESO);
-		System.out.println("Grafo original:");
-		for(Estacion estacionA : adminEstaciones.estaciones) {
-			for(Estacion estacionB : adminEstaciones.estaciones) {
-				System.out.print(grafo.get(estacionA).get(estacionB) + " ");
-			}
-			System.out.println("");
-		}
 		HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd = floydwarshall(copyGrafo(adminEstaciones, adminLineas), adminEstaciones, adminLineas);
-		
-		System.out.println("Retorno de floyd:");
-		
-		for(Estacion estacionA : adminEstaciones.estaciones) {
-			for(Estacion estacionB : adminEstaciones.estaciones) {
-				System.out.print(grafoFloyd.get(estacionA).get(estacionB) + " ");
-			}
-			System.out.println("");
-		}
-		
 		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, adminEstaciones, adminLineas);
-		System.out.println("Lista de estaciones: " + listaDeEstaciones);
-		return null;
+		return fordFulkerson(listaDeEstaciones, origen, destino);
 	}
 	
 	
