@@ -1,6 +1,7 @@
 package estacion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,37 +17,17 @@ import sources.Trayecto;
 public class AdministradorDeCaminos {
 	
 	public HashMap<Estacion,HashMap<Estacion,Double>> grafo;
+	public HashMap<Estacion,HashMap<Estacion,Double>> grafoDFS;
 	public List<Integer> padre;
 	public List<Double> costos;
 	public List<Boolean> visitado;
+	public int flujoEncontradoEnDFS = 100000;
 	HashMap<Estacion, Boolean> recorridosDFS;
-	//el admin se debe reemplazar por la base de datos
-	public List<Estacion> getCaminoMasRapido(AdministradorDeLineasDeTransporte admin, Estacion origen, Estacion destino) {
-		Queue<Estacion> aProcesar = new LinkedList<>();
-		Map<Estacion, List<Estacion>> recorridos = new HashMap<>();
-		aProcesar.add(origen);
-		
-		List<Estacion> lista = new ArrayList<>();
-		lista.add(origen);
-		recorridos.put(origen, lista);
-		
-		while(!aProcesar.isEmpty()) {
-			Estacion estacion = aProcesar.poll();
-			List<Estacion> estacionesLlega = admin.lineas.stream().filter(linea -> (linea.contieneA(estacion) && linea.estaActiva()))
-								 .map(linea -> linea.getTrayecto().llegaA(estacion))
-								 .collect(Collectors.toList());
-			for(Estacion estacionALaQueLlega : estacionesLlega) {
-				if(!recorridos.containsKey(estacionALaQueLlega)) {
-					List<Estacion> recorridoHastaEstaEstacion = recorridos.get(estacion).stream().collect(Collectors.toList());
-					if(!estacion.equals(origen)) recorridoHastaEstaEstacion.add(estacion);
-					recorridos.put(estacionALaQueLlega, recorridoHastaEstaEstacion);
-					aProcesar.add(estacionALaQueLlega);
-				}
-			}
-		}
-		return recorridos.get(destino);
-	}
+	List<Estacion> estacionesMaximoFlujo;
+	List<Estacion> estacionesMaximoFlujoAux;
 	
+	//el admin se debe reemplazar por la base de datos
+		
 	private void initMatriz(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Pedido datoQueRequiere) {
 		grafo = new HashMap<>();
 		for(Estacion estacionA : adminEstaciones.estaciones) {
@@ -56,7 +37,9 @@ public class AdministradorDeCaminos {
 				if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, Double.valueOf(0));
 				else {
 					for(LineaDeTransporte linea : adminLineas.lineas) {
-						if(linea.contieneA(estacionA) && linea.llegaA(estacionA).equals(estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
+						System.out.println("Con linea " + linea + " iterando " + estacionA + " " + estacionB + "contiene? " + linea.contieneA(estacionA));
+						if(linea.contieneA(estacionA) && linea.llegaA(estacionA, estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
+							System.out.println("Y llega");
 							switch(datoQueRequiere) {
 							case MASRAPIDO:
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.duracionAAdyacente(estacionA).doubleValue());
@@ -70,8 +53,9 @@ public class AdministradorDeCaminos {
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
 								else if(linea.costoAAdyacente(estacionA) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA));
 							default:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.pesoAAdyacente(estacionA).doubleValue());
-								else if(linea.costoAAdyacente(estacionA) > grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoAAdyacente(estacionA).doubleValue());
+								System.out.println("iterando " + estacionA + " " + estacionB);
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.pesoA(estacionA, estacionB).doubleValue());
+								else if(linea.costoAAdyacente(estacionA) > grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoA(estacionA, estacionB).doubleValue());
 							}
 						}
 					}
@@ -160,35 +144,57 @@ public class AdministradorDeCaminos {
 	}
 	
 	private int dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, int flux) {
-		System.out.println("flujo: " + flux);
-		recorridosDFS = new HashMap<>();
 		if(!origen.equals(destino)) {
+			
 			recorridosDFS.put(origen, Boolean.TRUE);
 			for(Estacion vecina : estaciones) {
-			if(!recorridosDFS.containsKey(vecina) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).intValue() > 0) {
-				if(grafo.get(origen).get(vecina).intValue() == 0) System.out.println("Vamos a pasar 0 en " + origen + " destino " + vecina);
-				int retornoDFS = dfs(vecina, destino, estaciones, Math.min(flux, grafo.get(origen).get(vecina).intValue()));
-				if(retornoDFS != -1) 
-					grafo.get(origen).put(destino, grafo.get(origen).get(vecina) - Math.min(retornoDFS, flux));
-					return retornoDFS;
+				
+				if(!recorridosDFS.containsKey(vecina) && grafoDFS.get(origen).get(vecina) != null && !origen.equals(vecina) && grafoDFS.get(origen).get(vecina).intValue() > 0) {
+					
+					if(grafoDFS.get(origen).get(vecina).intValue() == 0) System.out.println("Vamos a pasar 0 en " + origen + " destino " + vecina);
+					int retornoDFS = dfs(vecina, destino, estaciones, Math.min(flux, grafoDFS.get(origen).get(vecina).intValue()));
+					if(retornoDFS != -1) {
+						estacionesMaximoFlujoAux.add(origen);
+						System.out.println("a " + origen + " restando " + retornoDFS);
+						grafoDFS.get(origen).put(vecina, grafoDFS.get(origen).get(vecina) - retornoDFS);
+						flujoEncontradoEnDFS = Math.min(flujoEncontradoEnDFS, grafo.get(origen).get(vecina).intValue());
+						return retornoDFS;
+					}
+				
 				}
+				
 			}
+			
 		}
 		else {
+			estacionesMaximoFlujoAux.add(origen);
+			System.out.println("primer retorno: " + flux);
 			return flux;
 		}
 		return -1;
 	}
 	
-	private int fordFulkerson(List<Estacion> estaciones, Estacion origen, Estacion destino) {
+	private int fordFulkerson(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, List<Estacion> estaciones, Estacion origen, Estacion destino) {
+		recorridosDFS = new HashMap<>();
+		estacionesMaximoFlujoAux = new ArrayList<>();
+		grafoDFS = copyGrafo(adminEstaciones, adminLineas);
 		int retornoDFS = dfs(origen, destino, estaciones, 100000);
 		int flujoMaximo = 0;
 		while(retornoDFS != -1) {
 			recorridosDFS.clear();
-			System.out.println("comparando " + flujoMaximo + " con " + retornoDFS);
-			flujoMaximo = Math.max(flujoMaximo, retornoDFS);
+			recorridosDFS = new HashMap<>();
+			if(flujoMaximo < flujoEncontradoEnDFS) {
+				flujoMaximo = flujoEncontradoEnDFS;
+				estacionesMaximoFlujo = estacionesMaximoFlujoAux;
+			}
+			flujoEncontradoEnDFS = 1000000;
+			System.out.println("retorno del dfs " + retornoDFS + " con estaciones " + estacionesMaximoFlujoAux);
+			estacionesMaximoFlujoAux = new ArrayList<>();
+			grafo.forEach((i,j) -> System.out.println("key: " + i + "value " + j));
 			retornoDFS = dfs(origen, destino, estaciones, 100000);
 		}
+		Collections.reverse(estacionesMaximoFlujo);
+		System.out.println(estacionesMaximoFlujo);
 		return flujoMaximo;
 	}
 	
@@ -211,9 +217,10 @@ public class AdministradorDeCaminos {
 	
 	public int mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) {
 		initMatriz(adminEstaciones, adminLineas, Pedido.MAXIMOPESO);
+		grafo.forEach((i,j) -> System.out.println("key: " + i + "value " + j));
 		HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd = floydwarshall(copyGrafo(adminEstaciones, adminLineas), adminEstaciones, adminLineas);
 		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, adminEstaciones, adminLineas);
-		return fordFulkerson(listaDeEstaciones, origen, destino);
+		return fordFulkerson(adminEstaciones, adminLineas, listaDeEstaciones, origen, destino);
 	}
 	
 	

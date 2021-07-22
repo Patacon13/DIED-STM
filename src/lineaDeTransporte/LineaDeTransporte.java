@@ -21,8 +21,8 @@ public class LineaDeTransporte {
 		return trayecto.contieneA(estacion);
 	}
 	
-	public Estacion llegaA(Estacion origen) {
-		return trayecto.llegaA(origen);
+	public Boolean llegaA(Estacion origen, Estacion destino) {
+		return trayecto.llegaA(origen, destino);
 	}
 	
 	public Double costoAAdyacente(Estacion origen) {
@@ -37,8 +37,8 @@ public class LineaDeTransporte {
 		return trayecto.duracionAAdyacente(origen);
 	}
 	
-	public Integer pesoAAdyacente(Estacion origen) {
-		return trayecto.pesoAAdyacente(origen);
+	public Integer pesoA(Estacion origen, Estacion destino) {
+		return trayecto.pesoA(origen, destino);
 	}
 	
 	public Trayecto getTrayecto() {
@@ -47,5 +47,10 @@ public class LineaDeTransporte {
 	
 	public boolean estaActiva() {
 		return estado == EstadoTransporte.ACTIVO;
+	}
+	
+	@Override
+	public String toString() {
+		return nombre;
 	}
 }

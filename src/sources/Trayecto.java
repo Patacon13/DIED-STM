@@ -44,11 +44,11 @@ public boolean contieneA(Estacion estacion) {
 	return rutas.stream().anyMatch(ruta -> ruta.getOrigen().equals(estacion) && ruta.estaActiva());
 }
 
-public Estacion llegaA(Estacion estacion) {
+public Boolean llegaA(Estacion estacion, Estacion destino) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getDestino();
+		if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return true;
 	}
-	return null;
+	return false;
 }
 
 public Double costoAAdyacente(Estacion estacion) {
@@ -73,9 +73,9 @@ public Integer duracionAAdyacente(Estacion estacion) {
 	return null;
 }
 
-public Integer pesoAAdyacente(Estacion estacion) {
+public Integer pesoA(Estacion estacion, Estacion destino) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getCantMax();
+		if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return r.getCantMax();
 	}
 	return null;
 }
