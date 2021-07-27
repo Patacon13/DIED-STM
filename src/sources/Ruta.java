@@ -1,7 +1,7 @@
 package sources;
 
 import estacion.Estacion;
-import lineaDeTransporte.EstadoLinea;
+import lineaDeTransporte.EstadoTransporte;
 
 public class Ruta {
 	private Estacion origen;
@@ -9,11 +9,11 @@ public class Ruta {
 	private Double kilometros;
 	private Integer duracion;
 	private Integer cantMax;
-	private EstadoLinea estado;
+	private EstadoTransporte estado;
 	private Double costo;
 	
 	
-	public Ruta(Estacion origen, Estacion destino, Double kilometros, Integer duracion, Integer cantMax, EstadoLinea estado,
+	public Ruta(Estacion origen, Estacion destino, Double kilometros, Integer duracion, Integer cantMax, EstadoTransporte estado,
 			Double costo) {
 		super();
 		this.origen = origen;
@@ -30,16 +30,13 @@ public class Ruta {
 		return origen;
 	}
 
-
-	public Estacion getDestino() {
-		return destino;
-	}
-
-
 	public Double getKilometros() {
 		return kilometros;
 	}
-
+	
+	public Estacion getDestino() {
+		return destino;
+	}
 
 	public Integer getDuracion() {
 		return duracion;
@@ -51,8 +48,12 @@ public class Ruta {
 	}
 
 
-	public EstadoLinea getEstado() {
+	public EstadoTransporte getEstado() {
 		return estado;
+	}
+	
+	public boolean estaActiva() {
+		return estado == EstadoTransporte.ACTIVO;
 	}
 
 

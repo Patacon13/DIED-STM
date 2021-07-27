@@ -5,21 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import sources.Trayecto;
+
 
 public class AdministradorDeLineasDeTransporte {
 	public ArrayList<LineaDeTransporte> lineas = new ArrayList<>(); 
 	
-	public LineaDeTransporte crearLineaDeTransporte(String nombre, Color color, EstadoLinea estado) {
-		LineaDeTransporte linea = new LineaDeTransporte(nombre,color,estado);
+	public LineaDeTransporte crearLineaDeTransporte(String nombre, Color color, EstadoTransporte estado, Trayecto trayecto) {
+		LineaDeTransporte linea = new LineaDeTransporte(nombre,color,estado, trayecto);
 		addlinea(linea);
 		return linea;
 	}
-	
+		
 	public boolean addlinea(LineaDeTransporte linea) {
 		return lineas.add(linea);  
 	}
 	
-	public boolean modifyLineaDeTransporte(LineaDeTransporte linea,String nombre, Color color, EstadoLinea estado) {
+	public boolean modifyLineaDeTransporte(LineaDeTransporte linea,String nombre, Color color, EstadoTransporte estado) {
 		linea.nombre= nombre;
 		linea.color= color;
 		linea.estado=estado;
@@ -41,7 +43,7 @@ public class AdministradorDeLineasDeTransporte {
 					  collect(Collectors.toList());
 	}
 	
-	public List<LineaDeTransporte> searchLineaDeTransporte(EstadoLinea estado) {
+	public List<LineaDeTransporte> searchLineaDeTransporte(EstadoTransporte estado) {
 		return lineas.stream().
 					  filter(linea -> linea.estado.compareTo(estado) == 0).
 					  collect(Collectors.toList());
