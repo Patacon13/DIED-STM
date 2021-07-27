@@ -13,6 +13,7 @@ class ABMLineaDeTransporte {
 	
 	@Test
 	void searchNombreTest() {
+		/*
 		AdministradorDeLineasDeTransporte adminLineas = new AdministradorDeLineasDeTransporte();
 		ArrayList<LineaDeTransporte> l=new ArrayList<LineaDeTransporte>();
 		LineaDeTransporte l1 = adminLineas.crearLineaDeTransporte("Linea 1",Color.RED, EstadoLinea.ACTIVO);
@@ -71,5 +72,6 @@ class ABMLineaDeTransporte {
 
 		assert(l.equals(adminLineas.searchLineaDeTransporte("Linea 1")));
 	}
-	
+*/
+}
 }
