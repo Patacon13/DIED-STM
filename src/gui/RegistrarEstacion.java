@@ -4,16 +4,33 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import estacion.AdministradorDeEstaciones;
+import estacion.Estacion;
+import estacion.EstadoEstacion;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+import java.awt.Color;
 
 public class RegistrarEstacion extends JPanel {
 	private JTextField estNombre;
 	private JTextField estApertura;
 	private JTextField estCierre;
+	private AdministradorDeEstaciones admin;
 
 	/**
 	 * Create the panel.
@@ -21,6 +38,7 @@ public class RegistrarEstacion extends JPanel {
 	public RegistrarEstacion() {
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
+		admin = new AdministradorDeEstaciones();
 		gridBagLayout.columnWidths = new int[]{33, 136, 62, 189, 0};
 		gridBagLayout.rowHeights = new int[]{19, 35, 20, 20, 20, 22, 35, 23, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -99,28 +117,64 @@ public class RegistrarEstacion extends JPanel {
 		gbc_lblNewLabel_1_2.gridy = 5;
 		add(lblNewLabel_1_2, gbc_lblNewLabel_1_2);
 		
-		JComboBox<String> estEstado = new JComboBox<String>();
+		JComboBox<EstadoEstacion> estEstado = new JComboBox<EstadoEstacion>();
 		GridBagConstraints gbc_estEstado = new GridBagConstraints();
 		gbc_estEstado.fill = GridBagConstraints.BOTH;
 		gbc_estEstado.insets = new Insets(0, 0, 5, 0);
 		gbc_estEstado.gridx = 3;
 		gbc_estEstado.gridy = 5;
 		add(estEstado, gbc_estEstado);
-		estEstado.addItem("Activa");
-		estEstado.addItem("En mantenimiento");
+		estEstado.addItem(EstadoEstacion.OPERATIVA);
+		estEstado.addItem(EstadoEstacion.EN_MANTENIMIENTO);
 		
-		JButton btnNewButton = new JButton("Agregar estacion");
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.anchor = GridBagConstraints.NORTH;
-		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnNewButton.gridwidth = 3;
-		gbc_btnNewButton.gridx = 1;
-		gbc_btnNewButton.gridy = 7;
-		add(btnNewButton, gbc_btnNewButton);
+		JLabel labelErrores = new JLabel("");
+		labelErrores.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		labelErrores.setForeground(Color.RED);
+		GridBagConstraints gbc_labelErrores = new GridBagConstraints();
+		gbc_labelErrores.gridwidth = 3;
+		gbc_labelErrores.insets = new Insets(0, 0, 5, 5);
+		gbc_labelErrores.gridx = 1;
+		gbc_labelErrores.gridy = 6;
+		add(labelErrores, gbc_labelErrores);
 		
-		btnNewButton.addActionListener(e->{
-			//Accion cuando se presione el boton
-		});
+		JButton boton = new JButton("Agregar estacion");
+		GridBagConstraints gbc_boton = new GridBagConstraints();
+		gbc_boton.anchor = GridBagConstraints.NORTH;
+		gbc_boton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_boton.gridwidth = 3;
+		gbc_boton.gridx = 1;
+		gbc_boton.gridy = 7;
+		add(boton, gbc_boton);
+		
+		boton.addActionListener(new ActionListener() {
 
+			public void actionPerformed(ActionEvent e) {
+				labelErrores.setForeground(Color.RED);
+				if(estNombre.getText().length() == 0 || estApertura.getText().length() == 0 || estCierre.getText().length() == 0)  {
+					labelErrores.setText("Has dejado algún campo sin completar, revisalo.");
+				} else {
+					LocalTime apertura = null;
+					LocalTime cierre = null;
+					try {
+						apertura = LocalTime.parse(estApertura.getText().toString());
+						cierre = LocalTime.parse(estCierre.getText().toString());
+					}catch(DateTimeParseException f) {
+						labelErrores.setText("La fecha ingresada es incorrecta, verifica que el formato sea hh:mm");
+					}
+					EstadoEstacion estado = estEstado.getItemAt(estEstado.getSelectedIndex());
+					Estacion nueva = new Estacion(null, estNombre.getText().toString(), apertura, cierre, estado);
+					try {
+						admin.addEstacion(nueva);
+						labelErrores.setForeground(Color.GREEN);
+						labelErrores.setText("Se registro la estacion correctamente");
+						estNombre.setText("");
+						estApertura.setText("");
+						estCierre.setText("");
+					} catch (ClassNotFoundException | SQLException e1) {
+						labelErrores.setText(e1.getMessage());
+					}
+				}
+			}
+		});
 	}
 }
