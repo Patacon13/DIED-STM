@@ -3,6 +3,7 @@ package sources;
 import java.util.ArrayList;
 
 import lineaDeTransporte.LineaDeTransporte;
+import ruta.Ruta;
 
 public class Trayecto {
 private ArrayList<Ruta> rutas; //tramos del trayecto

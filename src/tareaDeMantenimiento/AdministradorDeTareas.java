@@ -1,33 +1,68 @@
 package tareaDeMantenimiento;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import conexionMySQL.Conexion;
 import estacion.Estacion;
+import lineaDeTransporte.ColorLineaDeTransporte;
+import lineaDeTransporte.EstadoLinea;
+import lineaDeTransporte.LineaDeTransporte;
 
 public class AdministradorDeTareas {
 	
-public ArrayList<TareaDeMantenimiento> tareas = new ArrayList<>(); //FIXME: cuando se pase a bases de datos esto se debe eliminar
-	
-	//FIXME: puede que se pueda armar todo como static cuando tengamos la BD
+private Conexion con = new Conexion();
 
-	public TareaDeMantenimiento createTareaDeMantenimiento(LocalDate fechaInicioTarea, LocalDate fechaFinTarea, String observaciones, Estacion estacion){
-		TareaDeMantenimiento t= new TareaDeMantenimiento(fechaInicioTarea,fechaFinTarea,observaciones, estacion);
-		tareas.add(t);
-		return t;
+//Habria que recibir una tarea de mantenimiento directamente y ahi insertarla, no los atributos, ver eso
+	public Integer createTareaDeMantenimiento(LocalDate fechaInicioTarea, LocalDate fechaFinTarea, String observaciones, Estacion estacion) throws SQLException, ClassNotFoundException{
+		Connection conn = con.crearConexion();
+		PreparedStatement pstm = conn.prepareStatement("INSERT INTO mantenimiento (estacion,fechainicio,observaciones) VALUES (?,?,?)");
+		pstm.setInt(1,estacion.getId());
+		pstm.setDate(2, Date.valueOf(fechaInicioTarea));
+		pstm.setString(3, observaciones);
+		Integer c = pstm.executeUpdate();
+		pstm.close();
+		conn.close();
+		return c;
+
 	}
 	
-	public TareaDeMantenimiento buscarTareaDeEstacion(Estacion e) {
-		for(TareaDeMantenimiento tarea : tareas) 
-			if(tarea.estacion.equals(e)) return tarea;
-		return null;
-		
-	}
+/*
 	public void registrarFin(Estacion e) {
 		TareaDeMantenimiento t = buscarTareaDeEstacion(e);
 		int indice = tareas.indexOf(t);
 		t.fechaFinTarea = LocalDate.now();
 		tareas.set(indice, t);
+	}
+*/
+
+	public void finalizarMantenimiento(Estacion nueva, LocalDate fin) throws SQLException, ClassNotFoundException {
+		Connection conn = con.crearConexion();
+		PreparedStatement pstm = conn.prepareStatement("UPDATE mantenimiento SET fechafin=? WHERE estacion=? AND fechafin IS NULL");
+		pstm.setDate(1, Date.valueOf(fin));
+		pstm.setInt(2, nueva.getId());
+		Integer c = pstm.executeUpdate();
+		pstm.close();
+		conn.close();
+	}
+	
+	public ArrayList<TareaDeMantenimiento>getMantenimientos(Estacion est) throws ClassNotFoundException, SQLException {
+		Connection conn = new Conexion().crearConexion();
+		PreparedStatement ps = conn.prepareStatement("SELECT * FROM mantenimiento WHERE estacion=? "); 
+		ArrayList<TareaDeMantenimiento> retorno = new ArrayList<TareaDeMantenimiento>();
+		ps.setInt(1, est.getId());
+		ResultSet tareas = ps.executeQuery();
+		while(tareas.next()){
+			retorno.add(new TareaDeMantenimiento(tareas.getInt(1), tareas.getDate(3).toLocalDate(), tareas.getDate(4).toLocalDate(), tareas.getString(5), new Estacion(tareas.getInt(2), null, null, null, null))); 
+			  }
+			ps.close();
+			conn.close();
+			return retorno;
 	}
 	
 	
