@@ -25,16 +25,16 @@ public class LineaDeTransporte {
 		return trayecto.llegaA(origen, destino);
 	}
 	
-	public Double costoAAdyacente(Estacion origen) {
-		return trayecto.costoAAdyacente(origen);
+	public Double costoAAdyacente(Estacion origen, Estacion destino) {
+		return trayecto.costoAAdyacente(origen, destino);
 	}
 	
-	public Double distanciaAAdyacente(Estacion origen) {
-		return trayecto.distanciaAAdyacente(origen);
+	public Double distanciaAAdyacente(Estacion origen, Estacion destino) {
+		return trayecto.distanciaAAdyacente(origen, destino);
 	}
 	
-	public Integer duracionAAdyacente(Estacion origen) {
-		return trayecto.duracionAAdyacente(origen);
+	public Integer duracionAAdyacente(Estacion origen, Estacion destino) {
+		return trayecto.duracionAAdyacente(origen, destino);
 	}
 	
 	public Integer pesoA(Estacion origen, Estacion destino) {

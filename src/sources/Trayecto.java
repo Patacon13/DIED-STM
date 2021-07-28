@@ -51,22 +51,22 @@ public Boolean llegaA(Estacion estacion, Estacion destino) {
 	return false;
 }
 
-public Double costoAAdyacente(Estacion estacion) {
+public Double costoAAdyacente(Estacion estacion, Estacion destino) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getCosto();
+		if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return r.getCosto();
 	}
 	return null;
 }
 
-public Double distanciaAAdyacente(Estacion estacion) {
+public Double distanciaAAdyacente(Estacion estacion, Estacion destino) {
 	for(Ruta r : rutas) {
-		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getKilometros();
+		if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return r.getKilometros();
 	}
 	return null;
 }
 
 
-public Integer duracionAAdyacente(Estacion estacion) {
+public Integer duracionAAdyacente(Estacion estacion, Estacion destino) {
 	for(Ruta r : rutas) {
 		if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getDuracion();
 	}
