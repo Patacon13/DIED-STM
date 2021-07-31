@@ -12,10 +12,11 @@ public class Ruta {
 	private EstadoLinea estado;
 	private Double costo;
 	private Integer id;
+	private Integer idLinea;
 	
 	
 	public Ruta(Integer id, Estacion origen, Estacion destino, Double kilometros, Integer duracion, Integer cantMax, EstadoLinea estado,
-			Double costo) {
+			Double costo, Integer idlinea) {
 		super();
 		this.id = id;
 		this.origen = origen;
@@ -25,12 +26,17 @@ public class Ruta {
 		this.cantMax = cantMax;
 		this.estado = estado;
 		this.costo = costo;
+		this.idLinea = idLinea;
 	}
 
 
 	public Estacion getOrigen() {
 		return origen;
 	}
+	public Integer idLinea() {
+		return idLinea;
+	}
+	
 
 
 	public void setOrigen(Estacion origen) {
