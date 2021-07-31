@@ -64,7 +64,7 @@ public class RegistrarTrayectoLinea extends JPanel {
 		gbc_btnNewButton.gridy = 1;
 		add(registrarRuta, gbc_btnNewButton);
 		
-		JLabel lblNewLabel = new JLabel("Rutas agregadas al trayecto");
+		JLabel lblNewLabel = new JLabel("Rutas agregadas al trayecto de " + linea.getNombre() + " " + linea.getColor().toString());
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.gridwidth = 3;
@@ -87,31 +87,17 @@ public class RegistrarTrayectoLinea extends JPanel {
 				try {
 					modelo = construirTabla(linea);
 				} catch (ClassNotFoundException | SQLException e1) {
-					 JOptionPane.showMessageDialog(this,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-					e1.printStackTrace();
+					 JOptionPane.showMessageDialog(this, "Ocurrio un error al obtener los datos","Error",JOptionPane.ERROR_MESSAGE);
 				}
 				JTable table = new JTable (modelo);
 				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);  //Solo permitir seleccionar una fila
 				table.setFillsViewportHeight(true);
-				if(table.getRowCount() > 0) { //Si hay al menos una fila entonces puede seleccionar alguna y mostrar las opciones
-					//panel_1.setVisible(true);
-					table.setRowSelectionInterval(0, 0); //Seleccionar la primera fila automaticamente
-				}
 				panel.setLayout(new BorderLayout());
 				panel.add(table.getTableHeader(), BorderLayout.PAGE_START);
 				panel.add(table, BorderLayout.CENTER);
 				JScrollPane js=new JScrollPane(table);
 				js.setVisible(true);
 				panel.add(js);
-				
-				JButton verInformacion = new JButton("Ver mas informacion");
-				verInformacion.setVisible(false);
-				GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-				gbc_btnNewButton_1.gridwidth = 3;
-				gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
-				gbc_btnNewButton_1.gridx = 3;
-				gbc_btnNewButton_1.gridy = 4;
-				add(verInformacion, gbc_btnNewButton_1);
 	}
 	
 	DefaultTableModel construirTabla(LineaDeTransporte linea) throws ClassNotFoundException, SQLException {
@@ -138,5 +124,7 @@ public class RegistrarTrayectoLinea extends JPanel {
 		return modelo;
 		
 	}
+	
+	
 
 }
