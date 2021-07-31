@@ -73,6 +73,16 @@ public class Ventana extends JFrame {
 			 this.getContentPane().add(new BMEEstacionPadre());
 			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
 		});
+		mi3.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new PageRank());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
+		mi4.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new ProximoMantenimiento());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
 
 		mi6.addActionListener(e -> {
 			 this.getContentPane().removeAll();
