@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 
@@ -146,34 +148,32 @@ public class RegistrarEstacion extends JPanel {
 		gbc_boton.gridy = 7;
 		add(boton, gbc_boton);
 		
-		boton.addActionListener(new ActionListener() {
+		boton.addActionListener(e -> {
 
-			public void actionPerformed(ActionEvent e) {
 				labelErrores.setForeground(Color.RED);
 				if(estNombre.getText().length() == 0 || estApertura.getText().length() == 0 || estCierre.getText().length() == 0)  {
-					labelErrores.setText("Has dejado algún campo sin completar, revisalo.");
+					JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
 				} else {
 					LocalTime apertura = null;
 					LocalTime cierre = null;
 					try {
 						apertura = LocalTime.parse(estApertura.getText().toString());
 						cierre = LocalTime.parse(estCierre.getText().toString());
+						EstadoEstacion estado = estEstado.getItemAt(estEstado.getSelectedIndex());
+						Estacion nueva = new Estacion(null, estNombre.getText().toString(), apertura, cierre, estado);
+						try {
+							admin.addEstacion(nueva);
+							labelErrores.setForeground(Color.GREEN);
+							JOptionPane.showMessageDialog(this, "La estacion se registro correctamente","Info",JOptionPane.INFORMATION_MESSAGE);
+							estNombre.setText("");
+							estApertura.setText("");
+							estCierre.setText("");
+						} catch (ClassNotFoundException | SQLException e1) {
+							JOptionPane.showMessageDialog(this, "Ocurrio un error al registrar la estacion","Error",JOptionPane.ERROR_MESSAGE);
+					}
 					}catch(DateTimeParseException f) {
-						labelErrores.setText("La fecha ingresada es incorrecta, verifica que el formato sea hh:mm");
+						JOptionPane.showMessageDialog(this, "La fecha ingresada es incorrecta, verifica que el formato sea hh:mm","Error",JOptionPane.ERROR_MESSAGE);
 					}
-					EstadoEstacion estado = estEstado.getItemAt(estEstado.getSelectedIndex());
-					Estacion nueva = new Estacion(null, estNombre.getText().toString(), apertura, cierre, estado);
-					try {
-						admin.addEstacion(nueva);
-						labelErrores.setForeground(Color.GREEN);
-						labelErrores.setText("Se registro la estacion correctamente");
-						estNombre.setText("");
-						estApertura.setText("");
-						estCierre.setText("");
-					} catch (ClassNotFoundException | SQLException e1) {
-						labelErrores.setText(e1.getMessage());
-					}
-				}
 			}
 		});
 	}

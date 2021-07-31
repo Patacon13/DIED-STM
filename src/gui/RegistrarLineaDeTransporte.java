@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -33,9 +34,6 @@ import java.time.format.DateTimeParseException;
 public class RegistrarLineaDeTransporte extends JPanel {
 	private JTextField linNombre;
 
-	/**
-	 * Create the panel.
-	 */
 	public RegistrarLineaDeTransporte() {
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
@@ -144,13 +142,11 @@ public class RegistrarLineaDeTransporte extends JPanel {
 		gbc_btnNewButton.gridy = 7;
 		add(boton, gbc_btnNewButton);
 		
-		boton.addActionListener(new ActionListener() {
-				//linColor deberia ser un comboBox
-			public void actionPerformed(ActionEvent e) {
+		boton.addActionListener(e -> {
 				AdministradorDeLineasDeTransporte admin = new AdministradorDeLineasDeTransporte();
 				labelErrores.setForeground(Color.RED);
 				if(linNombre.getText().length() == 0)  {
-					labelErrores.setText("Has dejado algún campo sin completar, revisalo.");
+					JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
 				} else {
 					EstadoLinea estado = linEstado.getItemAt(linEstado.getSelectedIndex());
 					ColorLineaDeTransporte color = linColor.getItemAt(linEstado.getSelectedIndex());
@@ -158,11 +154,10 @@ public class RegistrarLineaDeTransporte extends JPanel {
 					try {
 						admin.addlinea(nueva);
 						labelErrores.setForeground(Color.GREEN);
-						labelErrores.setText("Se registro la estacion correctamente");
+						JOptionPane.showMessageDialog(this, "La linea se registro correctamente","Error",JOptionPane.INFORMATION_MESSAGE);
 						linNombre.setText("");
 					} catch (ClassNotFoundException | SQLException e1) {
-						labelErrores.setText(e1.getMessage());
-					}
+						JOptionPane.showMessageDialog(this, "Ocurrio un error al registrar la linea, revisalo","Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
