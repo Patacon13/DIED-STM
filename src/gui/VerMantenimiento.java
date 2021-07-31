@@ -22,6 +22,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 
@@ -41,8 +43,7 @@ public class VerMantenimiento extends JPanel {
 		try {
 			modelo = construirTabla(est);
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			labelErrores.setText(e.getLocalizedMessage());
+			JOptionPane.showMessageDialog(this, "Ocurrio un error al obtener los mantenimientos de la estacion.","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		table = new JTable (modelo);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);  //Solo permitir seleccionar una fila
@@ -53,10 +54,6 @@ public class VerMantenimiento extends JPanel {
 		JScrollPane js=new JScrollPane(table);
 		js.setVisible(true);
 		panel.add(js);
-		
-		
-	  
-	    
 	   }
 	
 
@@ -112,9 +109,14 @@ public class VerMantenimiento extends JPanel {
 		for(int i=0; i<tareas.size(); i++) {
 			   int ID = tareas.get(i).getId();
 			   LocalDate fechainicio = tareas.get(i).getFechaInicioTarea();
-			   LocalDate fechafin = tareas.get(i).getFechaFinTarea();
+			   String fechaFin;
+			   if(tareas.get(i).getFechaFinTarea() == null) {
+				   fechaFin = "";
+			   } else {
+				   fechaFin = tareas.get(i).getFechaFinTarea().toString();
+			   }
 			   String observaciones = tareas.get(i).getObservaciones();
-			   Object[] mantenimiento = {ID, fechainicio, fechafin, observaciones};
+			   Object[] mantenimiento = {ID, fechainicio, fechaFin, observaciones};
 			   modelo.addRow(mantenimiento);
 			   }		
 		return modelo;

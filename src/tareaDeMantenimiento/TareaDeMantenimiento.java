@@ -62,6 +62,14 @@ public class TareaDeMantenimiento {
 	public LocalDate getFechaFinTarea() {
 		return fechaFinTarea;
 	}
-	
+
+	  @Override
+	public String toString() {
+		if(this.getFechaFinTarea() == null) {
+			return"NUNCA";
+		} else{ 
+		return this.getFechaFinTarea().toString();
+		}
+		}
 
 }
