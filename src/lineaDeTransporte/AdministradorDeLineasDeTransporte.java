@@ -1,18 +1,12 @@
 package lineaDeTransporte;
 
-import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import conexionMySQL.Conexion;
-import estacion.Estacion;
-import estacion.EstadoEstacion;
 
 
 public class AdministradorDeLineasDeTransporte {
@@ -45,7 +39,6 @@ public class AdministradorDeLineasDeTransporte {
 		conn.close();
 		return c;
 	}
-	
 	
 	public Integer deleteLineaDeTransporte(Integer id) throws SQLException, ClassNotFoundException {
 		Connection conn = con.crearConexion();
@@ -83,6 +76,13 @@ public class AdministradorDeLineasDeTransporte {
 		return retorno;
 	}
 	
+	/* crear search
+	public List<LineaDeTransporte> searchLineaDeTransporte(EstadoTransporte estado) {
+		return lineas.stream().
+					  filter(linea -> linea.estado.compareTo(estado) == 0).
+					  collect(Collectors.toList());
+	}
+	*/
 	
 	
 	
