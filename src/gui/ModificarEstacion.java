@@ -56,37 +56,35 @@ public class ModificarEstacion extends JPanel {
 		boton.addActionListener(g-> {
 				labelErrores.setForeground(Color.RED);
 				if(estNombre.getText().length() == 0 || estApertura.getText().length() == 0 || estCierre.getText().length() == 0)  {
-					labelErrores.setText("Has dejado algún campo sin completar, revisalo.");
+					JOptionPane.showMessageDialog(this, "Dejaste algun campo sin completar, revisalo.","Error",JOptionPane.ERROR_MESSAGE);
 				} else {
 					LocalTime apertura = null;
 					LocalTime cierre = null;
 					try {
 						apertura = LocalTime.parse(estApertura.getText().toString());
 						cierre = LocalTime.parse(estCierre.getText().toString());
+						EstadoEstacion estado = estEstado.getItemAt(estEstado.getSelectedIndex());
+						Estacion nueva = new Estacion(est.getId(), estNombre.getText().toString(), apertura, cierre, estado);
+						
+						if(est.getEstado() != nueva.getEstado() && nueva.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
+							RegistrarMantenimiento(nueva);	
+						} else if(est.getEstado() != nueva.getEstado() && nueva.getEstado() == EstadoEstacion.OPERATIVA) {
+							RegistrarFinMantenimiento(nueva);
+						}
+						
+						if(est.getEstado() == nueva.getEstado() || (est.getEstado() != nueva.getEstado() && mantExitoso)) {
+						try {
+							
+							admin.modifyEstacion(est, nueva);
+							JOptionPane.showMessageDialog(this,"Se modificó correctamente la estacion.","Info",JOptionPane.INFORMATION_MESSAGE);
+							cambiarJFrame();
+						} catch (ClassNotFoundException | SQLException e1) {
+							JOptionPane.showMessageDialog(this, "Ocurio un error al modificar la estacion","Error",JOptionPane.ERROR_MESSAGE);
+						}
+					}
 					}catch(DateTimeParseException f) {
-						labelErrores.setText("La fecha ingresada es incorrecta, verifica que el formato sea hh:mm");
+						JOptionPane.showMessageDialog(this, "La fecha ingresada es incorrecta, verifica que sea hh:mm","Error",JOptionPane.ERROR_MESSAGE);
 					}
-					EstadoEstacion estado = estEstado.getItemAt(estEstado.getSelectedIndex());
-					Estacion nueva = new Estacion(est.getId(), estNombre.getText().toString(), apertura, cierre, estado);
-					
-					if(est.getEstado() != nueva.getEstado() && nueva.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
-						RegistrarMantenimiento(nueva);
-						
-					} else if(est.getEstado() != nueva.getEstado() && nueva.getEstado() == EstadoEstacion.OPERATIVA) {
-						RegistrarFinMantenimiento(nueva);
-						
-					}
-
-					
-				if(est.getEstado() == nueva.getEstado() || (est.getEstado() != nueva.getEstado() && mantExitoso)) {
-					try {
-						admin.modifyEstacion(est, nueva);
-						cambiarJFrame();
-					} catch (ClassNotFoundException | SQLException e1) {
-						labelErrores.setText("Ha ocurrido un error al modificar la estacion, intente mas tarde");
-					}
-
-				}
 				}
 				
 		});
@@ -130,18 +128,17 @@ public class ModificarEstacion extends JPanel {
 			 LocalDate inicio = null;
 			 try {
 			  inicio = LocalDate.parse(finicio.getText().toString(), formatter);
+				 String descripcion = des.getText().toString();
+				 AdministradorDeTareas adminMan= new AdministradorDeTareas();
+				 try {
+					adminMan.createTareaDeMantenimiento(inicio, null, descripcion, nueva);
+					mantExitoso = true;
+				} catch (ClassNotFoundException | SQLException e) {
+					JOptionPane.showMessageDialog(frame,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}
 			 } catch(DateTimeParseException e) {
 				 JOptionPane.showMessageDialog(frame,"Alguna fecha ingresada no es valida.","False",JOptionPane.ERROR_MESSAGE);
 			 }
-			 String descripcion = des.getText().toString();
-			 AdministradorDeTareas adminMan= new AdministradorDeTareas();
-			 try {
-				adminMan.createTareaDeMantenimiento(inicio, null, descripcion, nueva);
-				mantExitoso = true;
-				JOptionPane.showMessageDialog(frame,"Se registró correctamente el mantenimiento.","Info",JOptionPane.INFORMATION_MESSAGE);
-			} catch (ClassNotFoundException | SQLException e) {
-				JOptionPane.showMessageDialog(frame,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-			}
 		 }
 	}
 	
@@ -166,17 +163,16 @@ public class ModificarEstacion extends JPanel {
 			 LocalDate fin = null;
 			 try {
 			  fin = LocalDate.parse(ffin.getText().toString(), formatter);
+				 try {
+						AdministradorDeTareas adminMan = new AdministradorDeTareas();
+						adminMan.finalizarMantenimiento(nueva, fin);
+						mantExitoso = true;
+					} catch (ClassNotFoundException | SQLException e) {
+						JOptionPane.showMessageDialog(frame, "Ocurrio un error al registrar el fin del mantenimiento","Error",JOptionPane.ERROR_MESSAGE);
+					}
 			 } catch(DateTimeParseException e) {
 				 JOptionPane.showMessageDialog(frame,"La fecha ingresada no es valida.","False",JOptionPane.ERROR_MESSAGE);
 			 }
-			 try {
-					AdministradorDeTareas adminMan = new AdministradorDeTareas();
-					adminMan.finalizarMantenimiento(nueva, fin);
-					mantExitoso = true;
-					JOptionPane.showMessageDialog(frame,"Se registró correctamente el fin del mantenimiento.","Info",JOptionPane.INFORMATION_MESSAGE);
-				} catch (ClassNotFoundException | SQLException e) {
-					JOptionPane.showMessageDialog(frame,e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-				}
 
 		 }		
 	}

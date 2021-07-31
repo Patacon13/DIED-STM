@@ -48,7 +48,7 @@ public class ModificarLineaDeTransporte extends JPanel {
 		boton.addActionListener(g-> {
 				labelErrores.setForeground(Color.RED);
 				if(linNombre.getText().length() == 0)  {
-					labelErrores.setText("Has dejado algún campo sin completar, revisalo.");
+					JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
 				} else {
 					EstadoLinea estado = lEstado.getItemAt(lEstado.getSelectedIndex());
 					ColorLineaDeTransporte color = linColor.getItemAt(linColor.getSelectedIndex());
@@ -58,7 +58,7 @@ public class ModificarLineaDeTransporte extends JPanel {
 						JOptionPane.showMessageDialog(this,"Se modificó la linea correctamente.","Info",JOptionPane.INFORMATION_MESSAGE);
 						cambiarJFrame();
 					} catch (ClassNotFoundException | SQLException e1) {
-						labelErrores.setText("Ha ocurrido un error al modificar la estacion, intente mas tarde");
+						JOptionPane.showMessageDialog(this, "Ha ocurrido un error al modificar la linea.","Error",JOptionPane.ERROR_MESSAGE);
 					}	
 		}
 		});

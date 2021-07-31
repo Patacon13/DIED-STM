@@ -55,8 +55,7 @@ public class BMELineaDeTransporte extends JPanel {
 		try {
 			modelo = construirTabla("");
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-			labelErrores.setText("Ha ocurrido un error al obtener los datos. Intente mas tarde");
+			JOptionPane.showMessageDialog(this, "Ha ocurrido un error al obtener los datos, intente mas tarde","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		table = new JTable (modelo);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);  //Solo permitir seleccionar una fila
@@ -90,7 +89,7 @@ public class BMELineaDeTransporte extends JPanel {
 						panel_1.setVisible(false);
 					}
 				} catch (ClassNotFoundException | SQLException e) {
-					labelErrores.setText(e.getMessage());
+					JOptionPane.showMessageDialog(this, "Ocurrio un erorr al eliminar la tabla.","Error",JOptionPane.ERROR_MESSAGE);
 				} 
 	        }
 	    });
@@ -120,7 +119,7 @@ public class BMELineaDeTransporte extends JPanel {
 				table.setRowSelectionInterval(0, 0); //Seleccionar la primera fila automaticamente
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			labelErrores.setText("Ha ocurrido un error al realizar la busqueda");
+			JOptionPane.showMessageDialog(this, "Ha ocurrido un error al realizar la busqueda","Error",JOptionPane.ERROR_MESSAGE);
 		}	
 	    });
 	    
