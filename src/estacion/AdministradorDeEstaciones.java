@@ -71,6 +71,7 @@ public class AdministradorDeEstaciones {
 		conn.close();
 		return retorno;
 	}
+
 	/*Si sql se deja vacio se devuelven todas las estaciones y si sql tiene algun valor se devuelven las estaciones que tengan
 	en alguna columna ese valor
 	*/

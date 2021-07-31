@@ -1,4 +1,5 @@
 package tests;
+/*
 
 import conexionMySQL.Conexion;
 import static org.junit.Assert.fail;
@@ -25,4 +26,4 @@ class ConnectionTest {
 	}
 	
 
-}
+}*/

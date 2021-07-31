@@ -113,7 +113,9 @@ public class Ruta {
 		this.id = id;
 	}
 
-
+	public boolean estaActiva() {
+		return estado == EstadoLinea.ACTIVO;
+	}
 	
 	
 	

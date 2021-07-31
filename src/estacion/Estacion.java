@@ -27,6 +27,7 @@ public class Estacion implements Comparable<Estacion>{
 		this.estado = estado;
 	}
 
+
 	public Integer getId() {
 		return id;
 	}
@@ -125,5 +126,6 @@ public class Estacion implements Comparable<Estacion>{
 	public boolean equals(Object est) {
 		Estacion e= (Estacion) est; 
 		return this.id == e.getId();
+
 	}
 }
