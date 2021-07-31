@@ -100,6 +100,20 @@ public class AdministradorDeEstaciones {
 		return retorno;
 	}
 	
+	public ArrayList<Estacion> pageRank() throws SQLException, ClassNotFoundException{
+		Connection conn = new Conexion().crearConexion();
+		PreparedStatement ps;
+		ResultSet estaciones;
+		ArrayList<Estacion> retorno = new ArrayList<Estacion>();
+		ps = conn.prepareStatement("SELECT * FROM estacion AS est, (SELECT destino, count(*) AS cant FROM ruta GROUP BY destino) AS aux WHERE est.id = aux.destino ORDER BY aux.cant DESC;");
+		
+		estaciones = ps.executeQuery();
+		while(estaciones.next()){
+			retorno.add(new Estacion(estaciones.getInt(1), estaciones.getString(2), estaciones.getTime(3).toLocalTime(), estaciones.getTime(4).toLocalTime(), EstadoEstacion.valueOf(estaciones.getString(5))));
+		}
+		return retorno;
+	}
+	
 
 	
 }
