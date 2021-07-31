@@ -45,8 +45,7 @@ public class RegistrarRuta extends JPanel {
 		    cargarEstaciones(rOrigen);
 			cargarEstaciones(rDestino);
 		} catch (ClassNotFoundException | SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Ocurrio un error al cargar las estaciones.","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -56,36 +55,37 @@ public class RegistrarRuta extends JPanel {
 			if(rDistancia.getText().toString().length() == 0 || rPasajeros.getText().toString().length() == 0 || rDuracion.getText().toString().length() == 0 || rCosto.getText().toString().length() == 0) {
 				 JOptionPane.showMessageDialog(this,"Dejaste algún campo vacio.","Error",JOptionPane.ERROR_MESSAGE);
 			} else {
-				Boolean a = true;
 			try {
 				distancia = Double.parseDouble(rDistancia.getText().toString());
 				pasajeros = Integer.parseInt(rPasajeros.getText().toString());
 				duracion = Integer.parseInt(rDuracion.getText().toString());
 				costo = Double.parseDouble(rCosto.getText().toString());
+				Estacion origen =  rOrigen.getItemAt(rOrigen.getSelectedIndex());
+				Estacion destino = rOrigen.getItemAt(rDestino.getSelectedIndex());
+				EstadoLinea estado = rEstado.getItemAt(rEstado.getSelectedIndex());
+
+				Ruta nueva = new Ruta(null, origen, destino, distancia, duracion, pasajeros, estado, costo, linea.getId());
+				AdministradorDeRutas admin = new AdministradorDeRutas();
+				if(origen.equals(destino)) {
+					 JOptionPane.showMessageDialog(this,"La estacion de origen no puede ser la misma que la de destino.","Error",JOptionPane.ERROR_MESSAGE);
+				} else {
+					try {
+						admin.addRuta(nueva, linea);
+						JOptionPane.showMessageDialog(this,"Se registró correctamente la ruta.","Info",JOptionPane.INFORMATION_MESSAGE);
+						JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
+						ventana.getContentPane().removeAll(); //Remover componentes
+						ventana.getContentPane().add(new RegistrarTrayectoLinea(linea), BorderLayout.CENTER); 
+						SwingUtilities.updateComponentTreeUI(ventana);
+					} catch (ClassNotFoundException | SQLException e1) {
+						JOptionPane.showMessageDialog(this,"Ocurrio un error. Intenta mas tarde.","Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
 			} catch (NumberFormatException f) {
 				JOptionPane.showMessageDialog(this,"Algun campo completado no es numérico.","Error",JOptionPane.ERROR_MESSAGE);
-				a = false;
 			}
-			if(a) {
-			Estacion origen =  rOrigen.getItemAt(rOrigen.getSelectedIndex());
-			Estacion destino = rOrigen.getItemAt(rDestino.getSelectedIndex());
-			EstadoLinea estado = rEstado.getItemAt(rEstado.getSelectedIndex());
 
-			Ruta nueva = new Ruta(null, origen, destino, distancia, duracion, pasajeros, estado, costo);
-			AdministradorDeRutas admin = new AdministradorDeRutas();
-			try {
-				admin.addRuta(nueva, linea);
-				JOptionPane.showMessageDialog(this,"Se registró correctamente la ruta.","Info",JOptionPane.INFORMATION_MESSAGE);
-				JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
-				 ventana.getContentPane().removeAll(); //Remover componentes
-				 ventana.getContentPane().add(new RegistrarTrayectoLinea(linea), BorderLayout.CENTER); 
-				 SwingUtilities.updateComponentTreeUI(ventana);
-			} catch (ClassNotFoundException | SQLException e1) {
-				JOptionPane.showMessageDialog(this,"Ocurrio un error. Intenta mas tarde.","Error",JOptionPane.ERROR_MESSAGE);
+		
 			}
-			
-			}
-		}
 		});
 
 	}
