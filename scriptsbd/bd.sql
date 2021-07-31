@@ -14,7 +14,8 @@ duracion numeric,
 pasajerosmax integer,
 estado varchar(20),
 costo numeric,
-kilometros numeric
+kilometros numeric,
+linea integer references lineadetransporte(id)
 );
 
 CREATE TABLE mantenimiento(
@@ -32,11 +33,6 @@ color varchar(40),
 estado varchar(20)
 );
 
-CREATE TABLE listaestacioneslinea(
-linea integer references lineadetransporte(id),
-ruta integer references ruta(id),
-primary key(linea, ruta)
-);
 
 CREATE TABLE venta(
 nro_boleto integer primary key,
@@ -53,5 +49,3 @@ nro_boleto integer references venta(nro_boleto),
 ruta integer references ruta(id),
 primary key(nro_boleto, ruta)
 );
-
-
