@@ -15,7 +15,7 @@ public class Conexion {
 	Connection conn = null;
 	Class.forName("com.mysql.cj.jdbc.Driver");
 	conn = DriverManager.getConnection(URL, USER, PASS);
-	System.out.println("Conexión establecida");
+	//System.out.println("Conexión establecida");
 	return conn;
 	}
 
