@@ -4,13 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
 import conexionMySQL.Conexion;
 import tareaDeMantenimiento.TareaDeMantenimiento;
 
-public class Estacion {
+public class Estacion implements Comparable<Estacion>{
 	private Conexion con = new Conexion();
 	protected Integer id;
 	protected String nombre;
@@ -74,19 +75,55 @@ public class Estacion {
 
 	public TareaDeMantenimiento obtenerUltimoMantenimiento() throws SQLException, ClassNotFoundException {
 		Connection conn = con.crearConexion();
-		PreparedStatement pstm = conn.prepareStatement("SELECT * FROM mantenimiento WHERE estacion=?");
+		PreparedStatement pstm = conn.prepareStatement("SELECT * FROM mantenimiento WHERE estacion=? AND id=(SELECT MAX(id) FROM mantenimiento WHERE estacion=?)");
 		pstm.setInt(1, this.getId());
+		pstm.setInt(2, this.getId());
 		ResultSet rs = pstm.executeQuery();
-		TareaDeMantenimiento ret = new TareaDeMantenimiento();
+		TareaDeMantenimiento ret = new TareaDeMantenimiento(null, LocalDate.of(1969, 1, 1), LocalDate.of(1969, 1, 1), null, null);
 	    while(rs.next()) {
 	    	ret.setId(rs.getInt(1));
 	    	ret.setEstacion(this);
 	    	ret.setFechaInicioTarea(rs.getDate(3).toLocalDate());
+	    	if(rs.getDate(4) == null) {
+	    		ret.setFechaFinTarea(LocalDate.of(2100, 1, 1));
+	    	} else {
+	    		ret.setFechaFinTarea(rs.getDate(4).toLocalDate());
+	    	}
 	    }
 		pstm.close();
 		conn.close();
 	return ret;
 	}
 	
+
+	@Override
+	public int compareTo(Estacion o) {
+		TareaDeMantenimiento ultimoMantenimientoThis;
+		TareaDeMantenimiento ultimoMantenimientoO;
+		try {
+			ultimoMantenimientoThis = this.obtenerUltimoMantenimiento();
+			ultimoMantenimientoO = o.obtenerUltimoMantenimiento();
+			if(ultimoMantenimientoThis.getFechaFinTarea().isAfter(ultimoMantenimientoO.getFechaFinTarea())){
+				//el mio termino despues
+				return 1;
+			} else if(ultimoMantenimientoThis.getFechaFinTarea().isBefore(ultimoMantenimientoO.getFechaFinTarea())) {
+				//el del otro termino despues
+				return -1;
+			} else {
+				//son iguales, o sea los dos nunca tuvieron mantenimiento o los dos iniciaron y no terminaron
+				return 0;
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+			
+	}
 	
+	@Override
+	public boolean equals(Object est) {
+		Estacion e= (Estacion) est; 
+		return this.id == e.getId();
+	}
 }
