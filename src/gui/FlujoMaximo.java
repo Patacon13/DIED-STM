@@ -15,6 +15,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -67,7 +68,10 @@ public class FlujoMaximo extends JPanel {
 			try {
 				//lista = (ArrayList<Estacion>) admin.caminoMasBarato(new AdministradorDeEstaciones(), new AdministradorDeLineasDeTransporte(), origen, destino, Pedido.MAXIMOPESO);
 				//lista.stream().forEach(f-> System.out.println(f.toString()));
-			System.out.println(admin.mayorPesoDeAaB(new AdministradorDeEstaciones(), new AdministradorDeLineasDeTransporte(), origen, destino));
+				List<Estacion> estaciones = new AdministradorDeEstaciones().getEstaciones("");
+				List<LineaDeTransporte> lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
+			System.out.println(admin.mayorPesoDeAaB(estaciones, lineas, origen, destino));
+			System.out.println(admin.subGrafoConConexionesAB(estaciones, origen, destino));
 			} catch (ClassNotFoundException | SQLException e1) {
 				
 			}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,11 +31,9 @@ public class AdministradorDeCaminos {
 	private void initMatriz(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
 		grafo = new HashMap<>();
 		AdministradorDeRutas admin = new AdministradorDeRutas();
-		int cantIteraciones = 0;
 		for(Estacion estacionA : estaciones) {
 			grafo.put(estacionA, new HashMap<>());
 			for(Estacion estacionB : estaciones){
-				cantIteraciones++;
 				
 				if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, Double.valueOf(0));
 				else {
@@ -232,9 +231,7 @@ public class AdministradorDeCaminos {
 		return retorno.stream().collect(Collectors.toList());
 	}
 	
-	public int mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
-		List<Estacion> estaciones = adminEstaciones.getEstaciones("");
-		List<LineaDeTransporte> lineas = adminLineas.getLineasDeTransporte("");
+	public int mayorPesoDeAaB(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
 		Estacion origen = estaciones.stream()
 									.filter(estacion -> estacion.id.equals(origenEntrada.id))
 									.findFirst()
@@ -254,4 +251,28 @@ public class AdministradorDeCaminos {
 	}
 	
 	
+	public HashMap<Estacion,HashMap<Estacion,Double>> subGrafoConConexionesAB(List<Estacion> estaciones, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
+		HashMap<Estacion,HashMap<Estacion,Double>> grafoRetorno = new HashMap<>();
+		Estacion origen = estaciones.stream()
+									.filter(estacion -> estacion.id.equals(origenEntrada.id))
+									.findFirst()
+									.get();
+		Estacion destino = estaciones.stream()
+				 					 .filter(estacion -> estacion.id.equals(destinoEntrada.id))
+				 					 .findFirst()
+				 					 .get();
+		
+		HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
+		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, estaciones);
+		
+		for(Estacion estacionA : listaDeEstaciones) {
+			grafoRetorno.put(estacionA, new HashMap<Estacion, Double>());
+			for(Estacion estacionB : listaDeEstaciones) {
+				if(!estacionA.equals(estacionB)) {
+					if(grafo.get(estacionA).containsKey(estacionB)) grafoRetorno.get(estacionA).put(estacionB, Double.valueOf(1));
+				}
+			}
+		}
+		return grafoRetorno;
+	}
 }
