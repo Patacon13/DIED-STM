@@ -28,18 +28,16 @@ public class AdministradorDeCaminos {
 	
 	//el admin se debe reemplazar por la base de datos
 		
-	private void initMatriz(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
+	private void initMatriz(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
 		grafo = new HashMap<>();
-		for(Estacion estacionA : adminEstaciones.getEstaciones("")) {
+		for(Estacion estacionA : estaciones) {
 			grafo.put(estacionA, new HashMap<>());
-			for(Estacion estacionB : adminEstaciones.getEstaciones("")) {
+			for(Estacion estacionB : estaciones){
 				
 				if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, Double.valueOf(0));
 				else {
-					for(LineaDeTransporte linea : adminLineas.getLineasDeTransporte("")) {
-						System.out.println("Con linea " + linea + " iterando " + estacionA + " " + estacionB + "contiene? " + linea.contieneA(estacionA));
+					for(LineaDeTransporte linea : lineas){
 						if(linea.contieneA(estacionA) && linea.llegaA(estacionA, estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
-							System.out.println("Y llega");
 							switch(datoQueRequiere) {
 							case MASRAPIDO:
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.duracionAAdyacente(estacionA, estacionB).doubleValue());
@@ -53,7 +51,6 @@ public class AdministradorDeCaminos {
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA, estacionB));
 								else if(linea.costoAAdyacente(estacionA, estacionB) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA, estacionB));
 							default:
-								System.out.println("iterando " + estacionA + " " + estacionB);
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.pesoA(estacionA, estacionB).doubleValue());
 								else if(linea.pesoA(estacionA, estacionB) > grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoA(estacionA, estacionB).doubleValue());
 							}
@@ -67,11 +64,11 @@ public class AdministradorDeCaminos {
 	}
 	
 	
-	private void init(AdministradorDeEstaciones adminEstaciones, Estacion origen) throws ClassNotFoundException, SQLException {
+	private void init(List<Estacion> estaciones, Estacion origen) throws ClassNotFoundException, SQLException {
 		padre = new ArrayList<>();
 		costos = new ArrayList<>();
 		visitado = new ArrayList<>();
-		for(int i = 0; i<adminEstaciones.getEstaciones("").size(); i++) {
+		for(int i = 0; i<estaciones.size(); i++) {
 			visitado.add(Boolean.FALSE);
 			costos.add(Double.valueOf(Double.MAX_VALUE));
 			padre.add(i);
@@ -91,13 +88,20 @@ public class AdministradorDeCaminos {
 		return nodoMinimo;
 	}
 	
-	private void dijkstra(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
+	private void dijkstra(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
 		
 		int cercanaId = getCercano(costos);
-		Estacion cercana = adminEstaciones.getEstacion(Integer.valueOf(cercanaId));
+		Estacion cercana = estaciones.stream()
+									 .filter(estacion -> estacion.id.equals(Integer.valueOf(cercanaId)))
+									 .findFirst()
+									 .get();
 		visitado.set(cercanaId, true);
 		for(int adj = 0; adj < costos.size(); adj++) {
-			Estacion adyacente = adminEstaciones.getEstacion(Integer.valueOf(adj));
+			int thisIteracion = adj;
+			Estacion adyacente = estaciones.stream()
+										   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
+										   .findFirst()
+										   .get();
 			if(adyacente != null && cercana != null) {
 				if(grafo.get(cercana).get(adyacente) != null && costos.get(adj)>costos.get(cercanaId)+grafo.get(cercana).get(adyacente)) {
 					costos.set(adj, costos.get(cercanaId)+grafo.get(cercana).get(adyacente));
@@ -109,18 +113,23 @@ public class AdministradorDeCaminos {
 		
 	}	
 	
-	private HashMap<Estacion, HashMap<Estacion, Double>> copyGrafo(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) throws ClassNotFoundException, SQLException {
+	private HashMap<Estacion, HashMap<Estacion, Double>> copyGrafo(List<Estacion> estaciones) throws ClassNotFoundException, SQLException {
 		HashMap<Estacion,HashMap<Estacion,Double>> grafoRetorno = new HashMap<Estacion,HashMap<Estacion,Double>>(grafo);
-		for(Estacion estacionA : adminEstaciones.getEstaciones(""))
-			grafoRetorno.put(estacionA, new HashMap<Estacion, Double>(grafoRetorno.get(estacionA)));
+		
+		for(Estacion estacionA : estaciones){
+			
+			grafoRetorno.put(estacionA, new HashMap<Estacion, Double>(grafo.get(estacionA)));
+		
+			
+		}
 		return grafoRetorno;
 	}
 	
-	private HashMap<Estacion,HashMap<Estacion,Double>> floydwarshall(HashMap<Estacion,HashMap<Estacion,Double>> grafoRetorno, AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) throws ClassNotFoundException, SQLException {
-		for(Estacion estacionA : adminEstaciones.getEstaciones("")) {
+	private HashMap<Estacion,HashMap<Estacion,Double>> floydwarshall(HashMap<Estacion,HashMap<Estacion,Double>> grafoRetorno, List<Estacion> estaciones) throws ClassNotFoundException, SQLException {
+		for(Estacion estacionA : estaciones){
 			grafoRetorno.put(estacionA, new HashMap<Estacion, Double>(grafoRetorno.get(estacionA)));
-			for(Estacion estacionB : adminEstaciones.getEstaciones("")) {
-				for(Estacion estacionC : adminEstaciones.getEstaciones("")) {
+			for(Estacion estacionB : estaciones) {
+				for(Estacion estacionC : estaciones) {
 					if(grafoRetorno.get(estacionB) != null && grafoRetorno.get(estacionA) != null)
 						if(grafoRetorno.get(estacionB).get(estacionA) != null && grafoRetorno.get(estacionA).get(estacionC) != null) {
 							if(grafoRetorno.get(estacionB).get(estacionC) != null) grafoRetorno.get(estacionB).put(estacionC, Math.min(grafoRetorno.get(estacionB).get(estacionC),grafoRetorno.get(estacionB).get(estacionA) + grafoRetorno.get(estacionA).get(estacionC)));
@@ -132,10 +141,9 @@ public class AdministradorDeCaminos {
 		return grafoRetorno;
 	}
 	
-	public List<Estacion> subGrafoAB(HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd, Estacion origen, Estacion destino, AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) throws ClassNotFoundException, SQLException {
+	public List<Estacion> subGrafoAB(HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd, Estacion origen, Estacion destino, List<Estacion> estacionesIngreso) throws ClassNotFoundException, SQLException {
 		List<Estacion> estaciones = new ArrayList<>();
-		
-		for(Estacion estacion : adminEstaciones.getEstaciones("")) 
+		for(Estacion estacion : estacionesIngreso)
 			if(grafoFloyd.get(origen).get(estacion) != null && grafoFloyd.get(estacion).get(destino) != null) estaciones.add(estacion);
 		
 		return estaciones;	
@@ -149,11 +157,9 @@ public class AdministradorDeCaminos {
 				
 				if(!recorridosDFS.containsKey(vecina) && grafoDFS.get(origen).get(vecina) != null && !origen.equals(vecina) && grafoDFS.get(origen).get(vecina).intValue() > 0) {
 					
-					if(grafoDFS.get(origen).get(vecina).intValue() == 0) System.out.println("Vamos a pasar 0 en " + origen + " destino " + vecina);
 					int retornoDFS = dfs(vecina, destino, estaciones, Math.min(flux, grafoDFS.get(origen).get(vecina).intValue()));
 					if(retornoDFS != -1) {
 						estacionesMaximoFlujoAux.add(origen);
-						System.out.println("a " + origen + " restando " + retornoDFS);
 						grafoDFS.get(origen).put(vecina, grafoDFS.get(origen).get(vecina) - retornoDFS);
 						flujoEncontradoEnDFS = Math.min(flujoEncontradoEnDFS, grafo.get(origen).get(vecina).intValue());
 						return retornoDFS;
@@ -166,16 +172,15 @@ public class AdministradorDeCaminos {
 		}
 		else {
 			estacionesMaximoFlujoAux.add(origen);
-			System.out.println("primer retorno: " + flux);
 			return flux;
 		}
 		return -1;
 	}
 	
-	private int fordFulkerson(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, List<Estacion> estaciones, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
+	private int fordFulkerson(List<Estacion> estacionesIngreso, List<LineaDeTransporte> lineas, List<Estacion> estaciones, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
 		recorridosDFS = new HashMap<>();
 		estacionesMaximoFlujoAux = new ArrayList<>();
-		grafoDFS = copyGrafo(adminEstaciones, adminLineas);
+		grafoDFS = copyGrafo(estacionesIngreso);
 		int retornoDFS = dfs(origen, destino, estaciones, 100000);
 		int flujoMaximo = 0;
 		while(retornoDFS != -1) {
@@ -186,39 +191,58 @@ public class AdministradorDeCaminos {
 				estacionesMaximoFlujo = estacionesMaximoFlujoAux;
 			}
 			flujoEncontradoEnDFS = 1000000;
-			System.out.println("retorno del dfs " + retornoDFS + " con estaciones " + estacionesMaximoFlujoAux);
 			estacionesMaximoFlujoAux = new ArrayList<>();
-			grafo.forEach((i,j) -> System.out.println("key: " + i + "value " + j));
 			retornoDFS = dfs(origen, destino, estaciones, 100000);
 		}
 		Collections.reverse(estacionesMaximoFlujo);
-		System.out.println(estacionesMaximoFlujo);
 		return flujoMaximo;
 	}
 	
-	public List<Estacion> caminoMasBarato(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
+	public List<Estacion> caminoMasBarato(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Estacion origenEntrada, Estacion destinoEntrada, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
 		Deque<Estacion> retorno = new LinkedList<>();
 		
-		init(adminEstaciones, origen);
-		initMatriz(adminEstaciones, adminLineas, datoQueRequiere);
-		dijkstra(adminEstaciones, adminLineas, origen, destino);
+		Estacion origen = estaciones.stream()
+									.filter(estacion -> estacion.id.equals(origenEntrada.id))
+									.findFirst()
+									.get();
+		Estacion destino = estaciones.stream()
+									 .filter(estacion -> estacion.id.equals(destinoEntrada.id))
+									 .findFirst()
+									 .get();
+		
+		init(estaciones, origen);
+		initMatriz(estaciones, lineas, datoQueRequiere);
+		dijkstra(estaciones, lineas, origen, destino);
 		
 		Integer iteracion = padre.get(destino.id);
 		retorno.addFirst(destino);
 		while(!iteracion.equals(origen.id)) {
-			retorno.addFirst(adminEstaciones.getEstacion(iteracion));
+			int thisIteracion = iteracion;
+			retorno.addFirst(estaciones.stream()
+									   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
+									   .findFirst()
+									   .get());
 			iteracion = padre.get(iteracion);
 		}
 		retorno.addFirst(origen);
 		return retorno.stream().collect(Collectors.toList());
 	}
 	
-	public int mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
-		initMatriz(adminEstaciones, adminLineas, Pedido.MAXIMOPESO);
-		grafo.forEach((i,j) -> System.out.println("key: " + i + "value " + j));
-		HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd = floydwarshall(copyGrafo(adminEstaciones, adminLineas), adminEstaciones, adminLineas);
-		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, adminEstaciones, adminLineas);
-		return fordFulkerson(adminEstaciones, adminLineas, listaDeEstaciones, origen, destino);
+	public int mayorPesoDeAaB(AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
+		List<Estacion> estaciones = adminEstaciones.getEstaciones("");
+		List<LineaDeTransporte> lineas = adminLineas.getLineasDeTransporte("");
+		Estacion origen = estaciones.stream()
+									.filter(estacion -> estacion.id.equals(origenEntrada.id))
+									.findFirst()
+									.get();
+		Estacion destino = estaciones.stream()
+				 					 .filter(estacion -> estacion.id.equals(destinoEntrada.id))
+				 					 .findFirst()
+				 					 .get();
+		initMatriz(estaciones, lineas, Pedido.MAXIMOPESO);
+		HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
+		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, estaciones);
+		return fordFulkerson(estaciones, lineas, listaDeEstaciones, origen, destino);
 	}
 	
 	

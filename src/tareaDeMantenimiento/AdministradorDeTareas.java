@@ -9,15 +9,12 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import conexionMySQL.Conexion;
+import conexionMySQL.Conexion2;
 import estacion.Estacion;
-import lineaDeTransporte.ColorLineaDeTransporte;
-import lineaDeTransporte.EstadoLinea;
-import lineaDeTransporte.LineaDeTransporte;
 
 public class AdministradorDeTareas {
 	
-private Conexion con = new Conexion();
+private Conexion2 con = new Conexion2();
 
 //Habria que recibir una tarea de mantenimiento directamente y ahi insertarla, no los atributos, ver eso
 	public Integer createTareaDeMantenimiento(LocalDate fechaInicioTarea, LocalDate fechaFinTarea, String observaciones, Estacion estacion) throws SQLException, ClassNotFoundException{
@@ -56,7 +53,7 @@ private Conexion con = new Conexion();
 	
 	public ArrayList<TareaDeMantenimiento>getMantenimientos(Estacion est) throws ClassNotFoundException, SQLException {
 		LocalDate fechaFin;
-		Connection conn = new Conexion().crearConexion();
+		Connection conn = new Conexion2().crearConexion();
 		PreparedStatement ps = conn.prepareStatement("SELECT * FROM mantenimiento WHERE estacion=? "); 
 		ArrayList<TareaDeMantenimiento> retorno = new ArrayList<TareaDeMantenimiento>();
 		ps.setInt(1, est.getId());

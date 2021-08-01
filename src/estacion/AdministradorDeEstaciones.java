@@ -5,19 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import conexionMySQL.Conexion;
-import tareaDeMantenimiento.AdministradorDeTareas;
-
+import conexionMySQL.Conexion2;
 
 
 public class AdministradorDeEstaciones {
-	private Conexion con = new Conexion();
+	private Conexion2 con = new Conexion2();
 	
 	public Integer addEstacion(Estacion e) throws ClassNotFoundException, SQLException{
 		Connection conn = con.crearConexion();
@@ -77,7 +71,7 @@ public class AdministradorDeEstaciones {
 	*/
 	public ArrayList<Estacion> getEstaciones(String sql) throws ClassNotFoundException, SQLException {
 		ArrayList<Estacion> retorno = new ArrayList<Estacion>();
-		Connection conn = new Conexion().crearConexion();
+		Connection conn = new Conexion2().crearConexion();
 		PreparedStatement ps;
 		ResultSet estaciones;
 		
@@ -102,7 +96,7 @@ public class AdministradorDeEstaciones {
 	}
 	
 	public ArrayList<Estacion> pageRank() throws SQLException, ClassNotFoundException{
-		Connection conn = new Conexion().crearConexion();
+		Connection conn = new Conexion2().crearConexion();
 		PreparedStatement ps;
 		ResultSet estaciones;
 		ArrayList<Estacion> retorno = new ArrayList<Estacion>();

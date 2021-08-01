@@ -6,13 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 
-import conexionMySQL.Conexion;
+import conexionMySQL.Conexion2;
 import tareaDeMantenimiento.TareaDeMantenimiento;
 
 public class Estacion implements Comparable<Estacion>{
-	private Conexion con = new Conexion();
+	private Conexion2 con = new Conexion2();
 	protected Integer id;
 	protected String nombre;
 	protected LocalTime horarioApertura;
@@ -67,6 +66,7 @@ public class Estacion implements Comparable<Estacion>{
 	public void setEstado(EstadoEstacion estado) {
 		this.estado = estado;
 	}
+	
 	
 	@Override
 	public String toString() {
@@ -125,7 +125,7 @@ public class Estacion implements Comparable<Estacion>{
 	@Override
 	public boolean equals(Object est) {
 		Estacion e= (Estacion) est; 
-		return this.id == e.getId();
+		return this.id.equals(e.getId());
 
 	}
 }

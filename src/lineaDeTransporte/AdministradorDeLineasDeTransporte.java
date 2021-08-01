@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import conexionMySQL.Conexion;
+import conexionMySQL.Conexion2;
 
 
 public class AdministradorDeLineasDeTransporte {
-	private Conexion con = new Conexion();
+	private Conexion2 con = new Conexion2();
 
 	
 	public Integer addlinea(LineaDeTransporte linea) throws SQLException, ClassNotFoundException {
