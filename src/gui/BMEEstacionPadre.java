@@ -109,6 +109,16 @@ public class BMEEstacionPadre extends JPanel {
 		 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
 	    });
 	    
+	    fmaximo.addActionListener(f->{
+		    int selectedRow = table.getSelectedRow();
+	        selectedData = (String) table.getValueAt(selectedRow, 1);
+	        Estacion est = new Estacion((Integer) table.getValueAt(selectedRow, 0), (String) table.getValueAt(selectedRow, 1), LocalTime.parse(table.getValueAt(selectedRow, 2).toString()), LocalTime.parse(table.getValueAt(selectedRow, 3).toString()), EstadoEstacion.valueOf(table.getValueAt(selectedRow, 4).toString()));
+	   	 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
+		 ventana.getContentPane().removeAll(); //Remover componentes
+		 ventana.add(new FlujoMaximo(est), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
+		 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
+	    });
+	    
 	    //Accion al buscar
 	    buscar.addActionListener(f->{
 	    try {

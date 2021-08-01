@@ -132,7 +132,7 @@ public class AdministradorDeCaminos {
 		return grafoRetorno;
 	}
 	
-	private List<Estacion> subGrafoAB(HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd, Estacion origen, Estacion destino, AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) throws ClassNotFoundException, SQLException {
+	public List<Estacion> subGrafoAB(HashMap<Estacion,HashMap<Estacion,Double>> grafoFloyd, Estacion origen, Estacion destino, AdministradorDeEstaciones adminEstaciones, AdministradorDeLineasDeTransporte adminLineas) throws ClassNotFoundException, SQLException {
 		List<Estacion> estaciones = new ArrayList<>();
 		
 		for(Estacion estacion : adminEstaciones.getEstaciones("")) 

@@ -19,6 +19,7 @@ public class LineaDeTransporte {
 		this.id=id;
 		this.nombre=nombre; 
 		this.color=color; //CAMBIAR COLOR A UN ENUM COLOR
+		this.estado = estado;
 	}
 	
 	protected Integer id;
