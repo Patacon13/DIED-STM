@@ -7,9 +7,9 @@ import java.sql.SQLException;
 
 
 public class Conexion2 {
-	 String URL = "jdbc:mysql://sql10.freemysqlhosting.net:3306/sql10428633";
-	 String USER = "sql10428633";
-	 String PASS = "GTJp4WRXcy";
+	String URL = "jdbc:mysql://sql10.freemysqlhosting.net:3306/sql10428757";
+	String USER = "sql10428757";
+	String PASS = "wNW12qcwqW";
 	
 	public Connection crearConexion() throws SQLException, ClassNotFoundException {
 		Connection conn = null;

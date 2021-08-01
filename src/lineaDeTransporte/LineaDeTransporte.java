@@ -1,6 +1,7 @@
 package lineaDeTransporte;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import estacion.Estacion;
 import ruta.AdministradorDeRutas;
@@ -95,6 +96,49 @@ public class LineaDeTransporte {
 		}
 		return null;
 	}
+	
+	//Las mismas funciones pero con listas para reducir los tiempos
+	
+	public boolean contieneA(List<Ruta> rutas, Estacion estacion) {
+		return rutas.stream().anyMatch(ruta -> ruta.getOrigen().equals(estacion) && ruta.estaActiva());
+	}
+
+	public Boolean llegaA(List<Ruta> rutas, Estacion estacion, Estacion destino) throws ClassNotFoundException, SQLException {
+		for(Ruta r : rutas) {
+			if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return true;
+		}
+		return false;
+	}
+
+	public Double costoAAdyacente(List<Ruta> rutas, Estacion estacion, Estacion destino) throws ClassNotFoundException, SQLException {
+		for(Ruta r : rutas) {
+			if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return r.getCosto();
+		}
+		return null;
+	}
+
+	public Double distanciaAAdyacente(List<Ruta> rutas, Estacion estacion, Estacion destino) throws ClassNotFoundException, SQLException {
+		for(Ruta r : rutas) {
+			if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return r.getKilometros();
+		}
+		return null;
+	}
+
+
+	public Integer duracionAAdyacente(List<Ruta> rutas, Estacion estacion, Estacion destino) throws ClassNotFoundException, SQLException {
+		for(Ruta r : rutas) {
+			if(r.getOrigen().equals(estacion) && r.estaActiva()) return r.getDuracion();
+		}
+		return null;
+	}
+
+	public Integer pesoA(List<Ruta> rutas, Estacion estacion, Estacion destino) throws ClassNotFoundException, SQLException {
+		for(Ruta r : rutas) {
+			if(r.getOrigen().equals(estacion) && r.estaActiva() && r.getDestino().equals(destino)) return r.getCantMax();
+		}
+		return null;
+	}
+	
 		
 	public boolean estaActiva() {
 		return estado == EstadoLinea.ACTIVO;

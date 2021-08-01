@@ -7,12 +7,11 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 import lineaDeTransporte.AdministradorDeLineasDeTransporte;
 import lineaDeTransporte.LineaDeTransporte;
+import ruta.*;
 
 public class AdministradorDeCaminos {
 	
@@ -22,37 +21,41 @@ public class AdministradorDeCaminos {
 	public List<Double> costos;
 	public List<Boolean> visitado;
 	public int flujoEncontradoEnDFS = 100000;
-	HashMap<Estacion, Boolean> recorridosDFS;
-	List<Estacion> estacionesMaximoFlujo;
-	List<Estacion> estacionesMaximoFlujoAux;
+	private HashMap<Estacion, Boolean> recorridosDFS;
+	private List<Estacion> estacionesMaximoFlujo;
+	private List<Estacion> estacionesMaximoFlujoAux;
 	
 	//el admin se debe reemplazar por la base de datos
 		
 	private void initMatriz(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
 		grafo = new HashMap<>();
+		AdministradorDeRutas admin = new AdministradorDeRutas();
+		int cantIteraciones = 0;
 		for(Estacion estacionA : estaciones) {
 			grafo.put(estacionA, new HashMap<>());
 			for(Estacion estacionB : estaciones){
+				cantIteraciones++;
 				
 				if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, Double.valueOf(0));
 				else {
 					for(LineaDeTransporte linea : lineas){
-						if(linea.contieneA(estacionA) && linea.llegaA(estacionA, estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
+						List<Ruta> rutas = admin.getRutas(linea);
+						if(linea.contieneA(rutas, estacionA) && linea.llegaA(rutas, estacionA, estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
 							switch(datoQueRequiere) {
 							case MASRAPIDO:
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.duracionAAdyacente(estacionA, estacionB).doubleValue());
-								else if(linea.duracionAAdyacente(estacionA, estacionB) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.duracionAAdyacente(estacionA, estacionB).doubleValue());
+								else if(linea.duracionAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.duracionAAdyacente(rutas, estacionA, estacionB).doubleValue());
 								break;
 							case MENORDISTANCIA:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(estacionA, estacionB));
-								else if(linea.distanciaAAdyacente(estacionA, estacionB) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(estacionA, estacionB));
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(rutas, estacionA, estacionB));
+								else if(linea.distanciaAAdyacente(rutas,estacionA, estacionB) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.distanciaAAdyacente(rutas, estacionA, estacionB));
 								break;
 							case MASBARATO:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA, estacionB));
-								else if(linea.costoAAdyacente(estacionA, estacionB) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(estacionA, estacionB));
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(rutas, estacionA, estacionB));
+								else if(linea.costoAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.costoAAdyacente(rutas, estacionA, estacionB));
 							default:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.pesoA(estacionA, estacionB).doubleValue());
-								else if(linea.pesoA(estacionA, estacionB) > grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoA(estacionA, estacionB).doubleValue());
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, linea.pesoA(rutas, estacionA, estacionB).doubleValue());
+								else if(linea.pesoA(rutas, estacionA, estacionB) > grafo.get(estacionA).get(estacionB)) grafo.get(estacionA).put(estacionB, linea.pesoA(rutas, estacionA, estacionB).doubleValue());
 							}
 						}
 					}
@@ -183,6 +186,7 @@ public class AdministradorDeCaminos {
 		grafoDFS = copyGrafo(estacionesIngreso);
 		int retornoDFS = dfs(origen, destino, estaciones, 100000);
 		int flujoMaximo = 0;
+		estacionesMaximoFlujo = estacionesMaximoFlujoAux;
 		while(retornoDFS != -1) {
 			recorridosDFS.clear();
 			recorridosDFS = new HashMap<>();
@@ -245,7 +249,9 @@ public class AdministradorDeCaminos {
 		return fordFulkerson(estaciones, lineas, listaDeEstaciones, origen, destino);
 	}
 	
-	
+	public List<Estacion> getEstacionesMaximoFlujo() {
+		return estacionesMaximoFlujo;
+	}
 	
 	
 }
