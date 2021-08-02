@@ -1,4 +1,4 @@
-package estacion;
+package pair;
 
 public class Pair<U, V> {
 	

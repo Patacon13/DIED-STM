@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import lineaDeTransporte.ColorLineaDeTransporte;
 import lineaDeTransporte.LineaDeTransporte;
+import pair.Pair;
 import ruta.*;
 
 /**
