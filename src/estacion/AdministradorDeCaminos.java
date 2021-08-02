@@ -146,7 +146,6 @@ public class AdministradorDeCaminos {
 	private void dijkstra(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
 		for(int i = 1; i<costos.size(); i++) {
 			int cercanaId = getCercano(costos);
-			System.out.println("cercana = " + cercanaId);
 			Estacion cercana = estaciones.stream()
 										 .filter(estacion -> estacion.id.equals(Integer.valueOf(cercanaId)))
 										 .findFirst()
@@ -292,8 +291,6 @@ public class AdministradorDeCaminos {
 	 * @param estacionesEnIteracionActual
 	 */
 	private void dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, Deque<Pair<Estacion, LineaDeTransporte>> estacionesEnIteracionActual) {
-		//System.out.println("Origen: " + origen + " Destino: " + destino);
-		//System.out.println("Y la lista en este momento es de " + estacionesEnIteracionActual);
 		if(!origen.equals(destino)) {
 			
 			recorridosDFS.put(origen, Boolean.TRUE);
@@ -307,9 +304,7 @@ public class AdministradorDeCaminos {
 			
 		}
 		else {
-			//System.out.println("Anadiendo + " + estacionesEnIteracionActual);
 			estacionesDeAaB.add(new LinkedList<>(estacionesEnIteracionActual));
-			//System.out.println("Estaciones de a b en este momento: " + estacionesDeAaB);
 		}
 	}
 	
@@ -399,7 +394,6 @@ public class AdministradorDeCaminos {
 			if(ultimaIteracion == iteracion) return null;
 			int thisIteracion = iteracion;
 			ultimaIteracion = thisIteracion;
-			System.out.println(thisIteracion);
 			retorno.addFirst(estaciones.stream()
 									   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
 									   .findFirst()
