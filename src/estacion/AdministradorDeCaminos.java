@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import lineaDeTransporte.ColorLineaDeTransporte;
+import lineaDeTransporte.LineaDeTransporte;
 import lineaDeTransporte.LineaDeTransporte;
 import pair.Pair;
 import ruta.*;
@@ -20,8 +20,8 @@ public class AdministradorDeCaminos {
 	public Integer porcentaje = 0;
 	public boolean finalizado = false;
 	
-	private HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafo;
-	private HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoDFS;
+	private HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafo;
+	private HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoDFS;
 	private List<Integer> padre;
 	private List<Double> costos;
 	private List<Boolean> visitado;
@@ -29,7 +29,7 @@ public class AdministradorDeCaminos {
 	private HashMap<Estacion, Boolean> recorridosDFS;
 	private List<Estacion> estacionesMaximoFlujo;
 	private List<Estacion> estacionesMaximoFlujoAux;
-	private List<Deque<Pair<Estacion, ColorLineaDeTransporte>>> estacionesDeAaB;
+	private List<Deque<Pair<Estacion, LineaDeTransporte>>> estacionesDeAaB;
 	
 		
 	/**
@@ -53,27 +53,27 @@ public class AdministradorDeCaminos {
 			grafo.put(estacionA, new HashMap<>());
 			for(Estacion estacionB : estaciones){
 				
-				if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(Double.valueOf(0),null));
+				if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(Double.valueOf(0),null));
 				else {
 					for(LineaDeTransporte linea : lineas){
 						List<Ruta> rutas = admin.getRutas(linea);
 						if(linea.contieneA(rutas, estacionA) && linea.llegaA(rutas, estacionA, estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
 							switch(datoQueRequiere) {
 							case MASRAPIDO:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.duracionAAdyacente(estacionA, estacionB).doubleValue(), linea.getColor()));
-								else if(linea.duracionAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.duracionAAdyacente(rutas, estacionA, estacionB).doubleValue(), linea.getColor()));
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.duracionAAdyacente(estacionA, estacionB).doubleValue(), linea));
+								else if(linea.duracionAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.duracionAAdyacente(rutas, estacionA, estacionB).doubleValue(), linea));
 								break;
 							case MENORDISTANCIA:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double,ColorLineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea.getColor()));
-								else if(linea.distanciaAAdyacente(rutas,estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea.getColor()));
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double,LineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea));
+								else if(linea.distanciaAAdyacente(rutas,estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea));
 								break;
 							case MASBARATO:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea.getColor()));
-								else if(linea.costoAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea.getColor()));
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea));
+								else if(linea.costoAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea));
 								break;
 							default:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea.getColor()));
-								else if(linea.pesoA(rutas, estacionA, estacionB) > grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea.getColor()));
+								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea));
+								else if(linea.pesoA(rutas, estacionA, estacionB) > grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea));
 							}
 						}
 					}
@@ -177,12 +177,12 @@ public class AdministradorDeCaminos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	private HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> copyGrafo(List<Estacion> estaciones) throws ClassNotFoundException, SQLException {
-		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoRetorno = new HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>>(grafo);
+	private HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> copyGrafo(List<Estacion> estaciones) throws ClassNotFoundException, SQLException {
+		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoRetorno = new HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>>(grafo);
 		
 		for(Estacion estacionA : estaciones){
 			
-			grafoRetorno.put(estacionA, new HashMap<Estacion, Pair<Double,ColorLineaDeTransporte>>(grafo.get(estacionA)));
+			grafoRetorno.put(estacionA, new HashMap<Estacion, Pair<Double,LineaDeTransporte>>(grafo.get(estacionA)));
 		
 			
 		}
@@ -202,15 +202,15 @@ public class AdministradorDeCaminos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	private HashMap<Estacion, HashMap<Estacion, Pair<Double, ColorLineaDeTransporte>>> floydwarshall(HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoRetorno, List<Estacion> estaciones) throws ClassNotFoundException, SQLException {
+	private HashMap<Estacion, HashMap<Estacion, Pair<Double, LineaDeTransporte>>> floydwarshall(HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoRetorno, List<Estacion> estaciones) throws ClassNotFoundException, SQLException {
 		for(Estacion estacionA : estaciones){
-			grafoRetorno.put(estacionA, new HashMap<Estacion, Pair<Double, ColorLineaDeTransporte>>(grafoRetorno.get(estacionA)));
+			grafoRetorno.put(estacionA, new HashMap<Estacion, Pair<Double, LineaDeTransporte>>(grafoRetorno.get(estacionA)));
 			for(Estacion estacionB : estaciones) {
 				for(Estacion estacionC : estaciones) {
 					if(grafoRetorno.get(estacionB) != null && grafoRetorno.get(estacionA) != null)
 						if(grafoRetorno.get(estacionB).get(estacionA) != null && grafoRetorno.get(estacionA).get(estacionC) != null) {
-							if(grafoRetorno.get(estacionB).get(estacionC) != null) grafoRetorno.get(estacionB).put(estacionC, new Pair<Double, ColorLineaDeTransporte>(Math.min(grafoRetorno.get(estacionB).get(estacionC).first,grafoRetorno.get(estacionB).get(estacionA).first + grafoRetorno.get(estacionA).get(estacionC).first),null));
-							else grafoRetorno.get(estacionB).put(estacionC, new Pair<Double, ColorLineaDeTransporte>(grafoRetorno.get(estacionB).get(estacionA).first + grafoRetorno.get(estacionA).get(estacionC).first, null));
+							if(grafoRetorno.get(estacionB).get(estacionC) != null) grafoRetorno.get(estacionB).put(estacionC, new Pair<Double, LineaDeTransporte>(Math.min(grafoRetorno.get(estacionB).get(estacionC).first,grafoRetorno.get(estacionB).get(estacionA).first + grafoRetorno.get(estacionA).get(estacionC).first),null));
+							else grafoRetorno.get(estacionB).put(estacionC, new Pair<Double, LineaDeTransporte>(grafoRetorno.get(estacionB).get(estacionA).first + grafoRetorno.get(estacionA).get(estacionC).first, null));
 						}
 				}
 			}
@@ -233,7 +233,7 @@ public class AdministradorDeCaminos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public List<Estacion> estacionesAB(HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoFloyd, Estacion origen, Estacion destino, List<Estacion> estacionesIngreso) throws ClassNotFoundException, SQLException {
+	public List<Estacion> estacionesAB(HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoFloyd, Estacion origen, Estacion destino, List<Estacion> estacionesIngreso) throws ClassNotFoundException, SQLException {
 		List<Estacion> estaciones = new ArrayList<>();
 		for(Estacion estacion : estacionesIngreso)
 			if(grafoFloyd.get(origen).get(estacion) != null && grafoFloyd.get(estacion).get(destino) != null) estaciones.add(estacion);
@@ -264,7 +264,7 @@ public class AdministradorDeCaminos {
 					int retornoDFS = dfs(vecina, destino, estaciones, Math.min(flux, grafoDFS.get(origen).get(vecina).first.intValue()));
 					if(retornoDFS != -1) {
 						estacionesMaximoFlujoAux.add(origen);
-						grafoDFS.get(origen).put(vecina, new Pair<Double, ColorLineaDeTransporte>((grafoDFS.get(origen).get(vecina).first - retornoDFS), grafoDFS.get(origen).get(vecina).second));
+						grafoDFS.get(origen).put(vecina, new Pair<Double, LineaDeTransporte>((grafoDFS.get(origen).get(vecina).first - retornoDFS), grafoDFS.get(origen).get(vecina).second));
 						flujoEncontradoEnDFS = Math.min(flujoEncontradoEnDFS, grafo.get(origen).get(vecina).first.intValue());
 						return retornoDFS;
 					}
@@ -291,7 +291,7 @@ public class AdministradorDeCaminos {
 	 * @param estaciones
 	 * @param estacionesEnIteracionActual
 	 */
-	private void dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, Deque<Pair<Estacion, ColorLineaDeTransporte>> estacionesEnIteracionActual) {
+	private void dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, Deque<Pair<Estacion, LineaDeTransporte>> estacionesEnIteracionActual) {
 		//System.out.println("Origen: " + origen + " Destino: " + destino);
 		//System.out.println("Y la lista en este momento es de " + estacionesEnIteracionActual);
 		if(!origen.equals(destino)) {
@@ -299,7 +299,7 @@ public class AdministradorDeCaminos {
 			recorridosDFS.put(origen, Boolean.TRUE);
 			for(Estacion vecina : estaciones) {
 				if(!recorridosDFS.containsKey(vecina) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).first.intValue() > 0) {
-					estacionesEnIteracionActual.addLast(new Pair<Estacion, ColorLineaDeTransporte>(vecina, grafo.get(origen).get(vecina).second));
+					estacionesEnIteracionActual.addLast(new Pair<Estacion, LineaDeTransporte>(vecina, grafo.get(origen).get(vecina).second));
 					dfs(vecina, destino, estaciones, estacionesEnIteracionActual);
 					estacionesEnIteracionActual.pop();
 				}
@@ -308,13 +308,13 @@ public class AdministradorDeCaminos {
 		}
 		else {
 			//System.out.println("Anadiendo + " + estacionesEnIteracionActual);
-			estacionesDeAaB.add(new LinkedList(estacionesEnIteracionActual));
+			estacionesDeAaB.add(new LinkedList<>(estacionesEnIteracionActual));
 			//System.out.println("Estaciones de a b en este momento: " + estacionesDeAaB);
 		}
 	}
 	
 	/**
-	 * Inicializa recorridosDFS y estacionesDeAaB para la funcion dfs (solo la que tiene cuarto parametro Deque<Pair<Estacion, ColorLineaDeTransporte>)
+	 * Inicializa recorridosDFS y estacionesDeAaB para la funcion dfs (solo la que tiene cuarto parametro Deque<Pair<Estacion, LineaDeTransporte>)
 	 */
 	private void initDFSAaB() {
 		recorridosDFS = new HashMap<Estacion, Boolean>();
@@ -434,7 +434,7 @@ public class AdministradorDeCaminos {
 				 					 .findFirst()
 				 					 .get();
 		initMatriz(estaciones, lineas, Pedido.MAXIMOPESO);
-		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
+		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
 		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		return fordFulkerson(estaciones, lineas, listaDeEstaciones, origen, destino);
 	}
@@ -452,7 +452,7 @@ public class AdministradorDeCaminos {
 	 * Devuelve el grafo. Se requiere ejecutar previamente initMatriz.
 	 * @return
 	 */
-	public HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> getGrafo() {
+	public HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> getGrafo() {
 		return grafo;
 	}
 	
@@ -468,8 +468,8 @@ public class AdministradorDeCaminos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> subGrafoConConexionesAB(List<Estacion> estaciones, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
-		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoRetorno = new HashMap<>();
+	public HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> subGrafoConConexionesAB(List<Estacion> estaciones, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
+		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoRetorno = new HashMap<>();
 		Estacion origen = estaciones.stream()
 									.filter(estacion -> estacion.id.equals(origenEntrada.id))
 									.findFirst()
@@ -479,14 +479,14 @@ public class AdministradorDeCaminos {
 				 					 .findFirst()
 				 					 .get();
 		
-		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
+		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
 		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		
 		for(Estacion estacionA : listaDeEstaciones) {
-			grafoRetorno.put(estacionA, new HashMap<Estacion, Pair<Double,ColorLineaDeTransporte>>());
+			grafoRetorno.put(estacionA, new HashMap<Estacion, Pair<Double,LineaDeTransporte>>());
 			for(Estacion estacionB : listaDeEstaciones) {
 				if(!estacionA.equals(estacionB)) {
-					if(grafo.get(estacionA).containsKey(estacionB)) grafoRetorno.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(Double.valueOf(1),grafo.get(estacionA).get(estacionB).second));
+					if(grafo.get(estacionA).containsKey(estacionB)) grafoRetorno.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(Double.valueOf(1),grafo.get(estacionA).get(estacionB).second));
 				}
 			}
 		}
@@ -504,7 +504,7 @@ public class AdministradorDeCaminos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public List<Deque<Pair<Estacion, ColorLineaDeTransporte>>> getCaminos(List<Estacion> estaciones, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
+	public List<Deque<Pair<Estacion, LineaDeTransporte>>> getCaminos(List<Estacion> estaciones, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
 		Estacion origen = estaciones.stream()
 				.filter(estacion -> estacion.id.equals(origenEntrada.id))
 				.findFirst()
@@ -513,13 +513,13 @@ public class AdministradorDeCaminos {
 							 .filter(estacion -> estacion.id.equals(destinoEntrada.id))
 							 .findFirst()
 							 .get();
-		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
+		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
 		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		
 		initDFSAaB();
 		
 		dfs(origen, destino, estaciones, new LinkedList<>());
-		estacionesDeAaB.stream().forEach(d -> d.addFirst(new Pair<Estacion, ColorLineaDeTransporte>(origen, null)));
+		estacionesDeAaB.stream().forEach(d -> d.addFirst(new Pair<Estacion, LineaDeTransporte>(origen, null)));
 		return estacionesDeAaB;
 	}
 

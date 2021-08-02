@@ -6,17 +6,17 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Valentin/git/DIED-STM/mysql-connector-java-8.0.25.jar">
+	<classpathentry exported="true" kind="lib" path="/home/tomas/Escritorio/mysql/mysql-connector-java-8.0.25/mysql-connector-java-8.0.25.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Valentin/git/DIED-STM_FIN/gs-core-2.0.jar">
+	<classpathentry exported="true" kind="lib" path="/home/tomas/UTN/3°/DIED/TPIntegrador/DIED-STM/gs-core-2.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Valentin/git/DIED-STM_FIN/gs-ui-swing-2.0.jar">
+	<classpathentry exported="true" kind="lib" path="/home/tomas/UTN/3°/DIED/TPIntegrador/DIED-STM/gs-ui-swing-2.0.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

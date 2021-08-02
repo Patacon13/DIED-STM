@@ -125,7 +125,7 @@ public class FlujoMaximo extends JPanel {
 							
 							//System.out.println(admin2.caminoPedido(estaciones, lineas, origen, destino, Pedido.MAXIMOPESO));
 							Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
-							List<Deque<Pair<Estacion, ColorLineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
+							List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
 							ParserDelegator workaround = new ParserDelegator();
 							String texto = "";
 							texto = texto + "<html>";

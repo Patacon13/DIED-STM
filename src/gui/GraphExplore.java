@@ -32,9 +32,9 @@ import pair.Pair;
             	ArrayList<Estacion> estaciones= admin2.getEstaciones("");
             	ArrayList<LineaDeTransporte> lineas= admin3.getLineasDeTransporte("");
             	System.out.println(admin.caminoPedido(estaciones, lineas, origen, destino, Pedido.MASBARATO));
-            	List<Deque<Pair<Estacion, ColorLineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
+            	List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
             	System.out.println(resultado);
-            	Iterator<Pair<Estacion, ColorLineaDeTransporte>> it;
+            	Iterator<Pair<Estacion, LineaDeTransporte>> it;
             	Integer count = 0;
             	for(int i=0; i<resultado.size(); i++) {
            		 	ArrayList<String> nodospedges = new ArrayList<String>();
