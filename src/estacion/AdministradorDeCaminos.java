@@ -24,6 +24,7 @@ public class AdministradorDeCaminos {
 	private HashMap<Estacion, Boolean> recorridosDFS;
 	private List<Estacion> estacionesMaximoFlujo;
 	private List<Estacion> estacionesMaximoFlujoAux;
+	private List<Deque<Pair<Estacion, ColorLineaDeTransporte>>> estacionesDeAaB;
 	
 	//el admin se debe reemplazar por la base de datos
 		
@@ -178,6 +179,31 @@ public class AdministradorDeCaminos {
 		return -1;
 	}
 	
+	private void dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, Deque<Pair<Estacion, ColorLineaDeTransporte>> estacionesEnIteracionActual) {
+		//System.out.println("Origen: " + origen + " Destino: " + destino);
+		//System.out.println("Y la lista en este momento es de " + estacionesEnIteracionActual);
+		if(!origen.equals(destino)) {
+			
+			recorridosDFS.put(origen, Boolean.TRUE);
+			for(Estacion vecina : estaciones) {
+				System.out.println("trabajando de origen " + origen + " a vecina " + vecina);
+				if(!recorridosDFS.containsKey(vecina) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).first.intValue() > 0) {
+					System.out.println("Entrando desde " + origen + " a " + vecina);
+					estacionesEnIteracionActual.addLast(new Pair<Estacion, ColorLineaDeTransporte>(vecina, grafo.get(origen).get(vecina).second));
+					dfs(vecina, destino, estaciones, estacionesEnIteracionActual);
+					estacionesEnIteracionActual.pop();
+				}
+			}
+			
+		}
+		else {
+			//System.out.println("Anadiendo + " + estacionesEnIteracionActual);
+			estacionesDeAaB.add(new LinkedList(estacionesEnIteracionActual));
+			//System.out.println("Estaciones de a b en este momento: " + estacionesDeAaB);
+		}
+		System.out.println("Saliendo de " + origen);
+	}
+	
 	private int fordFulkerson(List<Estacion> estacionesIngreso, List<LineaDeTransporte> lineas, List<Estacion> estaciones, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
 		recorridosDFS = new HashMap<>();
 		estacionesMaximoFlujoAux = new ArrayList<>();
@@ -241,6 +267,7 @@ public class AdministradorDeCaminos {
 				 					 .get();
 		initMatriz(estaciones, lineas, Pedido.MAXIMOPESO);
 		System.out.println(grafo);
+		System.out.println("TODOS LOS CAMINOS: " + getCaminos(estaciones, origenEntrada, destinoEntrada));
 		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
 		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, estaciones);
 		return fordFulkerson(estaciones, lineas, listaDeEstaciones, origen, destino);
@@ -276,9 +303,30 @@ public class AdministradorDeCaminos {
 		return grafoRetorno;
 	}
 	
-	public List<List<Estacion>> getCaminos(List<Estacion> estaciones, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
-		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> subGrafoConConexiones = subGrafoConConexionesAB(estaciones, origen, destino);
-		
-		return null;
+	private void initDFSAaB() {
+		recorridosDFS = new HashMap<Estacion, Boolean>();
+		estacionesDeAaB = new ArrayList<>();
 	}
+	
+	public List<Deque<Pair<Estacion, ColorLineaDeTransporte>>> getCaminos(List<Estacion> estaciones, Estacion origenEntrada, Estacion destinoEntrada) throws ClassNotFoundException, SQLException {
+		Estacion origen = estaciones.stream()
+				.filter(estacion -> estacion.id.equals(origenEntrada.id))
+				.findFirst()
+				.get();
+		Estacion destino = estaciones.stream()
+							 .filter(estacion -> estacion.id.equals(destinoEntrada.id))
+							 .findFirst()
+							 .get();
+		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
+		List<Estacion> listaDeEstaciones = subGrafoAB(grafoFloyd, origen, destino, estaciones);
+		
+		initDFSAaB();
+		System.out.println("Estaciones: " + estaciones);
+		System.out.println("Grafo: " + grafo);
+		
+		dfs(origen, destino, estaciones, new LinkedList<>());
+		estacionesDeAaB.stream().forEach(d -> d.addFirst(new Pair<Estacion, ColorLineaDeTransporte>(origen, null)));
+		return estacionesDeAaB;
+	}
+
 }
