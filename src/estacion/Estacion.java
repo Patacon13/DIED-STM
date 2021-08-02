@@ -71,7 +71,7 @@ public class Estacion implements Comparable<Estacion>{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return this.nombre + " " + this.id;
+		return this.nombre;
 	}
 
 	public TareaDeMantenimiento obtenerUltimoMantenimiento() throws SQLException, ClassNotFoundException {
