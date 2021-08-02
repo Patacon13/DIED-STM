@@ -154,8 +154,6 @@ public class AdministradorDeCaminos {
 		visitado.set(cercanaId, true);
 		for(int adj = 0; adj < costos.size(); adj++) {
 			int thisIteracion = adj;
-			System.out.println("Adj es " + adj);
-			System.out.println("Estaciones: " + estaciones);
 			Estacion adyacente = estaciones.stream()
 										   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion+1)))
 										   .findFirst()
@@ -300,9 +298,7 @@ public class AdministradorDeCaminos {
 			
 			recorridosDFS.put(origen, Boolean.TRUE);
 			for(Estacion vecina : estaciones) {
-				System.out.println("trabajando de origen " + origen + " a vecina " + vecina);
 				if(!recorridosDFS.containsKey(vecina) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).first.intValue() > 0) {
-					System.out.println("Entrando desde " + origen + " a " + vecina);
 					estacionesEnIteracionActual.addLast(new Pair<Estacion, ColorLineaDeTransporte>(vecina, grafo.get(origen).get(vecina).second));
 					dfs(vecina, destino, estaciones, estacionesEnIteracionActual);
 					estacionesEnIteracionActual.pop();
@@ -315,7 +311,6 @@ public class AdministradorDeCaminos {
 			estacionesDeAaB.add(new LinkedList(estacionesEnIteracionActual));
 			//System.out.println("Estaciones de a b en este momento: " + estacionesDeAaB);
 		}
-		System.out.println("Saliendo de " + origen);
 	}
 	
 	/**
