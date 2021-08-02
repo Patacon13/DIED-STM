@@ -154,8 +154,10 @@ public class AdministradorDeCaminos {
 		visitado.set(cercanaId, true);
 		for(int adj = 0; adj < costos.size(); adj++) {
 			int thisIteracion = adj;
+			System.out.println("Adj es " + adj);
+			System.out.println("Estaciones: " + estaciones);
 			Estacion adyacente = estaciones.stream()
-										   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
+										   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion+1)))
 										   .findFirst()
 										   .get();
 			if(adyacente != null && cercana != null) {
