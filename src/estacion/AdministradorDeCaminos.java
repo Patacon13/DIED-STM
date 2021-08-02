@@ -14,10 +14,7 @@ import lineaDeTransporte.LineaDeTransporte;
 import pair.Pair;
 import ruta.*;
 
-/**
- * @author tomas
- *
- */
+
 public class AdministradorDeCaminos {
 	
 	public Integer porcentaje = 0;
