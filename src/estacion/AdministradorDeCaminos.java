@@ -20,6 +20,9 @@ import ruta.*;
  */
 public class AdministradorDeCaminos {
 	
+	public Integer porcentaje = 0;
+	public boolean finalizado = false;
+	
 	private HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafo;
 	private HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoDFS;
 	private List<Integer> padre;
@@ -47,6 +50,7 @@ public class AdministradorDeCaminos {
 	 */
 	private void initMatriz(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
 		grafo = new HashMap<>();
+		Integer cont = 0;
 		AdministradorDeRutas admin = new AdministradorDeRutas();
 		for(Estacion estacionA : estaciones) {
 			grafo.put(estacionA, new HashMap<>());
@@ -78,8 +82,14 @@ public class AdministradorDeCaminos {
 				}
 				
 			}
-			
+			cont++;
+			if(estaciones.size() != 0) {
+				porcentaje = cont*100/estaciones.size();
+				System.out.println(porcentaje);
+			}
 		}
+		porcentaje = 100;
+		finalizado = true;
 	}
 	
 	
@@ -423,8 +433,6 @@ public class AdministradorDeCaminos {
 				 					 .findFirst()
 				 					 .get();
 		initMatriz(estaciones, lineas, Pedido.MAXIMOPESO);
-		System.out.println(grafo);
-		System.out.println("TODOS LOS CAMINOS: " + getCaminos(estaciones, origenEntrada, destinoEntrada));
 		HashMap<Estacion,HashMap<Estacion,Pair<Double,ColorLineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
 		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		return fordFulkerson(estaciones, lineas, listaDeEstaciones, origen, destino);
@@ -508,8 +516,6 @@ public class AdministradorDeCaminos {
 		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		
 		initDFSAaB();
-		System.out.println("Estaciones: " + estaciones);
-		System.out.println("Grafo: " + grafo);
 		
 		dfs(origen, destino, estaciones, new LinkedList<>());
 		estacionesDeAaB.stream().forEach(d -> d.addFirst(new Pair<Estacion, ColorLineaDeTransporte>(origen, null)));

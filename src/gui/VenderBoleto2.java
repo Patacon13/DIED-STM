@@ -239,7 +239,7 @@ public class VenderBoleto2 extends JPanel {
 		destinoValue.setText(destino.toString());
 		
 		btnVolver.addActionListener(e->{
-				 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
+				 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde estï¿½ el Jpanel
 				 ventana.getContentPane().removeAll(); //Remover componentes
 				 ventana.add(new VenderBoleto(), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
 				 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
