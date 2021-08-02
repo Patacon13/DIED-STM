@@ -70,6 +70,7 @@ public class AdministradorDeCaminos {
 							case MASBARATO:
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea.getColor()));
 								else if(linea.costoAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea.getColor()));
+								break;
 							default:
 								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea.getColor()));
 								else if(linea.pesoA(rutas, estacionA, estacionB) > grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, ColorLineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea.getColor()));
@@ -82,7 +83,6 @@ public class AdministradorDeCaminos {
 			cont++;
 			if(estaciones.size() != 0) {
 				porcentaje = cont*100/estaciones.size();
-				System.out.println(porcentaje);
 			}
 		}
 		porcentaje = 100;
@@ -102,7 +102,10 @@ public class AdministradorDeCaminos {
 		padre = new ArrayList<>();
 		costos = new ArrayList<>();
 		visitado = new ArrayList<>();
-		for(int i = 0; i<estaciones.size(); i++) {
+		padre.add(0);
+		visitado.add(Boolean.FALSE);
+		costos.add(Double.valueOf(0));
+		for(int i = 1; i<=estaciones.get(estaciones.size()-1).id; i++) {
 			visitado.add(Boolean.FALSE);
 			costos.add(Double.valueOf(Double.MAX_VALUE));
 			padre.add(i);
@@ -118,8 +121,8 @@ public class AdministradorDeCaminos {
 	 */
 	private int getCercano(List<Double> costos) {
 		Double valorMinimo = Double.MAX_VALUE;
-		int nodoMinimo = 0;
-		for(int i = 0; i<costos.size(); i++) {
+		int nodoMinimo = 1;
+		for(int i = 1; i<costos.size(); i++) {
 			if(!visitado.get(i) && costos.get(i) < valorMinimo) {
 				valorMinimo = costos.get(i);
 				nodoMinimo = i;
@@ -127,7 +130,6 @@ public class AdministradorDeCaminos {
 		}
 		return nodoMinimo;
 	}
-	
 	/**
 	 * Realiza el algoritmo de Dijkstra.
 	 * <p>
@@ -142,29 +144,30 @@ public class AdministradorDeCaminos {
 	 * @throws SQLException
 	 */
 	private void dijkstra(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
-		
-		int cercanaId = getCercano(costos);
-		Estacion cercana = estaciones.stream()
-									 .filter(estacion -> estacion.id.equals(Integer.valueOf(cercanaId)))
-									 .findFirst()
-									 .get();
-		visitado.set(cercanaId, true);
-		for(int adj = 0; adj < costos.size(); adj++) {
-			int thisIteracion = adj;
-			Estacion adyacente = estaciones.stream()
-										   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion+1)))
-										   .findFirst()
-										   .get();
-			if(adyacente != null && cercana != null) {
-				if(grafo.get(cercana).get(adyacente) != null && costos.get(adj)>costos.get(cercanaId)+grafo.get(cercana).get(adyacente).first) {
-					costos.set(adj, costos.get(cercanaId)+grafo.get(cercana).get(adyacente).first);
-					padre.set(adj, cercanaId);
+		for(int i = 1; i<costos.size(); i++) {
+			int cercanaId = getCercano(costos);
+			System.out.println("cercana = " + cercanaId);
+			Estacion cercana = estaciones.stream()
+										 .filter(estacion -> estacion.id.equals(Integer.valueOf(cercanaId)))
+										 .findFirst()
+										 .get();
+			visitado.set(cercanaId, true);
+			for(int adj = 1; adj < costos.size(); adj++) {
+				int thisIteracion = adj;
+				Estacion adyacente = estaciones.stream()
+											   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
+											   .findFirst()
+											   .get();
+				if(adyacente != null && cercana != null) {
+					if(grafo.get(cercana).get(adyacente) != null && costos.get(adj)>costos.get(cercanaId)+grafo.get(cercana).get(adyacente).first) {
+						costos.set(adj, costos.get(cercanaId)+grafo.get(cercana).get(adyacente).first);
+						padre.set(adj, cercanaId);
+					}
 				}
 			}
 		}
 		
-		
-	}	
+	}
 	
 	/**
 	 * Copia el grafo generado en initMatriz por uno nuevo. Requiere que anteriormente se ejecute initMatriz
@@ -391,8 +394,12 @@ public class AdministradorDeCaminos {
 		
 		Integer iteracion = padre.get(destino.id);
 		retorno.addFirst(destino);
+		int ultimaIteracion = -1;
 		while(!iteracion.equals(origen.id)) {
+			if(ultimaIteracion == iteracion) return null;
 			int thisIteracion = iteracion;
+			ultimaIteracion = thisIteracion;
+			System.out.println(thisIteracion);
 			retorno.addFirst(estaciones.stream()
 									   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
 									   .findFirst()
