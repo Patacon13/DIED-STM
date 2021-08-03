@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
+import estacion.EstadoEstacion;
 import tareaDeMantenimiento.AdministradorDeTareas;
 import tareaDeMantenimiento.TareaDeMantenimiento;
 import java.awt.GridBagLayout;
@@ -50,8 +51,15 @@ public class ProximoMantenimiento extends JPanel {
 					DefaultTableModel modelo = new DefaultTableModel(null,columnas){
 					    public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
 					};
-					   Object[] estacion = {aMantener.getId(), aMantener.getNombre(), aMantener.getHorarioApertura(), aMantener.getHorarioCierre(), aMantener.getEstado().toString()};
-					   modelo.addRow(estacion);
+
+						if(aMantener.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
+							Object[] estacion = {"-", "-", "-", "-", "-"};
+							   modelo.addRow(estacion);
+						} else {
+							Object[] estacion = {aMantener.getId(), aMantener.getNombre(), aMantener.getHorarioApertura(), aMantener.getHorarioCierre(), aMantener.getEstado().toString()};
+							   modelo.addRow(estacion);
+						}
+
 				
 					JTable table = new JTable (modelo);
 					table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);  //Solo permitir seleccionar una fila
