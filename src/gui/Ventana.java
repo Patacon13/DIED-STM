@@ -19,7 +19,7 @@ public class Ventana extends JFrame {
 				try {
 					Ventana frame = new Ventana();
 					frame.setVisible(true);
-					frame.setSize(700, 550);
+					frame.setSize(600, 400);
 					frame.setTitle("Sistema de Gestión Transporte Multimodal");
 				} catch (Exception e) {
 					e.printStackTrace();
