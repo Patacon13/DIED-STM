@@ -84,7 +84,7 @@ public class BMEEstacionPadre extends JPanel {
 	        idsec = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
 	        Object[] opciones = {"De acuerdo!", "No"};
 	        Object defaultOp = opciones[0];
-	        int elegido = JOptionPane.showOptionDialog(this, "Se eliminará " + table.getValueAt(selectedRow, 1).toString() + " ¿Está seguro?", "Eliminar estacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, defaultOp);
+	        int elegido = JOptionPane.showOptionDialog(this, "Se eliminará " + table.getValueAt(selectedRow, 1).toString() + ", las rutas que salen y llegan a la estacion y sus mantenimientos ¿Está seguro?", "Eliminar estacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, defaultOp);
 	        if(elegido == JOptionPane.YES_OPTION) {
 	        	try {
 					admin.deleteEstacion(idsec);
