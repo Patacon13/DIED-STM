@@ -19,7 +19,7 @@ public class Ventana extends JFrame {
 				try {
 					Ventana frame = new Ventana();
 					frame.setVisible(true);
-					frame.setSize(600, 400);
+					frame.setSize(700, 550);
 					frame.setTitle("Sistema de Gestión Transporte Multimodal");
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -102,13 +102,6 @@ public class Ventana extends JFrame {
 		setJMenuBar(menuBar);
 	}
 		
-	private void cambiarPanel(JPanel jp, JMenuItem sm) {
-		sm.addActionListener(e -> {
-			 this.getContentPane().removeAll();
-			 this.getContentPane().add(jp);
-			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
-		});
 
-	}
 		 }
 		
