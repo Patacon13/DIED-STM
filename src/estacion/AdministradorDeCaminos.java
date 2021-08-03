@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lineaDeTransporte.LineaDeTransporte;
-import lineaDeTransporte.LineaDeTransporte;
 import pair.Pair;
 import ruta.*;
 
@@ -297,7 +296,7 @@ public class AdministradorDeCaminos {
 			
 			recorridosDFS.put(origen, Boolean.TRUE);
 			for(Estacion vecina : estaciones) {
-				if(!recorridosDFS.containsKey(vecina) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).first.intValue() > 0) {
+				if((!recorridosDFS.containsKey(vecina) || !recorridosDFS.get(vecina)) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).first.intValue() > 0) {
 					estacionesEnIteracionActual.addLast(new Pair<Estacion, LineaDeTransporte>(vecina, grafo.get(origen).get(vecina).second));
 					dfs(vecina, destino, estaciones, estacionesEnIteracionActual);
 					estacionesEnIteracionActual.pop();
@@ -308,6 +307,9 @@ public class AdministradorDeCaminos {
 		else {
 			estacionesDeAaB.add(new LinkedList<>(estacionesEnIteracionActual));
 		}
+		
+		recorridosDFS.put(origen, Boolean.FALSE);
+		
 	}
 	
 	/**
