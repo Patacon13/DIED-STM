@@ -456,7 +456,7 @@ public class AdministradorDeCaminos {
 	/**
 	 * Retorna un subgrafo de A a B.
 	 * <p>
-	 * Utilizando DFS, revisa que estaciones forman parte del grafo que va de A a B, y lo devuelve con una distancia de 1 para cada par de nodos al cual se pueda llegar.
+	 * Utilizando la lsita de estaciones y el grafo, encuentra el subgrafo que tiene las conexiones de A a B y lo retorna en forma de listas de listas (lista de Deque). Requiere que previamente se llame a initMatriz
 	 * @param estaciones
 	 * @param origenEntrada
 	 * @param destinoEntrada
