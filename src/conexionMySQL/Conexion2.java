@@ -8,8 +8,8 @@ import java.sql.SQLException;
 
 public class Conexion2 {
 	String URL = "jdbc:mysql://localhost:3306/tpdied";
-	String USER = "usuario";
-	String PASS = "contrasena";
+	String USER = "root";
+	String PASS = "";
 	
 	public Connection crearConexion() throws SQLException, ClassNotFoundException {
 		Connection conn = null;
