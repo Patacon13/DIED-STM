@@ -46,48 +46,50 @@ public class AdministradorDeCaminos {
 	 * @throws SQLException
 	 */
 	private void initMatriz(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
-		grafo = new HashMap<>();
-		Integer cont = 0;
-		AdministradorDeRutas admin = new AdministradorDeRutas();
-		for(Estacion estacionA : estaciones) {
-			grafo.put(estacionA, new HashMap<>());
-			for(Estacion estacionB : estaciones){
-				
-				if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(Double.valueOf(0),null));
-				else {
-					for(LineaDeTransporte linea : lineas){
-						List<Ruta> rutas = admin.getRutas(linea);
-						if(linea.contieneA(rutas, estacionA) && linea.llegaA(rutas, estacionA, estacionB) && linea.estaActiva()) { //Si contiene al origen, y llega a la estacionB como destino
-							switch(datoQueRequiere) {
-							case MASRAPIDO:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.duracionAAdyacente(estacionA, estacionB).doubleValue(), linea));
-								else if(linea.duracionAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.duracionAAdyacente(rutas, estacionA, estacionB).doubleValue(), linea));
-								break;
-							case MENORDISTANCIA:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double,LineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea));
-								else if(linea.distanciaAAdyacente(rutas,estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea));
-								break;
-							case MASBARATO:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea));
-								else if(linea.costoAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea));
-								break;
-							default:
-								if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea));
-								else if(linea.pesoA(rutas, estacionA, estacionB) > grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea));
-							}
-						}
-					}
-				}
-				
-			}
-			cont++;
-			if(estaciones.size() != 0) {
-				porcentaje = cont*100/estaciones.size();
-			}
-		}
-		porcentaje = 100;
-		finalizado = true;
-	}
+        grafo = new HashMap<>();
+        Integer cont = 0;
+        AdministradorDeRutas admin = new AdministradorDeRutas();
+        for(Estacion estacionA : estaciones) {
+            grafo.put(estacionA, new HashMap<>());
+            if(estacionA.estado == EstadoEstacion.OPERATIVA) {
+                for(Estacion estacionB : estaciones){
+                    
+                    if(estacionA.equals(estacionB)) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(Double.valueOf(0),null));
+                    else {
+                        for(LineaDeTransporte linea : lineas){
+                            List<Ruta> rutas = admin.getRutas(linea);
+                            if(linea.contieneA(rutas, estacionA) && linea.llegaA(rutas, estacionA, estacionB) && linea.estaActiva() && estacionB.estado == EstadoEstacion.OPERATIVA) { //Si contiene al origen, y llega a la estacionB como destino
+                                switch(datoQueRequiere) {
+                                case MASRAPIDO:
+                                    if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.duracionAAdyacente(estacionA, estacionB).doubleValue(), linea));
+                                    else if(linea.duracionAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.duracionAAdyacente(rutas, estacionA, estacionB).doubleValue(), linea));
+                                    break;
+                                case MENORDISTANCIA:
+                                    if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double,LineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea));
+                                    else if(linea.distanciaAAdyacente(rutas,estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.distanciaAAdyacente(rutas, estacionA, estacionB), linea));
+                                    break;
+                                case MASBARATO:
+                                    if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea));
+                                    else if(linea.costoAAdyacente(rutas, estacionA, estacionB) < grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.costoAAdyacente(rutas, estacionA, estacionB), linea));
+                                    break;
+                                default:
+                                    if(grafo.get(estacionA).get(estacionB) == null) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea));
+                                    else if(linea.pesoA(rutas, estacionA, estacionB) > grafo.get(estacionA).get(estacionB).first) grafo.get(estacionA).put(estacionB, new Pair<Double, LineaDeTransporte>(linea.pesoA(rutas, estacionA, estacionB).doubleValue(), linea));
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+                cont++;
+                if(estaciones.size() != 0) {
+                    porcentaje = cont*100/estaciones.size();
+                }
+            }
+        }
+        porcentaje = 100;
+        finalizado = true;
+    }
 	
 	
 	/**
@@ -487,6 +489,16 @@ public class AdministradorDeCaminos {
 		return grafoRetorno;
 	}
 	
+	public double valor(List<Estacion> estaciones) {
+		Double value = Double.valueOf(0);
+		Estacion anterior = null;
+		for(Estacion e : estaciones) {
+			if(anterior != null) 
+				value += grafo.get(anterior).get(e).first;
+			anterior = e;
+		}
+		return value;
+	}
 	/**
 	 * Retorna los caminos de A a B.
 	 * <p>
