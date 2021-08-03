@@ -27,6 +27,8 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.Color;
 
 public class FlujoMaximo extends JPanel {
 
@@ -45,6 +47,7 @@ public class FlujoMaximo extends JPanel {
 		setLayout(gridBagLayout);
 		
 		JLabel lblNewLabel = new JLabel("Flujo m\u00E1ximo");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 3;
@@ -58,27 +61,15 @@ public class FlujoMaximo extends JPanel {
 		gbc_comboBox.gridx = 3;
 		gbc_comboBox.gridy = 2;
 		add(comboBox, gbc_comboBox);
-		try {
-			this.cargarEstaciones(comboBox);
-		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println("Error al cargas las estaciones");
-		}
-		
-		
-		JButton boton = new JButton("Elegir estacion destino");
-		GridBagConstraints gbc_boton = new GridBagConstraints();
-		gbc_boton.insets = new Insets(0, 0, 5, 5);
-		gbc_boton.gridx = 3;
-		gbc_boton.gridy = 4;
-		add(boton, gbc_boton);
 		
 
   		JProgressBar progressBar = new JProgressBar(0, 100);
-  		 progressBar.setStringPainted(true);
+  		progressBar.setForeground(new Color(60, 179, 113));
+  		progressBar.setStringPainted(true);
   		GridBagConstraints gbc_progressBar = new GridBagConstraints();
   		gbc_progressBar.insets = new Insets(0, 0, 5, 5);
   		gbc_progressBar.gridx = 3;
-  		gbc_progressBar.gridy = 6;
+  		gbc_progressBar.gridy = 4;
   		add(progressBar, gbc_progressBar);
   		
   		JLabel lblNewLabel_1 = new JLabel("");
@@ -89,6 +80,7 @@ public class FlujoMaximo extends JPanel {
   		add(lblNewLabel_1, gbc_labelValor);
   		
   		JLabel res = new JLabel("");
+  		res.setFont(new Font("Tahoma", Font.PLAIN, 10));
   		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
   		gbc_lblNewLabel_1.gridwidth = 5;
   		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
@@ -100,90 +92,105 @@ public class FlujoMaximo extends JPanel {
   		GridBagConstraints gbc_labelValor1 = new GridBagConstraints();
   		gbc_labelValor1.insets = new Insets(0, 0, 5, 5);
   		gbc_labelValor1.gridx = 3;
-  		gbc_labelValor1.gridy = 10;
+  		gbc_labelValor1.gridy = 9;
   		add(labelValor, gbc_labelValor1);
+		try {
+			this.cargarEstaciones(comboBox);
+		} catch (ClassNotFoundException | SQLException e) {
+			System.out.println("Error al cargas las estaciones");
+		}
+  		
+  		
+  		JButton boton = new JButton("Elegir estacion destino");
+  		GridBagConstraints gbc_boton = new GridBagConstraints();
+  		gbc_boton.insets = new Insets(0, 0, 5, 5);
+  		gbc_boton.gridx = 3;
+  		gbc_boton.gridy = 3;
+  		add(boton, gbc_boton);
   		
   		JLabel estacionesFMax = new JLabel("Camino: ");
   		GridBagConstraints gbc_estacionesFMax = new GridBagConstraints();
-  		gbc_estacionesFMax.insets = new Insets(0, 0, 0, 5);
+  		gbc_estacionesFMax.insets = new Insets(0, 0, 5, 5);
   		gbc_estacionesFMax.gridx = 3;
-  		gbc_estacionesFMax.gridy = 12;
+  		gbc_estacionesFMax.gridy = 10;
   		add(estacionesFMax, gbc_estacionesFMax);
+  		
+  				boton.addActionListener(e->{
+  					progressBar.setValue(0);
+  					res.setText("");
+  					labelValor.setText("Flujo maximo: ");
+  					estacionesFMax.setText("Camino: ");
+  					Estacion destino = comboBox.getItemAt(comboBox.getSelectedIndex());
+  					if(!origen.equals(destino)) {
+  					boton.setVisible(false);
+  					lblNewLabel_1.setText("Caminos posibles: ");
+  					ArrayList<Estacion> lista = new ArrayList<Estacion>();
+  			    	AdministradorDeCaminos admin = new AdministradorDeCaminos();	
+  			    	AdministradorDeCaminos admin2 = new AdministradorDeCaminos();	
+  					Thread thread = new Thread(){
+  						    public void run(){
+  						    
+  						    	List<Estacion> estaciones;
+  								try {
+  									estaciones = new AdministradorDeEstaciones().getEstaciones("");
+  									List<LineaDeTransporte> lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
+  									//System.out.println(admin2.caminoPedido(estaciones, lineas, origen, destino, Pedido.MAXIMOPESO));
+  									Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
+  									List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
+  									ParserDelegator workaround = new ParserDelegator();
+  									String texto = "";
+  									texto = texto + "<html>";
+  									Iterator<Pair<Estacion, LineaDeTransporte>> it;
+  									if(resultado.size() != 0) {
+  									for(int i=0; i<resultado.size(); i++) {
+  										it = resultado.get(i).iterator();
+  										while(it.hasNext()) {
+  										texto = texto + " " + it.next().first.toString() + " -->";
+  										}
+  										texto = texto + "FIN <br></br>";
+  									}
+  									texto = texto + "</html>";
+  									res.setText(texto);
+  									res.repaint();
+  									labelValor.setText(labelValor.getText() + " " + valor + " pasajeros");
+  									estacionesFMax.setText(estacionesFMax.getText() + admin.getEstacionesMaximoFlujo());
+  									} else {
+  										SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "No existe camino entre las estaciones elegidas."));
+  									}
+  									boton.setVisible(true);
+  								} catch (ClassNotFoundException | SQLException e) {
+  		
+  									SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "Ocurrio un error al calcular el flujo maximo"));
+  									e.printStackTrace();
+  								}
+  		
+  						    }
+  						  };
+  						  
+  						  Thread barra = new Thread(){
+  							    public void run(){
+  							    	while(!admin.finalizado) {
+  									        progressBar.setValue(admin.porcentaje);
+  									        progressBar.repaint();
+  									try {
+  										Thread.sleep(500);
+  									} catch (InterruptedException e) {
+  										
+  									}		
+  							    	}
+  							    	progressBar.setValue(100);
+  							        progressBar.repaint();
+  							    	}
+  							    	
+  							    };
+  				    	  thread.start();
+  				    	  barra.start();
+  					} else {
+  						JOptionPane.showMessageDialog(this, "Las estaciones no pueden ser iguales.","Error",JOptionPane.ERROR_MESSAGE);
+  					}
+  				});
+  		
 
-		boton.addActionListener(e->{
-			progressBar.setValue(0);
-			res.setText("");
-			labelValor.setText("");
-			estacionesFMax.setText("");
-			Estacion destino = comboBox.getItemAt(comboBox.getSelectedIndex());
-			if(!origen.equals(destino)) {
-			boton.setVisible(false);
-			lblNewLabel_1.setText("Caminos posibles: ");
-			ArrayList<Estacion> lista = new ArrayList<Estacion>();
-	    	AdministradorDeCaminos admin = new AdministradorDeCaminos();	
-	    	AdministradorDeCaminos admin2 = new AdministradorDeCaminos();	
-			Thread thread = new Thread(){
-				    public void run(){
-				    
-				    	List<Estacion> estaciones;
-						try {
-							estaciones = new AdministradorDeEstaciones().getEstaciones("");
-							List<LineaDeTransporte> lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
-							//System.out.println(admin2.caminoPedido(estaciones, lineas, origen, destino, Pedido.MAXIMOPESO));
-							Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
-							List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
-							ParserDelegator workaround = new ParserDelegator();
-							String texto = "";
-							texto = texto + "<html>";
-							Iterator<Pair<Estacion, LineaDeTransporte>> it;
-							if(resultado.size() != 0) {
-							for(int i=0; i<resultado.size(); i++) {
-								it = resultado.get(i).iterator();
-								while(it.hasNext()) {
-								texto = texto + " " + it.next().first.toString() + " -->";
-								}
-								texto = texto + "<br></br>";
-							}
-							texto = texto + "</html>";
-							res.setText(texto);
-							res.repaint();
-							labelValor.setText(labelValor.getText() + " " + valor + " pasajeros");
-							estacionesFMax.setText(estacionesFMax.getText() + admin.getEstacionesMaximoFlujo());
-							} else {
-								SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "No existe camino entre las estaciones elegidas."));
-							}
-							boton.setVisible(true);
-						} catch (ClassNotFoundException | SQLException e) {
-
-							SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "Ocurrio un error al calcular el flujo maximo"));
-							e.printStackTrace();
-						}
-
-				    }
-				  };
-				  
-				  Thread barra = new Thread(){
-					    public void run(){
-					    	while(!admin.finalizado) {
-							        progressBar.setValue(admin.porcentaje);
-							        progressBar.repaint();
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								
-							}		
-					    	}
-					    	progressBar.setValue(100);
-					        progressBar.repaint();
-					    	}
-					    	
-					    };
-		    	  thread.start();
-		    	  barra.start();
-			} else {
-				JOptionPane.showMessageDialog(this, "Las estaciones no pueden ser iguales.","Error",JOptionPane.ERROR_MESSAGE);
-			}
-		});
 		
 	}
 	
