@@ -1,15 +1,15 @@
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('A1','08:00','20:00','OPERATIVA');
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('A2','10:00','18:00','OPERATIVA');
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('A3','11:00','12:00','OPERATIVA');
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('A4','07:30','20:30','OPERATIVA');
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('A5','08:30','15:00','OPERATIVA');
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('A6','15:00','00:00','EN_MANTENIMIENTO');
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('A7','10:00','20:00','EN_MANTENIMIENTO');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A1','08:00','20:00','OPERATIVA');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A2','10:00','18:00','OPERATIVA');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A3','11:00','12:00','OPERATIVA');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A4','07:30','20:30','OPERATIVA');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A5','08:30','15:00','OPERATIVA');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A6','15:00','00:00','EN_MANTENIMIENTO');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A7','10:00','20:00','EN_MANTENIMIENTO');
 
-INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('L1','AMARILLO','ACTIVO');
-INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('L2','AZUL','ACTIVO');
-INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('L3','CYAN','INACTIVO');
-INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('L4','GRIS','ACTIVO');
+INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('Linea L1','AMARILLO','ACTIVO');
+INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('Linea L2','AZUL','ACTIVO');
+INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('Linea L3','CYAN','INACTIVO');
+INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('Linea L4','GRIS','ACTIVO');
 
 INSERT INTO ruta (origen, destino, duracion, pasajerosmax, estado, costo, kilometros, linea) VALUES (1,2,15,15,'ACTIVO',10,25,1);
 INSERT INTO ruta (origen, destino, duracion, pasajerosmax, estado, costo, kilometros, linea) VALUES (2,7,5,16,'ACTIVO',12,25,2);
