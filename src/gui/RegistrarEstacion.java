@@ -75,7 +75,7 @@ public class RegistrarEstacion extends JPanel {
 		add(estNombre, gbc_estNombre);
 		estNombre.setColumns(10);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("Horario apertura: ");
+		JLabel lblNewLabel_1_1 = new JLabel("Horario apertura: (hh:mm)");
 		GridBagConstraints gbc_lblNewLabel_1_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1_1.insets = new Insets(0, 0, 5, 5);
@@ -93,7 +93,7 @@ public class RegistrarEstacion extends JPanel {
 		gbc_estApertura.gridy = 3;
 		add(estApertura, gbc_estApertura);
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("Horario cierre:  ");
+		JLabel lblNewLabel_1_1_1 = new JLabel("Horario cierre: (hh:mm)");
 		GridBagConstraints gbc_lblNewLabel_1_1_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1_1_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1_1_1.insets = new Insets(0, 0, 5, 5);
