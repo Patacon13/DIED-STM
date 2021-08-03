@@ -502,7 +502,7 @@ public class AdministradorDeCaminos {
 	/**
 	 * Retorna los caminos de A a B.
 	 * <p>
-	 * Utilizando la lsita de estaciones y el grafo, encuentra el subgrafo que tiene las conexiones de A a B y lo retorna en forma de listas de listas (lista de Deque). 
+	 * Utilizando la lsita de estaciones y el grafo, encuentra el subgrafo que tiene las conexiones de A a B y lo retorna en forma de listas de listas (lista de Deque). Requiere que previamente se llame a initMatriz
 	 * @param estaciones
 	 * @param origenEntrada
 	 * @param destinoEntrada
