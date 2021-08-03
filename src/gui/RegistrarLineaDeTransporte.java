@@ -85,20 +85,20 @@ public class RegistrarLineaDeTransporte extends JPanel {
 		gbc_linColor.fill = GridBagConstraints.HORIZONTAL;
 		gbc_linColor.gridx = 3;
 		gbc_linColor.gridy = 3;
+		add(linColor, gbc_linColor);
 		linColor.addItem(ColorLineaDeTransporte.AMARILLO);
 		linColor.addItem(ColorLineaDeTransporte.AZUL);
 		linColor.addItem(ColorLineaDeTransporte.BLANCO);
 		linColor.addItem(ColorLineaDeTransporte.CYAN);
 		linColor.addItem(ColorLineaDeTransporte.GRIS);
 		linColor.addItem(ColorLineaDeTransporte.GRIS_CLARO);
-		linColor.addItem(ColorLineaDeTransporte.GRIS_CLARO);
+		linColor.addItem(ColorLineaDeTransporte.GRIS_OSCURO);
 		linColor.addItem(ColorLineaDeTransporte.MAGENTA);
 		linColor.addItem(ColorLineaDeTransporte.NARANJA);
 		linColor.addItem(ColorLineaDeTransporte.NEGRO);
 		linColor.addItem(ColorLineaDeTransporte.ROJO);
 		linColor.addItem(ColorLineaDeTransporte.ROSADO);
 		linColor.addItem(ColorLineaDeTransporte.VERDE);
-		add(linColor, gbc_linColor);
 		
 		
 		JLabel lblNewLabel_1_2 = new JLabel("Estado:  ");
@@ -149,7 +149,7 @@ public class RegistrarLineaDeTransporte extends JPanel {
 					JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
 				} else {
 					EstadoLinea estado = linEstado.getItemAt(linEstado.getSelectedIndex());
-					ColorLineaDeTransporte color = linColor.getItemAt(linEstado.getSelectedIndex());
+					ColorLineaDeTransporte color = linColor.getItemAt(linColor.getSelectedIndex());
 					LineaDeTransporte nueva = new LineaDeTransporte(null, linNombre.getText().toString(), color, estado);
 					try {
 						admin.addlinea(nueva);
