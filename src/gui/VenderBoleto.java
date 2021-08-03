@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
+import estacion.EstadoEstacion;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -149,13 +150,14 @@ public class VenderBoleto extends JPanel {
 		Estacion origen = estOrigen.getItemAt(estOrigen.getSelectedIndex());
 		Estacion destino = estDestino.getItemAt(estDestino.getSelectedIndex());
 		if(nombre.length() == 0 || email.length() == 0) {
-			JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo.","Error",JOptionPane.ERROR_MESSAGE);
 		} else if(origen.equals(destino)){
-			JOptionPane.showMessageDialog(this, "La estacion de origen no puede ser igual a la de destino","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "La estacion de origen no puede ser igual a la de destino.","Error",JOptionPane.ERROR_MESSAGE);
+		}else if(origen.getEstado() == EstadoEstacion.EN_MANTENIMIENTO || destino.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
+			JOptionPane.showMessageDialog(this, "La estacion de origen o destino se encuentra en mantenimiento.","Error",JOptionPane.ERROR_MESSAGE);
 		} else {
 			 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
 			 ventana.getContentPane().removeAll(); //Remover componentes
-			//String elegido = getSelectedButtonText(grupo);
 			 ventana.add(new VenderBoleto2(origen, destino, nombre, email), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
 			 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
 		}
