@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.Viewer;
 
@@ -236,7 +237,7 @@ public class VenderBoleto2 extends JPanel {
 		        	Pedido pedido = Pedido.valueOf(getSelectedButtonText(grupo));
 					//new Mapa(origen, destino, pedido).start();
 			    	System.setProperty("org.graphstream.ui", "swing");
-			        Graph graph = new SingleGraph("Mapa");
+			        Graph graph = new MultiGraph("Mapa");
 			        try {
 			        	ArrayList<Estacion> estaciones= admin2.getEstaciones("");
 			        	ArrayList<LineaDeTransporte> lineas= admin3.getLineasDeTransporte("");
@@ -245,7 +246,7 @@ public class VenderBoleto2 extends JPanel {
 			        	Iterator<Pair<Estacion, LineaDeTransporte>> it;
 			        	Integer count = 0;
 			        	
-			        	
+			        	if(camino != null) {
 			        	for(int i=0; i<resultado.size(); i++) {
 			       		 	ArrayList<Pair<Estacion, LineaDeTransporte>> nodospedges = new ArrayList<Pair<Estacion, LineaDeTransporte>>();
 			        		 it = resultado.get(i).iterator();
@@ -253,14 +254,16 @@ public class VenderBoleto2 extends JPanel {
 								Pair<Estacion, LineaDeTransporte> actual2 = it.next();
 								String actual = actual2.first.toString();
 								if(graph.getNode(actual) == null) {
-									System.out.println(actual);
 									graph.addNode(actual);
 								}
+								//System.out.println(actual);
 								nodospedges.add(actual2);
 							}
 							for(Integer k= 1; k<nodospedges.size(); k++) {
-					            graph.addEdge(count.toString(), nodospedges.get(k).first.toString(), nodospedges.get(k-1).first.toString());
-					            graph.getEdge(count.toString()).setAttribute("ui.label", nodospedges.get(k).second.getNombre());
+								if(graph.getEdge(nodospedges.get(k).toString()) == null) {
+									graph.addEdge(nodospedges.get(k).toString(), nodospedges.get(k-1).first.toString(), nodospedges.get(k).first.toString(), true);
+									graph.getEdge(nodospedges.get(k).toString()).setAttribute("ui.label", nodospedges.get(k).second.getNombre());
+								}
 					            count++;
 							}
 							}
@@ -279,16 +282,42 @@ public class VenderBoleto2 extends JPanel {
 				        
 				        Object[] opciones = {"De acuerdo!", "No"};
 				        Object defaultOp = opciones[0];
-
-
+				        btnMapa.setVisible(false);
+				        JButton btnConfirmar = new JButton("Confirmar venta");
+				        GridBagConstraints gbc_btnConfirmar = new GridBagConstraints();
+				        gbc_btnConfirmar.insets = new Insets(0, 0, 5, 5);
+				        gbc_btnConfirmar.gridx = 5;
+				        gbc_btnConfirmar.gridy = 16;
+				        add(btnConfirmar, gbc_btnConfirmar);
+				        btnConfirmar.addActionListener(f-> {
+				        
+				        
 				        int elegido = JOptionPane.showOptionDialog(this, "Se registrara la venta con los datos descritos. ¿Esta seguro?", "Registrar venta", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, defaultOp);
 				        if(elegido == JOptionPane.YES_OPTION) {
 				        	Boleto nuevo = new Boleto(null, email, nombre, LocalDate.now(), origen, destino, costo, camino);
 				        	AdministradorDeBoletos admin4 = new AdministradorDeBoletos();
-				        	admin4.addBoleto(nuevo);
-				        } 
+				        	try {
+								admin4.addBoleto(nuevo);
+								btnConfirmar.setVisible(false);
+								btnMapa.setVisible(true);
+								precioValue.setText("");
+								caminoASeguirValue.setText("");
+								JOptionPane.showMessageDialog(this, "La venta se realizo correctamnete.","Info",JOptionPane.INFORMATION_MESSAGE);
+							} catch (ClassNotFoundException | SQLException e1) {
+								JOptionPane.showMessageDialog(this, "Ocurrio al registrar la venta.","Error",JOptionPane.ERROR_MESSAGE);
+							}
+				        } else {
+							btnConfirmar.setVisible(false);
+							btnMapa.setVisible(true);
+							precioValue.setText("");
+							caminoASeguirValue.setText("");
+				        }
+				        });
+			        	} else {
+			        		JOptionPane.showMessageDialog(this, "No existe camino entre las estaciones elegidas.","Error",JOptionPane.ERROR_MESSAGE);
+			        	}
 					} catch (ClassNotFoundException | SQLException f) {
-							//Agregar excepcion
+						JOptionPane.showMessageDialog(this, "Ocurrio un error al mostrar el mapa.","Error",JOptionPane.ERROR_MESSAGE);	//Agregar excepcion
 					}
 
 		        });
