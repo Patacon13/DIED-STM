@@ -61,6 +61,7 @@ public class AdministradorDeEstaciones {
 		while(estaciones.next()){
 			 retorno = new Estacion(estaciones.getInt(1), estaciones.getString(2), estaciones.getTime(3).toLocalTime(), estaciones.getTime(4).toLocalTime(), EstadoEstacion.valueOf(estaciones.getString(5)));
 		}
+		estaciones.close();
 		ps.close();
 		conn.close();
 		return retorno;
@@ -90,6 +91,7 @@ public class AdministradorDeEstaciones {
 		while(estaciones.next()){
 		retorno.add(new Estacion(estaciones.getInt(1), estaciones.getString(2), estaciones.getTime(3).toLocalTime(), estaciones.getTime(4).toLocalTime(), EstadoEstacion.valueOf(estaciones.getString(5))));
 		  }
+		estaciones.close();
 		ps.close();
 		conn.close();
 		return retorno;
@@ -106,6 +108,7 @@ public class AdministradorDeEstaciones {
 		while(estaciones.next()){
 			retorno.add(new Estacion(estaciones.getInt(1), estaciones.getString(2), estaciones.getTime(3).toLocalTime(), estaciones.getTime(4).toLocalTime(), EstadoEstacion.valueOf(estaciones.getString(5))));
 		}
+		estaciones.close();
 		ps.close();
 		conn.close();
 		return retorno;

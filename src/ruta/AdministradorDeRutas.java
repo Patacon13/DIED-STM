@@ -24,6 +24,7 @@ public class AdministradorDeRutas {
 		while(ruta.next()){
 			retorno.add(new Ruta(ruta.getInt(1), admin.getEstacion(ruta.getInt(2)), admin.getEstacion(ruta.getInt(3)), ruta.getDouble(8), ruta.getInt(4), ruta.getInt(5), EstadoLinea.valueOf(ruta.getString(6)), ruta.getDouble(7), ruta.getInt(9)));
 		}
+		ruta.close();
 		ps.close();
 		conn.close();
 		return retorno;
@@ -38,6 +39,7 @@ public class AdministradorDeRutas {
 		while(ruta.next()){
 			retorno.add(new Ruta(ruta.getInt(1), admin.getEstacion(ruta.getInt(2)), admin.getEstacion(ruta.getInt(3)), ruta.getDouble(8), ruta.getInt(4), ruta.getInt(5), EstadoLinea.valueOf(ruta.getString(6)), ruta.getDouble(7), ruta.getInt(9)));
 		}
+		ruta.close();
 		ps.close();
 		conn.close();
 		return retorno;
@@ -73,6 +75,7 @@ public class AdministradorDeRutas {
 		while(ruta.next()){
 			retorno = new Ruta(ruta.getInt(1), admin.getEstacion(ruta.getInt(2)), admin.getEstacion(ruta.getInt(3)), ruta.getDouble(8), ruta.getInt(4), ruta.getInt(5), EstadoLinea.valueOf(ruta.getString(6)), ruta.getDouble(7), ruta.getInt(9));
 		}
+		ruta.close();
 		ps.close();
 		conn.close();
 		return retorno;

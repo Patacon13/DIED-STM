@@ -71,6 +71,7 @@ public class AdministradorDeLineasDeTransporte {
 		while(lineas.next()){
 		retorno.add(new LineaDeTransporte(lineas.getInt(1), lineas.getString(2), ColorLineaDeTransporte.valueOf(lineas.getString(3)), EstadoLinea.valueOf(lineas.getString(4))));
 		  }
+		lineas.close();
 		ps.close();
 		conn.close();
 		return retorno;
