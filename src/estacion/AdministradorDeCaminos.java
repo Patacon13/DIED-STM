@@ -521,8 +521,6 @@ public class AdministradorDeCaminos {
 							 .filter(estacion -> estacion.id.equals(destinoEntrada.id))
 							 .findFirst()
 							 .get();
-		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
-		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		
 		initDFSAaB();
 		
