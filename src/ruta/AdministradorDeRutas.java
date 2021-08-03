@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import conexionMySQL.Conexion2;
 import estacion.AdministradorDeEstaciones;
+import estacion.Estacion;
 import lineaDeTransporte.EstadoLinea;
 import lineaDeTransporte.LineaDeTransporte;
 
@@ -79,6 +80,24 @@ public class AdministradorDeRutas {
 		ps.close();
 		conn.close();
 		return retorno;
+	}
+	
+	public Integer getRutaCant(LineaDeTransporte linea, Estacion origen, Estacion destino) throws SQLException, ClassNotFoundException {
+		Connection conn = con.crearConexion();
+		PreparedStatement ps = conn.prepareStatement("SELECT id FROM ruta WHERE origen=? AND destino=? AND linea=?");
+		AdministradorDeEstaciones admin = new AdministradorDeEstaciones();
+		ps.setInt(1, origen.getId());
+		ps.setInt(2, destino.getId());
+		ps.setInt(3, linea.getId());
+		ResultSet ruta = ps.executeQuery();
+		Integer count = 0;
+		while(ruta.next()){
+			count++;
+		}
+		ruta.close();
+		ps.close();
+		conn.close();
+		return count;
 	}
 	
 
