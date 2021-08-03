@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
+import java.awt.HeadlessException;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -68,6 +70,8 @@ public class RegistrarRuta extends JPanel {
 				AdministradorDeRutas admin = new AdministradorDeRutas();
 				if(origen.equals(destino)) {
 					 JOptionPane.showMessageDialog(this,"La estacion de origen no puede ser la misma que la de destino.","Error",JOptionPane.ERROR_MESSAGE);
+				} else if(admin.getRutaCant(linea, origen, destino) > 0) {
+					JOptionPane.showMessageDialog(this,"Ya existe una ruta entre las estaciones elegidas en esta linea.","Error",JOptionPane.ERROR_MESSAGE);
 				} else {
 					try {
 						admin.addRuta(nueva, linea);
@@ -82,6 +86,15 @@ public class RegistrarRuta extends JPanel {
 			}
 			} catch (NumberFormatException f) {
 				JOptionPane.showMessageDialog(this,"Algun campo completado no es numérico.","Error",JOptionPane.ERROR_MESSAGE);
+			} catch (HeadlessException e1) {
+				JOptionPane.showMessageDialog(this,"Error.","Error",JOptionPane.ERROR_MESSAGE);
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 
 		
