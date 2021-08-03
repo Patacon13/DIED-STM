@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import conexionMySQL.Conexion2;
+import tareaDeMantenimiento.AdministradorDeTareas;
 
 
 public class AdministradorDeEstaciones {
@@ -15,12 +18,24 @@ public class AdministradorDeEstaciones {
 	
 	public Integer addEstacion(Estacion e) throws ClassNotFoundException, SQLException{
 		Connection conn = con.crearConexion();
-		PreparedStatement pstm = conn.prepareStatement("INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES (?,?,?,?)");
+		PreparedStatement pstm = conn.prepareStatement("INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 		pstm.setString(1, e.nombre);
 		pstm.setTime(2,Time.valueOf(e.horarioApertura));
 		pstm.setTime(3,Time.valueOf(e.horarioCierre));
 		pstm.setString(4, e.estado.toString());
 		Integer c = pstm.executeUpdate();
+
+		if(e.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
+			ResultSet rs= pstm.getGeneratedKeys();
+			Integer uid = 0;
+			if(rs.next()){
+				uid =rs.getInt(1);
+			}
+			e.setId(uid);
+			AdministradorDeTareas admin = new AdministradorDeTareas();
+			admin.createTareaDeMantenimiento(LocalDate.now(), null, "La estacion inició en mantenimiento", e);
+			rs.close();
+		}
 		pstm.close();
 		conn.close();
 		return c;
