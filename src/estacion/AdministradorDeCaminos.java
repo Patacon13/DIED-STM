@@ -7,6 +7,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lineaDeTransporte.LineaDeTransporte;
@@ -147,17 +148,19 @@ public class AdministradorDeCaminos {
 	private void dijkstra(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
 		for(int i = 1; i<costos.size(); i++) {
 			int cercanaId = getCercano(costos);
-			Estacion cercana = estaciones.stream()
-										 .filter(estacion -> estacion.id.equals(Integer.valueOf(cercanaId)))
-										 .findFirst()
-										 .get();
+			Optional<Estacion> cerc = estaciones.stream()
+											 	.filter(estacion -> estacion.id.equals(Integer.valueOf(cercanaId)))
+											 	.findFirst();
+			Estacion cercana = null;
+			if(cerc.isPresent()) cercana = cerc.get();
 			visitado.set(cercanaId, true);
 			for(int adj = 1; adj < costos.size(); adj++) {
 				int thisIteracion = adj;
-				Estacion adyacente = estaciones.stream()
-											   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
-											   .findFirst()
-											   .get();
+				Optional<Estacion> ady = estaciones.stream()
+						   						   .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion)))
+						                           .findFirst();
+				Estacion adyacente = null;
+				if(ady.isPresent()) adyacente = ady.get();
 				if(adyacente != null && cercana != null) {
 					if(grafo.get(cercana).get(adyacente) != null && costos.get(adj)>costos.get(cercanaId)+grafo.get(cercana).get(adyacente).first) {
 						costos.set(adj, costos.get(cercanaId)+grafo.get(cercana).get(adyacente).first);
