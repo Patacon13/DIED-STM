@@ -21,6 +21,7 @@ import java.awt.Insets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -89,8 +90,9 @@ public class FlujoMaximo extends JPanel {
   		
   		JLabel res = new JLabel("");
   		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+  		gbc_lblNewLabel_1.gridwidth = 5;
   		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-  		gbc_lblNewLabel_1.gridx = 3;
+  		gbc_lblNewLabel_1.gridx = 1;
   		gbc_lblNewLabel_1.gridy = 8;
   		add(res, gbc_lblNewLabel_1);
   		
@@ -109,10 +111,14 @@ public class FlujoMaximo extends JPanel {
   		add(estacionesFMax, gbc_estacionesFMax);
 
 		boton.addActionListener(e->{
-		
+			progressBar.setValue(0);
+			res.setText("");
+			labelValor.setText("");
+			estacionesFMax.setText("");
+			Estacion destino = comboBox.getItemAt(comboBox.getSelectedIndex());
+			if(!origen.equals(destino)) {
 			boton.setVisible(false);
 			lblNewLabel_1.setText("Caminos posibles: ");
-			Estacion destino = comboBox.getItemAt(comboBox.getSelectedIndex());
 			ArrayList<Estacion> lista = new ArrayList<Estacion>();
 	    	AdministradorDeCaminos admin = new AdministradorDeCaminos();	
 	    	AdministradorDeCaminos admin2 = new AdministradorDeCaminos();	
@@ -129,19 +135,26 @@ public class FlujoMaximo extends JPanel {
 							ParserDelegator workaround = new ParserDelegator();
 							String texto = "";
 							texto = texto + "<html>";
+							Iterator<Pair<Estacion, LineaDeTransporte>> it;
+							if(resultado.size() != 0) {
 							for(int i=0; i<resultado.size(); i++) {
-								for(int j=0; j<resultado.get(i).size(); j++){
-								texto = texto + " " + resultado.get(i).poll().first.toString() + " -->";
+								it = resultado.get(i).iterator();
+								while(it.hasNext()) {
+								texto = texto + " " + it.next().first.toString() + " -->";
 								}
-								texto = texto + "" + destino.toString();
 								texto = texto + "<br></br>";
 							}
 							texto = texto + "</html>";
 							res.setText(texto);
+							res.repaint();
 							labelValor.setText(labelValor.getText() + " " + valor + " pasajeros");
 							estacionesFMax.setText(estacionesFMax.getText() + admin.getEstacionesMaximoFlujo());
+							} else {
+								SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "No existe camino entre las estaciones elegidas."));
+							}
+							boton.setVisible(true);
 						} catch (ClassNotFoundException | SQLException e) {
-							//JOptionPane.showMessageDialog("Ocurrio un error al calcular el flujo maximo","Error",JOptionPane.ERROR_MESSAGE);
+
 							SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "Ocurrio un error al calcular el flujo maximo"));
 							e.printStackTrace();
 						}
@@ -157,8 +170,7 @@ public class FlujoMaximo extends JPanel {
 							try {
 								Thread.sleep(500);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								
 							}		
 					    	}
 					    	progressBar.setValue(100);
@@ -168,7 +180,9 @@ public class FlujoMaximo extends JPanel {
 					    };
 		    	  thread.start();
 		    	  barra.start();
-				 
+			} else {
+				JOptionPane.showMessageDialog(this, "Las estaciones no pueden ser iguales.","Error",JOptionPane.ERROR_MESSAGE);
+			}
 		});
 		
 	}
