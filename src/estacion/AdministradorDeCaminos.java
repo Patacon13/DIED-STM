@@ -292,14 +292,14 @@ public class AdministradorDeCaminos {
 	 * @param estacionesEnIteracionActual
 	 */
 	private void dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, Deque<Pair<Estacion, LineaDeTransporte>> estacionesEnIteracionActual) {
+		//System.out.println("Estaciones it actual " + estacionesEnIteracionActual);
 		if(!origen.equals(destino)) {
-			
 			recorridosDFS.put(origen, Boolean.TRUE);
 			for(Estacion vecina : estaciones) {
 				if((!recorridosDFS.containsKey(vecina) || !recorridosDFS.get(vecina)) && grafo.get(origen).get(vecina) != null && !origen.equals(vecina) && grafo.get(origen).get(vecina).first.intValue() > 0) {
 					estacionesEnIteracionActual.addLast(new Pair<Estacion, LineaDeTransporte>(vecina, grafo.get(origen).get(vecina).second));
 					dfs(vecina, destino, estaciones, estacionesEnIteracionActual);
-					estacionesEnIteracionActual.pop();
+					estacionesEnIteracionActual.removeLast();
 				}
 			}
 			
@@ -307,7 +307,6 @@ public class AdministradorDeCaminos {
 		else {
 			estacionesDeAaB.add(new LinkedList<>(estacionesEnIteracionActual));
 		}
-		
 		recorridosDFS.put(origen, Boolean.FALSE);
 		
 	}
