@@ -26,3 +26,7 @@ INSERT INTO ruta (origen, destino, duracion, pasajerosmax, estado, costo, kilome
 INSERT INTO ruta (origen, destino, duracion, pasajerosmax, estado, costo, kilometros, linea) VALUES (6,7,13,5,'INACTIVO',18,19,1);
 INSERT INTO ruta (origen, destino, duracion, pasajerosmax, estado, costo, kilometros, linea) VALUES (5,2,5,35,'ACTIVO',12,12,2);
 INSERT INTO ruta (origen, destino, duracion, pasajerosmax, estado, costo, kilometros, linea) VALUES (4,6,2,20,'INACTIVO',10,11,4);
+
+INSERT INTO mantenimiento (estacion, fechainicio, fechafin, observaciones) VALUES(6, '2021-08-03', NULL, 'La estacion inició en mantenimiento');
+INSERT INTO mantenimiento (estacion, fechainicio, fechafin, observaciones) VALUES(7, '2021-08-03', NULL, 'La estacion inició en mantenimiento');
+INSERT INTO mantenimiento (estacion, fechainicio, fechafin, observaciones) VALUES(5, '2021-07-29', '2021-08-01', 'Arreglado algo');
