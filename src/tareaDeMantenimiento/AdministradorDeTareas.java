@@ -31,14 +31,7 @@ private Conexion2 con = new Conexion2();
 
 	}
 	
-/*
-	public void registrarFin(Estacion e) {
-		TareaDeMantenimiento t = buscarTareaDeEstacion(e);
-		int indice = tareas.indexOf(t);
-		t.fechaFinTarea = LocalDate.now();
-		tareas.set(indice, t);
-	}
-*/
+
 
 	public void finalizarMantenimiento(Estacion nueva, LocalDate fin) throws SQLException, ClassNotFoundException {
 		Connection conn = con.crearConexion();
@@ -48,7 +41,6 @@ private Conexion2 con = new Conexion2();
 		Integer c = pstm.executeUpdate();
 		pstm.close();
 		conn.close();
-		System.out.println(c);
 	}
 	
 	public ArrayList<TareaDeMantenimiento>getMantenimientos(Estacion est) throws ClassNotFoundException, SQLException {
@@ -66,6 +58,7 @@ private Conexion2 con = new Conexion2();
 			}
 			retorno.add(new TareaDeMantenimiento(tareas.getInt(1), tareas.getDate(3).toLocalDate(), fechaFin, tareas.getString(5), new Estacion(tareas.getInt(2), null, null, null, null))); 
 			  }
+			tareas.close();
 			ps.close();
 			conn.close();
 			return retorno;
@@ -83,6 +76,7 @@ private Conexion2 con = new Conexion2();
 		while(tareas.next()){
 		retorno.add(new TareaDeMantenimiento(tareas.getInt(1), tareas.getDate(3).toLocalDate(), tareas.getDate(4).toLocalDate(), tareas.getString(5), new Estacion(tareas.getInt(2), null, null, null, null)));
 		  }
+		tareas.close();
 		ps.close();
 		conn.close();
 		return retorno;
