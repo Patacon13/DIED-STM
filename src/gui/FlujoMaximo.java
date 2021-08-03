@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 import javax.swing.text.html.parser.ParserDelegator;
 
 import estacion.AdministradorDeCaminos;
@@ -122,7 +123,6 @@ public class FlujoMaximo extends JPanel {
 						try {
 							estaciones = new AdministradorDeEstaciones().getEstaciones("");
 							List<LineaDeTransporte> lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
-							
 							//System.out.println(admin2.caminoPedido(estaciones, lineas, origen, destino, Pedido.MAXIMOPESO));
 							Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
 							List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
@@ -141,7 +141,8 @@ public class FlujoMaximo extends JPanel {
 							labelValor.setText(labelValor.getText() + " " + valor + " pasajeros");
 							estacionesFMax.setText(estacionesFMax.getText() + admin.getEstacionesMaximoFlujo());
 						} catch (ClassNotFoundException | SQLException e) {
-							// TODO Auto-generated catch block
+							//JOptionPane.showMessageDialog("Ocurrio un error al calcular el flujo maximo","Error",JOptionPane.ERROR_MESSAGE);
+							SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "Ocurrio un error al calcular el flujo maximo"));
 							e.printStackTrace();
 						}
 
