@@ -18,7 +18,4 @@ El usuario tiene la posibilidad de indicar:
 ![Registrar estacion](https://i.ibb.co/HH1Y5J1/Registrar-Estacion.png)
 
 
-Una vez agregada, se muestra el mapa correspondiente y se indica que se pudo agregar satisfactoriamente.
-
-
-![Registrar estacion con mapa](https://i.ibb.co/CtxWmKs/Registrar-Estacion-Mapa.png)
+Una vez agregada se le muestra al usuario un mensaje informativo informando la situación (Si fue agregada correctamente, si algún campo completado es invalido o si ocurrió un error de base de datos)
