@@ -281,13 +281,13 @@ public class VenderBoleto2 extends JPanel {
 								if(graph.getNode(actual) == null) {
 									graph.addNode(actual);
 								}
-								//System.out.println(actual);
 								nodospedges.add(actual2);
 							}
 							for(Integer k= 1; k<nodospedges.size(); k++) {
-								if(graph.getEdge(nodospedges.get(k).toString()) == null) {
-									graph.addEdge(nodospedges.get(k).toString(), nodospedges.get(k-1).first.toString(), nodospedges.get(k).first.toString(), true);
-									graph.getEdge(nodospedges.get(k).toString()).setAttribute("ui.label", nodospedges.get(k).second.getNombre());
+								//Se verifica que solo haya un camino desde k a k-1
+								if(graph.getEdge(nodospedges.get(k).toString() + nodospedges.get(k-1).toString()) == null) {
+									graph.addEdge(nodospedges.get(k).toString() + nodospedges.get(k-1).toString(), nodospedges.get(k-1).first.toString(), nodospedges.get(k).first.toString(), true);
+									graph.getEdge(nodospedges.get(k).toString() + nodospedges.get(k-1).toString()).setAttribute("ui.label", nodospedges.get(k).second.getNombre());
 								}
 					            count++;
 							}
