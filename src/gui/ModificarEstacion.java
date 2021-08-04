@@ -115,8 +115,9 @@ public class ModificarEstacion extends JPanel {
 
 		 JTextField finicio =new JTextField(12);
 		 JTextField des = new JTextField(12);
-
-		mantenimiento.add(l1);
+		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		 finicio.setText(LocalDate.now().format(formatter));
+		 mantenimiento.add(l1);
 		 mantenimiento.add(finicio);
 		 mantenimiento.add(l3);
 		 mantenimiento.add(des);
@@ -124,7 +125,7 @@ public class ModificarEstacion extends JPanel {
 		 int a=JOptionPane.showConfirmDialog(frame,mantenimiento,"Registrar mantenimiento",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
 		 if(a==JOptionPane.OK_OPTION)
 		 {
-			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 			 LocalDate inicio = null;
 			 try {
 			  inicio = LocalDate.parse(finicio.getText().toString(), formatter);
@@ -149,8 +150,8 @@ public class ModificarEstacion extends JPanel {
 		 mantenimiento.setLayout(new GridLayout(4,1));
 		 JLabel l1=new JLabel("Fecha fin (dd-mm-aaaa): ");
 		 JTextField ffin=new JTextField(12);
-
-
+		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		 ffin.setText(LocalDate.now().format(formatter));
 		mantenimiento.add(l1);
 		mantenimiento.add(ffin);
 		
@@ -159,7 +160,6 @@ public class ModificarEstacion extends JPanel {
 
 		 if(a==JOptionPane.OK_OPTION)
 		 {
-			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 			 LocalDate fin = null;
 			 try {
 			  fin = LocalDate.parse(ffin.getText().toString(), formatter);
