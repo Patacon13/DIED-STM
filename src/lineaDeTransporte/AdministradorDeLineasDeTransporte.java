@@ -61,11 +61,11 @@ public class AdministradorDeLineasDeTransporte {
 			ps = conn.prepareStatement("SELECT * FROM lineadetransporte");    
 			lineas = ps.executeQuery();
 		} else {
-			ps = conn.prepareStatement("SELECT * FROM lineadetransporte WHERE nombre=? OR color=? OR estado=? OR id=? "); 
-			ps.setString(1, sql);
-			ps.setString(2, sql);
-			ps.setString(3, sql);
-			ps.setString(4, sql);
+			ps = conn.prepareStatement("SELECT * FROM lineadetransporte WHERE nombre LIKE ? OR color LIKE ? OR estado LIKE ? OR id LIKE?"); 
+			ps.setString(1, '%' + sql + '%');
+			ps.setString(2, '%' + sql + '%');
+			ps.setString(3, '%' + sql + '%');
+			ps.setString(4, '%' + sql + '%');
 			lineas = ps.executeQuery();
 		}
 		while(lineas.next()){

@@ -95,12 +95,12 @@ public class AdministradorDeEstaciones {
 			ps = conn.prepareStatement("SELECT * FROM estacion");    
 			estaciones = ps.executeQuery();
 		} else {
-		    ps = conn.prepareStatement("SELECT * FROM estacion WHERE nombre=? OR horario_apertura=? OR horario_cierre=? OR estado=? OR id=? "); 
-			ps.setString(1, sql);
-			ps.setString(2, sql);
-			ps.setString(3, sql);
-			ps.setString(4, sql);
-			ps.setString(5, sql);
+		    ps = conn.prepareStatement("SELECT * FROM estacion WHERE nombre LIKE ? OR horario_apertura LIKE ? OR horario_cierre LIKE ? OR estado LIKE ? OR id LIKE ? "); 
+			ps.setString(1, '%' + sql + '%');
+			ps.setString(2, '%' + sql + '%');
+			ps.setString(3, '%' + sql + '%');
+			ps.setString(4, '%' + sql + '%');
+			ps.setString(5, '%' + sql + '%');
 			estaciones = ps.executeQuery();
 		}
 		while(estaciones.next()){
