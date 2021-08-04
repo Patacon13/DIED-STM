@@ -56,28 +56,26 @@ public class VenderBoleto2 extends JPanel {
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{20, 145, 0, 0, 0, 140, 0, 0, 96, 0, 0};
-		gridBagLayout.rowHeights = new int[]{19, 25, 25, 25, 0, 25, 0, 0, 0, 0, 0, 0, 25, 0, 0, 17, 24, 0, 23, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 25, 0, 0, 0, 0, 0, 25, 0, 0, 17, 24, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		
-		JLabel lblNewLabel = new JLabel("VENDER BOLETO");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.fill = GridBagConstraints.VERTICAL;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridwidth = 9;
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		add(lblNewLabel, gbc_lblNewLabel);
 
 		ButtonGroup grupo = new ButtonGroup();
+			
+			JLabel lblNewLabel_4 = new JLabel("Elegir camino");
+			lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
+			gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_4.gridx = 5;
+			gbc_lblNewLabel_4.gridy = 0;
+			add(lblNewLabel_4, gbc_lblNewLabel_4);
 		
 			JRadioButton rdbtnNewRadioButton = new JRadioButton("MASBARATO");
 			GridBagConstraints gbc_rdbtnNewRadioButton = new GridBagConstraints();
 			gbc_rdbtnNewRadioButton.insets = new Insets(0, 0, 5, 5);
 			gbc_rdbtnNewRadioButton.gridx = 4;
-			gbc_rdbtnNewRadioButton.gridy = 5;
+			gbc_rdbtnNewRadioButton.gridy = 1;
 			add(rdbtnNewRadioButton, gbc_rdbtnNewRadioButton);
 			rdbtnNewRadioButton.setSelected(true);
 			grupo.add(rdbtnNewRadioButton);
@@ -86,7 +84,7 @@ public class VenderBoleto2 extends JPanel {
 		GridBagConstraints gbc_rdbtnNewRadioButton_1 = new GridBagConstraints();
 		gbc_rdbtnNewRadioButton_1.insets = new Insets(0, 0, 5, 5);
 		gbc_rdbtnNewRadioButton_1.gridx = 5;
-		gbc_rdbtnNewRadioButton_1.gridy = 5;
+		gbc_rdbtnNewRadioButton_1.gridy = 1;
 		add(rdbtnNewRadioButton_1, gbc_rdbtnNewRadioButton_1);
 		grupo.add(rdbtnNewRadioButton_1);
 		
@@ -94,17 +92,17 @@ public class VenderBoleto2 extends JPanel {
 		GridBagConstraints gbc_rdbtnNewRadioButton_2 = new GridBagConstraints();
 		gbc_rdbtnNewRadioButton_2.insets = new Insets(0, 0, 5, 5);
 		gbc_rdbtnNewRadioButton_2.gridx = 6;
-		gbc_rdbtnNewRadioButton_2.gridy = 5;
+		gbc_rdbtnNewRadioButton_2.gridy = 1;
 		add(rdbtnNewRadioButton_2, gbc_rdbtnNewRadioButton_2);
 		grupo.add(rdbtnNewRadioButton_2);
 		JSeparator separator = new JSeparator();
 		separator.setBackground(Color.BLACK);
 		separator.setForeground(Color.BLACK);
 		GridBagConstraints gbc_separator = new GridBagConstraints();
-		gbc_separator.gridwidth = 7;
-		gbc_separator.insets = new Insets(0, 0, 5, 5);
+		gbc_separator.gridwidth = 10;
+		gbc_separator.insets = new Insets(0, 0, 5, 0);
 		gbc_separator.gridx = 1;
-		gbc_separator.gridy = 7;
+		gbc_separator.gridy = 2;
 		gbc_separator.fill = GridBagConstraints.HORIZONTAL;
 		
 		add(separator, gbc_separator);
@@ -121,14 +119,14 @@ public class VenderBoleto2 extends JPanel {
 		gbc_lblNewLabel_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.gridx = 4;
-		gbc_lblNewLabel_1.gridy = 8;
+		gbc_lblNewLabel_1.gridy = 3;
 		add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
 		JLabel emailValue = new JLabel("");
 		GridBagConstraints gbc_emailValue = new GridBagConstraints();
 		gbc_emailValue.insets = new Insets(0, 0, 5, 5);
 		gbc_emailValue.gridx = 5;
-		gbc_emailValue.gridy = 8;
+		gbc_emailValue.gridy = 3;
 		add(emailValue, gbc_emailValue);
 		emailValue.setText(email);
 		
@@ -138,14 +136,14 @@ public class VenderBoleto2 extends JPanel {
 		gbc_lblNewLabel_1_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1_1.gridx = 4;
-		gbc_lblNewLabel_1_1.gridy = 9;
+		gbc_lblNewLabel_1_1.gridy = 4;
 		add(lblNewLabel_1_1, gbc_lblNewLabel_1_1);
 		
 		JLabel clienteValue = new JLabel("");
 		GridBagConstraints gbc_clienteValue = new GridBagConstraints();
 		gbc_clienteValue.insets = new Insets(0, 0, 5, 5);
 		gbc_clienteValue.gridx = 5;
-		gbc_clienteValue.gridy = 9;
+		gbc_clienteValue.gridy = 4;
 		add(clienteValue, gbc_clienteValue);
 		clienteValue.setText(nombre);
 		
@@ -155,14 +153,14 @@ public class VenderBoleto2 extends JPanel {
 		gbc_lblNewLabel_1_1_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1_1_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1_1_1.gridx = 4;
-		gbc_lblNewLabel_1_1_1.gridy = 10;
+		gbc_lblNewLabel_1_1_1.gridy = 5;
 		add(lblNewLabel_1_1_1, gbc_lblNewLabel_1_1_1);
 		
 		JLabel origenValue = new JLabel("");
 		GridBagConstraints gbc_origenValue = new GridBagConstraints();
 		gbc_origenValue.insets = new Insets(0, 0, 5, 5);
 		gbc_origenValue.gridx = 5;
-		gbc_origenValue.gridy = 10;
+		gbc_origenValue.gridy = 5;
 		add(origenValue, gbc_origenValue);
 		origenValue.setText(origen.toString());
 		
@@ -172,14 +170,14 @@ public class VenderBoleto2 extends JPanel {
 		gbc_lblNewLabel_1_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1_2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1_2.gridx = 4;
-		gbc_lblNewLabel_1_2.gridy = 11;
+		gbc_lblNewLabel_1_2.gridy = 6;
 		add(lblNewLabel_1_2, gbc_lblNewLabel_1_2);
 		
 		JLabel destinoValue = new JLabel("");
 		GridBagConstraints gbc_destinoValue = new GridBagConstraints();
 		gbc_destinoValue.insets = new Insets(0, 0, 5, 5);
 		gbc_destinoValue.gridx = 5;
-		gbc_destinoValue.gridy = 11;
+		gbc_destinoValue.gridy = 6;
 		add(destinoValue, gbc_destinoValue);
 		destinoValue.setText(destino.toString());
 		
@@ -189,14 +187,14 @@ public class VenderBoleto2 extends JPanel {
 		gbc_lblNewLabel_2.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_2.gridx = 4;
-		gbc_lblNewLabel_2.gridy = 12;
+		gbc_lblNewLabel_2.gridy = 7;
 		add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
 		JLabel precioValue = new JLabel("");
 		GridBagConstraints gbc_precioValue = new GridBagConstraints();
 		gbc_precioValue.insets = new Insets(0, 0, 5, 5);
 		gbc_precioValue.gridx = 5;
-		gbc_precioValue.gridy = 12;
+		gbc_precioValue.gridy = 7;
 		add(precioValue, gbc_precioValue);
 		
 		JLabel lblNewLabel_3 = new JLabel("Camino a seguir:");
@@ -205,14 +203,14 @@ public class VenderBoleto2 extends JPanel {
 		gbc_lblNewLabel_3.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.gridx = 4;
-		gbc_lblNewLabel_3.gridy = 13;
+		gbc_lblNewLabel_3.gridy = 8;
 		add(lblNewLabel_3, gbc_lblNewLabel_3);
 				
 				JLabel caminoASeguirValue = new JLabel("");
 				GridBagConstraints gbc_caminoASeguirValue = new GridBagConstraints();
 				gbc_caminoASeguirValue.insets = new Insets(0, 0, 5, 5);
 				gbc_caminoASeguirValue.gridx = 5;
-				gbc_caminoASeguirValue.gridy = 13;
+				gbc_caminoASeguirValue.gridy = 8;
 				add(caminoASeguirValue, gbc_caminoASeguirValue);
 		
 				JSeparator separator_1 = new JSeparator();
@@ -222,7 +220,7 @@ public class VenderBoleto2 extends JPanel {
 				gbc_separator_1.gridwidth = 10;
 				gbc_separator_1.insets = new Insets(0, 0, 5, 0);
 				gbc_separator_1.gridx = 1;
-				gbc_separator_1.gridy = 14;
+				gbc_separator_1.gridy = 9;
 				gbc_separator_1.fill = GridBagConstraints.HORIZONTAL;
 				add(separator_1, gbc_separator_1);
 				
@@ -230,7 +228,7 @@ public class VenderBoleto2 extends JPanel {
 		        GridBagConstraints gbc_btnMapa = new GridBagConstraints();
 		        gbc_btnMapa.insets = new Insets(0, 0, 5, 5);
 		        gbc_btnMapa.gridx = 5;
-		        gbc_btnMapa.gridy = 16;
+		        gbc_btnMapa.gridy = 11;
 		        add(btnMapa, gbc_btnMapa);
 		        btnMapa.addActionListener(e-> {
 		        	
@@ -322,7 +320,6 @@ public class VenderBoleto2 extends JPanel {
 
 		        });
 				
-		
 		
 		}
 	
