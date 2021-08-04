@@ -207,7 +207,10 @@ public class VenderBoleto2 extends JPanel {
 		add(lblNewLabel_3, gbc_lblNewLabel_3);
 				
 				JLabel caminoASeguirValue = new JLabel("");
+				caminoASeguirValue.setFont(new Font("Tahoma", Font.PLAIN, 10));
 				GridBagConstraints gbc_caminoASeguirValue = new GridBagConstraints();
+				gbc_caminoASeguirValue.anchor = GridBagConstraints.WEST;
+				gbc_caminoASeguirValue.gridwidth = 2;
 				gbc_caminoASeguirValue.insets = new Insets(0, 0, 5, 5);
 				gbc_caminoASeguirValue.gridx = 5;
 				gbc_caminoASeguirValue.gridy = 8;
@@ -224,12 +227,36 @@ public class VenderBoleto2 extends JPanel {
 				gbc_separator_1.fill = GridBagConstraints.HORIZONTAL;
 				add(separator_1, gbc_separator_1);
 				
-		        JButton btnMapa = new JButton("Ver mapa");
+		        JButton btnMapa = new JButton("Siguiente");
 		        GridBagConstraints gbc_btnMapa = new GridBagConstraints();
 		        gbc_btnMapa.insets = new Insets(0, 0, 5, 5);
 		        gbc_btnMapa.gridx = 5;
 		        gbc_btnMapa.gridy = 11;
 		        add(btnMapa, gbc_btnMapa);
+		        
+		        JButton btnCancelar = new JButton("Cancelar");
+		        GridBagConstraints gbc_btnCancelar = new GridBagConstraints();
+		        gbc_btnCancelar.insets = new Insets(0, 0, 5, 5);
+		        gbc_btnCancelar.gridx = 4;
+		        gbc_btnCancelar.gridy = 12;
+		        btnCancelar.setVisible(false);
+		        add(btnCancelar, gbc_btnCancelar);
+		        
+		        JButton btnVolverMapa = new JButton("Ver mapa");
+		        GridBagConstraints gbc_btnVolverMapa = new GridBagConstraints();
+		        gbc_btnVolverMapa.insets = new Insets(0, 0, 5, 5);
+		        gbc_btnVolverMapa.gridx = 5;
+		        gbc_btnVolverMapa.gridy = 12;
+		        btnVolverMapa.setVisible(false);
+		        add(btnVolverMapa, gbc_btnVolverMapa);
+		        
+		        JButton btnConfirmar = new JButton("Confirmar venta");
+		        GridBagConstraints gbc_btnConfirmar = new GridBagConstraints();
+		        gbc_btnConfirmar.insets = new Insets(0, 0, 5, 5);
+		        gbc_btnConfirmar.gridx = 6;
+		        gbc_btnConfirmar.gridy = 12;
+		        add(btnConfirmar, gbc_btnConfirmar);
+		        btnConfirmar.setVisible(false);
 		        btnMapa.addActionListener(e-> {
 		        	
 		        	Pedido pedido = Pedido.valueOf(getSelectedButtonText(grupo));
@@ -271,8 +298,6 @@ public class VenderBoleto2 extends JPanel {
 				        
 				        graph.setAutoCreate(true);
 				        graph.setStrict(true);
-				        Viewer viewer = graph.display();
-				        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
 				        for (Node node : graph) {
 				            node.setAttribute("ui.label", node.getId());
 				        }
@@ -280,13 +305,12 @@ public class VenderBoleto2 extends JPanel {
 				        
 				        Object[] opciones = {"De acuerdo!", "No"};
 				        Object defaultOp = opciones[0];
+				        
 				        btnMapa.setVisible(false);
-				        JButton btnConfirmar = new JButton("Confirmar venta");
-				        GridBagConstraints gbc_btnConfirmar = new GridBagConstraints();
-				        gbc_btnConfirmar.insets = new Insets(0, 0, 5, 5);
-				        gbc_btnConfirmar.gridx = 5;
-				        gbc_btnConfirmar.gridy = 16;
-				        add(btnConfirmar, gbc_btnConfirmar);
+				        btnConfirmar.setVisible(true);
+				        btnCancelar.setVisible(true);
+				        btnVolverMapa.setVisible(true);
+				        
 				        btnConfirmar.addActionListener(f-> {
 				        
 				        
@@ -297,22 +321,36 @@ public class VenderBoleto2 extends JPanel {
 				        	try {
 								admin4.addBoleto(nuevo);
 								btnConfirmar.setVisible(false);
+								btnCancelar.setVisible(false);
+								btnVolverMapa.setVisible(false);
 								btnMapa.setVisible(true);
 								precioValue.setText("");
 								caminoASeguirValue.setText("");
 								JOptionPane.showMessageDialog(this, "La venta se realizo correctamnete.","Info",JOptionPane.INFORMATION_MESSAGE);
-							} catch (ClassNotFoundException | SQLException e1) {
+								 cambiarVentana();
+				        	} catch (ClassNotFoundException | SQLException e1) {
 								JOptionPane.showMessageDialog(this, "Ocurrio al registrar la venta.","Error",JOptionPane.ERROR_MESSAGE);
 							}
-				        } else {
-							btnConfirmar.setVisible(false);
-							btnMapa.setVisible(true);
-							precioValue.setText("");
-							caminoASeguirValue.setText("");
-				        }
+				        } 
+				       });
+				        
+				        btnCancelar.addActionListener(f-> { 
+				        	cambiarVentana();
 				        });
+				        
+				        btnVolverMapa.addActionListener(f-> { 
+					        Viewer viewer2 = graph.display();
+					        viewer2.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
+				        });
+				        
+				        
+				        
 			        	} else {
 			        		JOptionPane.showMessageDialog(this, "No existe camino entre las estaciones elegidas.","Error",JOptionPane.ERROR_MESSAGE);
+			        		 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
+							 ventana.getContentPane().removeAll(); //Remover componentes
+							 ventana.add(new VenderBoleto(), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
+							 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
 			        	}
 					} catch (ClassNotFoundException | SQLException f) {
 						JOptionPane.showMessageDialog(this, "Ocurrio un error al mostrar el mapa.","Error",JOptionPane.ERROR_MESSAGE);	//Agregar excepcion
@@ -335,5 +373,12 @@ public class VenderBoleto2 extends JPanel {
 
         return null;
     }
+	
+	public void cambiarVentana() {
+		 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
+		 ventana.getContentPane().removeAll(); //Remover componentes
+		 ventana.add(new VenderBoleto(), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
+		 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
+	}
 	
 }
