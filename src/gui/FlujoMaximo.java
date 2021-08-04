@@ -122,7 +122,7 @@ public class FlujoMaximo extends JPanel {
   					estacionesFMax.setText("Camino: ");
   					Estacion destino = comboBox.getItemAt(comboBox.getSelectedIndex());
   					if(!origen.equals(destino)) {
-  					boton.setVisible(false);
+  					boton.setEnabled(false);
   					lblNewLabel_1.setText("Caminos posibles: ");
   					ArrayList<Estacion> lista = new ArrayList<Estacion>();
   			    	AdministradorDeCaminos admin = new AdministradorDeCaminos();	
@@ -157,11 +157,10 @@ public class FlujoMaximo extends JPanel {
   									} else {
   										SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "No existe camino entre las estaciones elegidas."));
   									}
-  									boton.setVisible(true);
+  									boton.setEnabled(true);
   								} catch (ClassNotFoundException | SQLException e) {
   		
   									SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "Ocurrio un error al calcular el flujo maximo"));
-  									e.printStackTrace();
   								}
   		
   						    }
