@@ -3,7 +3,7 @@ INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('E
 INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A3','11:00','12:00','OPERATIVA');
 INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A4','07:30','20:30','OPERATIVA');
 INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A5','08:30','15:00','OPERATIVA');
-INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A6','15:00','00:00','EN_MANTENIMIENTO');
+INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A6','15:00','23:59','EN_MANTENIMIENTO');
 INSERT INTO estacion (nombre,horario_apertura,horario_cierre, estado) VALUES ('Estacion A7','10:00','20:00','EN_MANTENIMIENTO');
 
 INSERT INTO lineadetransporte (nombre, color, estado) VALUES ('Linea L1','AMARILLO','ACTIVO');
