@@ -9,6 +9,7 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
 import estacion.EstadoEstacion;
@@ -24,6 +25,8 @@ import java.awt.Insets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JRadioButton;
 
@@ -126,8 +129,7 @@ public class VenderBoleto extends JPanel {
 		gbc_estDestino.gridy = 5;
 		add(estDestino, gbc_estDestino);
 		try {
-			cargarEstaciones(estDestino);
-			cargarEstaciones(estOrigen);
+			cargarEstaciones(estOrigen, estDestino);
 		} catch (ClassNotFoundException | SQLException e1) {
 			JOptionPane.showMessageDialog(this, "Ocurrio un error al cargar las estaciones.","Error",JOptionPane.ERROR_MESSAGE);
 		}
@@ -153,8 +155,9 @@ public class VenderBoleto extends JPanel {
 			JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo.","Error",JOptionPane.ERROR_MESSAGE);
 		} else if(origen.equals(destino)){
 			JOptionPane.showMessageDialog(this, "La estacion de origen no puede ser igual a la de destino.","Error",JOptionPane.ERROR_MESSAGE);
-		}else if(origen.getEstado() == EstadoEstacion.EN_MANTENIMIENTO || destino.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
+		} else if(origen.getEstado() == EstadoEstacion.EN_MANTENIMIENTO || destino.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
 			JOptionPane.showMessageDialog(this, "La estacion de origen o destino se encuentra en mantenimiento.","Error",JOptionPane.ERROR_MESSAGE);
+		
 		} else {
 			 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
 			 ventana.getContentPane().removeAll(); //Remover componentes
@@ -164,10 +167,10 @@ public class VenderBoleto extends JPanel {
 		});
 
 	}
-	private void  cargarEstaciones(JComboBox<Estacion> ests) throws ClassNotFoundException, SQLException {
+	private void  cargarEstaciones(JComboBox<Estacion> est1, JComboBox<Estacion> est2) throws ClassNotFoundException, SQLException {
 		AdministradorDeEstaciones admin = new AdministradorDeEstaciones();
 		ArrayList<Estacion> estaciones = admin.getEstaciones("");
-		estaciones.stream().forEach(e -> ests.addItem(e));
+		estaciones.stream().forEach(e ->{ est1.addItem(e); est2.addItem(e);});
 
 	}
 	
@@ -182,4 +185,6 @@ public class VenderBoleto extends JPanel {
 
         return null;
     }
+	
+
 }

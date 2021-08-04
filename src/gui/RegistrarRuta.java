@@ -44,8 +44,7 @@ public class RegistrarRuta extends JPanel {
 	public RegistrarRuta(LineaDeTransporte linea) {
 		construirInterfaz();
 		try {
-		    cargarEstaciones(rOrigen);
-			cargarEstaciones(rDestino);
+		    cargarEstaciones(rOrigen, rDestino);
 		} catch (ClassNotFoundException | SQLException e1) {
 			JOptionPane.showMessageDialog(this, "Ocurrio un error al cargar las estaciones.","Error",JOptionPane.ERROR_MESSAGE);
 		}
@@ -103,11 +102,10 @@ public class RegistrarRuta extends JPanel {
 
 	}
 	
-	private void  cargarEstaciones(JComboBox<Estacion> ests) throws ClassNotFoundException, SQLException {
+	private void  cargarEstaciones(JComboBox<Estacion> est1, JComboBox<Estacion> est2) throws ClassNotFoundException, SQLException {
 		AdministradorDeEstaciones admin = new AdministradorDeEstaciones();
 		ArrayList<Estacion> estaciones = admin.getEstaciones("");
-		estaciones.stream().forEach(e -> ests.addItem(e));
-
+		estaciones.stream().forEach(e ->{ est1.addItem(e); est2.addItem(e);});
 	}
 	
 	private void construirInterfaz() {
