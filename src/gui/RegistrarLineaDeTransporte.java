@@ -154,7 +154,7 @@ public class RegistrarLineaDeTransporte extends JPanel {
 					try {
 						admin.addlinea(nueva);
 						labelErrores.setForeground(Color.GREEN);
-						JOptionPane.showMessageDialog(this, "La linea se registro correctamente","Error",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(this, "La linea se registro correctamente","Exito",JOptionPane.INFORMATION_MESSAGE);
 						linNombre.setText("");
 					} catch (ClassNotFoundException | SQLException e1) {
 						JOptionPane.showMessageDialog(this, "Ocurrio un error al registrar la linea, revisalo","Error",JOptionPane.ERROR_MESSAGE);
