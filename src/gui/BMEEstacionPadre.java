@@ -58,7 +58,7 @@ public class BMEEstacionPadre extends JPanel {
 		try {
 			modelo = construirTabla("");
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
+
 			JOptionPane.showMessageDialog(this, "Ocurrio un error al obtener los datos.","Error",JOptionPane.ERROR_MESSAGE);
 		}
 		table = new JTable (modelo);
@@ -93,7 +93,7 @@ public class BMEEstacionPadre extends JPanel {
 						panel_1.setVisible(false);
 					}
 				} catch (ClassNotFoundException | SQLException e) {
-					JOptionPane.showMessageDialog(this, "No se pudieron obtener los datos de la tabla.","Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Ocurrio un error al eliminar la estacion..","Error",JOptionPane.ERROR_MESSAGE);
 				} 
 	        }
 	    });

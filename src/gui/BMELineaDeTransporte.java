@@ -89,7 +89,7 @@ public class BMELineaDeTransporte extends JPanel {
 						panel_1.setVisible(false);
 					}
 				} catch (ClassNotFoundException | SQLException e) {
-					JOptionPane.showMessageDialog(this, "Ocurrio un erorr al eliminar la tabla.","Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Ocurrio un error al eliminar la linea.","Error",JOptionPane.ERROR_MESSAGE);
 				} 
 	        }
 	    });
