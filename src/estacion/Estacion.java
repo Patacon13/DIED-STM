@@ -80,17 +80,18 @@ public class Estacion implements Comparable<Estacion>{
 		pstm.setInt(1, this.getId());
 		pstm.setInt(2, this.getId());
 		ResultSet rs = pstm.executeQuery();
-		TareaDeMantenimiento ret = new TareaDeMantenimiento(null, LocalDate.of(1969, 1, 1), LocalDate.of(1969, 1, 1), null, null);
+		TareaDeMantenimiento ret = new TareaDeMantenimiento(null, LocalDate.MIN, LocalDate.MIN, null, null);
 	    while(rs.next()) {
 	    	ret.setId(rs.getInt(1));
 	    	ret.setEstacion(this);
 	    	ret.setFechaInicioTarea(rs.getDate(3).toLocalDate());
 	    	if(rs.getDate(4) == null) {
-	    		ret.setFechaFinTarea(LocalDate.of(2100, 1, 1));
+	    		ret.setFechaFinTarea(LocalDate.MAX);
 	    	} else {
 	    		ret.setFechaFinTarea(rs.getDate(4).toLocalDate());
 	    	}
 	    }
+	    rs.close();
 		pstm.close();
 		conn.close();
 	return ret;
