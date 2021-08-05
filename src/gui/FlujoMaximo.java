@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 import estacion.AdministradorDeCaminos;
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
+import estacion.Pedido;
 import lineaDeTransporte.AdministradorDeLineasDeTransporte;
 import lineaDeTransporte.LineaDeTransporte;
 import pair.Pair;
@@ -27,13 +28,22 @@ import java.awt.Font;
 import java.awt.Color;
 
 public class FlujoMaximo extends JPanel {
-
+	Boolean calculo = Boolean.FALSE;
+	AdministradorDeCaminos admin = new AdministradorDeCaminos();
+	List<Estacion> estaciones;
+	List<LineaDeTransporte> lineas;
 	/**
 	 * Create the panel.
 	 */
 	public FlujoMaximo(Estacion origen) {
 		
-
+		
+		try {
+			estaciones = new AdministradorDeEstaciones().getEstaciones("");
+			lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
+		} catch (ClassNotFoundException | SQLException e1) {
+			JOptionPane.showMessageDialog(this, "Error al cargar los datos de la Base de Datos.","Error",JOptionPane.ERROR_MESSAGE);
+		}
 		  
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
@@ -119,15 +129,17 @@ public class FlujoMaximo extends JPanel {
   					Estacion destino = comboBox.getItemAt(comboBox.getSelectedIndex());
   					if(!origen.equals(destino)) {
   					boton.setEnabled(false);
-  					lblNewLabel_1.setText("Caminos posibles: ");
-  					AdministradorDeCaminos admin = new AdministradorDeCaminos();	
+  					lblNewLabel_1.setText("Caminos posibles: ");	
   			    	Thread thread = new Thread(){
   						    public void run(){
   						    
-  						    	List<Estacion> estaciones;
   								try {
-  									estaciones = new AdministradorDeEstaciones().getEstaciones("");
-  									List<LineaDeTransporte> lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
+  									
+  									if(!calculo) {
+  	  									admin.initMatriz(estaciones, lineas, Pedido.MAXIMOPESO);
+  	  									calculo = Boolean.TRUE;
+  									}
+  									
   									Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
   									List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
   									String texto = "";

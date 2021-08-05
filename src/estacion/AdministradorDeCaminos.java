@@ -45,7 +45,7 @@ public class AdministradorDeCaminos {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	private void initMatriz(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
+	public void initMatriz(List<Estacion> estaciones, List<LineaDeTransporte> lineas, Pedido datoQueRequiere) throws ClassNotFoundException, SQLException {
         grafo = new HashMap<>();
         Integer cont = 0;
         AdministradorDeRutas admin = new AdministradorDeRutas();
@@ -432,7 +432,6 @@ public class AdministradorDeCaminos {
 				 					 .filter(estacion -> estacion.id.equals(destinoEntrada.id))
 				 					 .findFirst()
 				 					 .get();
-		initMatriz(estaciones, lineas, Pedido.MAXIMOPESO);
 		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
 		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		return fordFulkerson(estaciones, lineas, listaDeEstaciones, origen, destino);
