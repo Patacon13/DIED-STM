@@ -5,4 +5,4 @@ has_children: true
 ---
 # Líneas de Transporte
 
-Existen distintos funciones sobre las líneas de transportes descriptas en las subpáginas de la izquierda.
+Existen distintos funciones sobre las líneas de transportes descriptas en las subpáginas de la izquierda (o, en el caso de estar en desde celular, en el índice correspondiente).
