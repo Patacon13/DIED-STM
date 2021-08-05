@@ -4,10 +4,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JTextField;
-
+import javax.swing.SwingUtilities;
 
 import lineaDeTransporte.AdministradorDeLineasDeTransporte;
 import lineaDeTransporte.ColorLineaDeTransporte;
@@ -15,20 +14,61 @@ import lineaDeTransporte.EstadoLinea;
 import lineaDeTransporte.LineaDeTransporte;
 
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JButton;
-
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.sql.SQLException;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
-public class RegistrarLineaDeTransporte extends JPanel {
+public class ModificarLineaDeTransporte extends JPanel {
 	private JTextField linNombre;
+	private JComboBox<ColorLineaDeTransporte> linColor;
+	private JComboBox<EstadoLinea> lEstado;
+	private AdministradorDeLineasDeTransporte admin = new AdministradorDeLineasDeTransporte();
+	private JButton boton;
+	private JLabel labelErrores;
 
-	public RegistrarLineaDeTransporte() {
 
+	public ModificarLineaDeTransporte(LineaDeTransporte l) {
+
+		construirInterfaz(l); //Agregar componentes a la interfaz
+		
+		boton.addActionListener(g-> {
+				labelErrores.setForeground(Color.RED);
+				if(linNombre.getText().length() == 0)  {
+					JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
+				} else {
+					EstadoLinea estado = lEstado.getItemAt(lEstado.getSelectedIndex());
+					ColorLineaDeTransporte color = linColor.getItemAt(linColor.getSelectedIndex());
+					LineaDeTransporte nueva = new LineaDeTransporte(null, linNombre.getText().toString(), color, estado);				
+					try {	
+						admin.modifyLineaDeTransporte(l, nueva);
+						JOptionPane.showMessageDialog(this,"Se modificó la linea correctamente.","Info",JOptionPane.INFORMATION_MESSAGE);
+						cambiarJFrame();
+					} catch (ClassNotFoundException | SQLException e1) {
+						JOptionPane.showMessageDialog(this, "Ha ocurrido un error al modificar la linea.","Error",JOptionPane.ERROR_MESSAGE);
+					}	
+		}
+		});
+	}
+	
+	private void cambiarJFrame() {
+		 
+		JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
+		 ventana.getContentPane().removeAll(); //Remover componentes
+		 ventana.getContentPane().add(new BMELineaDeTransporte(), BorderLayout.CENTER); 
+		 SwingUtilities.updateComponentTreeUI(ventana);
+		
+		
+	}
+	
+	
+	private void construirInterfaz(LineaDeTransporte l) {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{33, 136, 62, 189, 34, 0};
+		gridBagLayout.columnWidths = new int[]{33, 136, 62, 189, 36, 0};
 		gridBagLayout.rowHeights = new int[]{19, 35, 20, 20, 20, 22, 35, 23, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -61,6 +101,7 @@ public class RegistrarLineaDeTransporte extends JPanel {
 		gbc_estNombre.gridy = 2;
 		add(linNombre, gbc_estNombre);
 		linNombre.setColumns(10);
+		linNombre.setText(l.getNombre());
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Color: ");
 		GridBagConstraints gbc_lblNewLabel_1_1 = new GridBagConstraints();
@@ -70,26 +111,26 @@ public class RegistrarLineaDeTransporte extends JPanel {
 		gbc_lblNewLabel_1_1.gridy = 3;
 		add(lblNewLabel_1_1, gbc_lblNewLabel_1_1);
 		
-		JComboBox<ColorLineaDeTransporte> linColor = new JComboBox<ColorLineaDeTransporte>();
+		linColor = new JComboBox<ColorLineaDeTransporte>();
 		GridBagConstraints gbc_linColor = new GridBagConstraints();
 		gbc_linColor.insets = new Insets(0, 0, 5, 5);
 		gbc_linColor.fill = GridBagConstraints.HORIZONTAL;
 		gbc_linColor.gridx = 3;
 		gbc_linColor.gridy = 3;
-		add(linColor, gbc_linColor);
 		linColor.addItem(ColorLineaDeTransporte.AMARILLO);
 		linColor.addItem(ColorLineaDeTransporte.AZUL);
 		linColor.addItem(ColorLineaDeTransporte.BLANCO);
 		linColor.addItem(ColorLineaDeTransporte.CYAN);
 		linColor.addItem(ColorLineaDeTransporte.GRIS);
 		linColor.addItem(ColorLineaDeTransporte.GRIS_CLARO);
-		linColor.addItem(ColorLineaDeTransporte.GRIS_OSCURO);
+		linColor.addItem(ColorLineaDeTransporte.GRIS_CLARO);
 		linColor.addItem(ColorLineaDeTransporte.MAGENTA);
 		linColor.addItem(ColorLineaDeTransporte.NARANJA);
 		linColor.addItem(ColorLineaDeTransporte.NEGRO);
 		linColor.addItem(ColorLineaDeTransporte.ROJO);
 		linColor.addItem(ColorLineaDeTransporte.ROSADO);
 		linColor.addItem(ColorLineaDeTransporte.VERDE);
+		add(linColor, gbc_linColor);
 		
 		
 		JLabel lblNewLabel_1_2 = new JLabel("Estado:  ");
@@ -100,17 +141,18 @@ public class RegistrarLineaDeTransporte extends JPanel {
 		gbc_lblNewLabel_1_2.gridy = 4;
 		add(lblNewLabel_1_2, gbc_lblNewLabel_1_2);
 		
-		JComboBox<EstadoLinea> linEstado = new JComboBox<EstadoLinea>();
+		lEstado = new JComboBox<EstadoLinea>();
 		GridBagConstraints gbc_estEstado = new GridBagConstraints();
 		gbc_estEstado.fill = GridBagConstraints.BOTH;
 		gbc_estEstado.insets = new Insets(0, 0, 5, 5);
 		gbc_estEstado.gridx = 3;
 		gbc_estEstado.gridy = 4;
-		add(linEstado, gbc_estEstado);
-		linEstado.addItem(EstadoLinea.ACTIVO);
-		linEstado.addItem(EstadoLinea.INACTIVO);
+		add(lEstado, gbc_estEstado);
+		lEstado.addItem(EstadoLinea.ACTIVO);
+		lEstado.addItem(EstadoLinea.INACTIVO);
+		lEstado.setSelectedItem(l.getEstado());
 		
-		JLabel labelErrores = new JLabel("");
+		labelErrores = new JLabel("");
 		labelErrores.setForeground(Color.RED);
 		labelErrores.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		GridBagConstraints gbc_labelErrores = new GridBagConstraints();
@@ -120,10 +162,7 @@ public class RegistrarLineaDeTransporte extends JPanel {
 		gbc_labelErrores.gridy = 6;
 		add(labelErrores, gbc_labelErrores);
 		
-
-
-
-		JButton boton = new JButton("Agregar Linea de Transporte");
+		boton = new JButton("Modificar linea de transporte");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton.anchor = GridBagConstraints.NORTH;
@@ -132,28 +171,5 @@ public class RegistrarLineaDeTransporte extends JPanel {
 		gbc_btnNewButton.gridx = 1;
 		gbc_btnNewButton.gridy = 7;
 		add(boton, gbc_btnNewButton);
-		
-		boton.addActionListener(e -> {
-				AdministradorDeLineasDeTransporte admin = new AdministradorDeLineasDeTransporte();
-				labelErrores.setForeground(Color.RED);
-				if(linNombre.getText().length() == 0)  {
-					JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
-				} else {
-					EstadoLinea estado = linEstado.getItemAt(linEstado.getSelectedIndex());
-					ColorLineaDeTransporte color = linColor.getItemAt(linColor.getSelectedIndex());
-					LineaDeTransporte nueva = new LineaDeTransporte(null, linNombre.getText().toString(), color, estado);
-					try {
-						admin.addlinea(nueva);
-						labelErrores.setForeground(Color.GREEN);
-						JOptionPane.showMessageDialog(this, "La linea se registro correctamente","Exito",JOptionPane.INFORMATION_MESSAGE);
-						linNombre.setText("");
-					} catch (ClassNotFoundException | SQLException e1) {
-						JOptionPane.showMessageDialog(this, "Ocurrio un error al registrar la linea, revisalo","Error",JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
-
 	}
-	
-	
 }

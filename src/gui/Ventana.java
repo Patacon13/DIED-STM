@@ -11,7 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 public class Ventana extends JFrame {
-
+	JPanel actual = new VenderBoleto();
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -32,7 +32,7 @@ public class Ventana extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout(25, 25));
-		this.add(new VenderBoleto(), BorderLayout.CENTER); //Ventana por default
+		this.getContentPane().add(new VenderBoleto());//Ventana por default
 		//JPanels
 		
 		
@@ -48,9 +48,11 @@ public class Ventana extends JFrame {
 		JMenuItem mi1 = new JMenuItem("Agregar");
 		JMenuItem mi2 = new JMenuItem("Consultar estaciones");
 		JMenuItem mi3 = new JMenuItem("PageRank");
+		JMenuItem mi4 = new JMenuItem("Proximo matenimiento");
 		menu1.add(mi1);
 		menu1.add(mi2);
 		menu1.add(mi3);
+		menu1.add(mi4);
 		//Opciones submenu Lineas de Transporte
 		JMenuItem mi6 = new JMenuItem("Agregar");
 		JMenuItem mi7 = new JMenuItem("Consultar lineas de transporte");
@@ -59,25 +61,46 @@ public class Ventana extends JFrame {
 		//Opciones menu Boletos
 		JMenuItem mi11 = new JMenuItem("Vender Boleto");
 		menu3.add(mi11);
-		//Asociar cada JMenuItem a cada JPanel
-		cambiarPanel(new RegistrarEstacion(), mi1);
-		cambiarPanel(new BMEEstacion(), mi2);
-		cambiarPanel(new RegistrarLineaDeTransporte(), mi6);
-		cambiarPanel(new BMELineaDeTransporte(), mi7);
-		cambiarPanel(new VenderBoleto(), mi11);
-		setJMenuBar(menuBar);
-	}
-	
-	
-	
-	
-	private void cambiarPanel(JPanel jp, JMenuItem sm) {
-		sm.addActionListener(e -> {
+
+		mi1.addActionListener(e -> {
 			 this.getContentPane().removeAll();
-			 this.add(jp, BorderLayout.CENTER);
-			 SwingUtilities.updateComponentTreeUI(this);
+			 this.getContentPane().add(new RegistrarEstacion());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
+		mi2.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new BMEEstacionPadre());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
+		mi3.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new PageRank());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
+		mi4.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new ProximoMantenimiento());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
 		});
 
+		mi6.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new RegistrarLineaDeTransporte());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
+		mi7.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new BMELineaDeTransporte());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
+		mi11.addActionListener(e -> {
+			 this.getContentPane().removeAll();
+			 this.getContentPane().add(new VenderBoleto());
+			 SwingUtilities.updateComponentTreeUI(this.getContentPane());
+		});
+		setJMenuBar(menuBar);
 	}
+		
+
 		 }
 		

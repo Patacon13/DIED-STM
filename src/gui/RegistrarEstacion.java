@@ -2,18 +2,30 @@ package gui;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import estacion.AdministradorDeEstaciones;
+import estacion.Estacion;
+import estacion.EstadoEstacion;
+
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.sql.SQLException;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+import java.awt.Color;
 
 public class RegistrarEstacion extends JPanel {
 	private JTextField estNombre;
 	private JTextField estApertura;
 	private JTextField estCierre;
+	private AdministradorDeEstaciones admin;
 
 	/**
 	 * Create the panel.
@@ -21,6 +33,7 @@ public class RegistrarEstacion extends JPanel {
 	public RegistrarEstacion() {
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
+		admin = new AdministradorDeEstaciones();
 		gridBagLayout.columnWidths = new int[]{33, 136, 62, 189, 0};
 		gridBagLayout.rowHeights = new int[]{19, 35, 20, 20, 20, 22, 35, 23, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -55,7 +68,7 @@ public class RegistrarEstacion extends JPanel {
 		add(estNombre, gbc_estNombre);
 		estNombre.setColumns(10);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("Horario apertura: ");
+		JLabel lblNewLabel_1_1 = new JLabel("Horario apertura: (hh:mm)");
 		GridBagConstraints gbc_lblNewLabel_1_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1_1.insets = new Insets(0, 0, 5, 5);
@@ -73,7 +86,7 @@ public class RegistrarEstacion extends JPanel {
 		gbc_estApertura.gridy = 3;
 		add(estApertura, gbc_estApertura);
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("Horario cierre:  ");
+		JLabel lblNewLabel_1_1_1 = new JLabel("Horario cierre: (hh:mm)");
 		GridBagConstraints gbc_lblNewLabel_1_1_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1_1_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_1_1_1.insets = new Insets(0, 0, 5, 5);
@@ -99,28 +112,62 @@ public class RegistrarEstacion extends JPanel {
 		gbc_lblNewLabel_1_2.gridy = 5;
 		add(lblNewLabel_1_2, gbc_lblNewLabel_1_2);
 		
-		JComboBox<String> estEstado = new JComboBox<String>();
+		JComboBox<EstadoEstacion> estEstado = new JComboBox<EstadoEstacion>();
 		GridBagConstraints gbc_estEstado = new GridBagConstraints();
 		gbc_estEstado.fill = GridBagConstraints.BOTH;
 		gbc_estEstado.insets = new Insets(0, 0, 5, 0);
 		gbc_estEstado.gridx = 3;
 		gbc_estEstado.gridy = 5;
 		add(estEstado, gbc_estEstado);
-		estEstado.addItem("Activa");
-		estEstado.addItem("En mantenimiento");
+		estEstado.addItem(EstadoEstacion.OPERATIVA);
+		estEstado.addItem(EstadoEstacion.EN_MANTENIMIENTO);
 		
-		JButton btnNewButton = new JButton("Agregar estacion");
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.anchor = GridBagConstraints.NORTH;
-		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnNewButton.gridwidth = 3;
-		gbc_btnNewButton.gridx = 1;
-		gbc_btnNewButton.gridy = 7;
-		add(btnNewButton, gbc_btnNewButton);
+		JLabel labelErrores = new JLabel("");
+		labelErrores.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		labelErrores.setForeground(Color.RED);
+		GridBagConstraints gbc_labelErrores = new GridBagConstraints();
+		gbc_labelErrores.gridwidth = 3;
+		gbc_labelErrores.insets = new Insets(0, 0, 5, 5);
+		gbc_labelErrores.gridx = 1;
+		gbc_labelErrores.gridy = 6;
+		add(labelErrores, gbc_labelErrores);
 		
-		btnNewButton.addActionListener(e->{
-			//Accion cuando se presione el boton
-		});
+		JButton boton = new JButton("Agregar estacion");
+		GridBagConstraints gbc_boton = new GridBagConstraints();
+		gbc_boton.anchor = GridBagConstraints.NORTH;
+		gbc_boton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_boton.gridwidth = 3;
+		gbc_boton.gridx = 1;
+		gbc_boton.gridy = 7;
+		add(boton, gbc_boton);
+		
+		boton.addActionListener(e -> {
 
+				labelErrores.setForeground(Color.RED);
+				if(estNombre.getText().length() == 0 || estApertura.getText().length() == 0 || estCierre.getText().length() == 0)  {
+					JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo","Error",JOptionPane.ERROR_MESSAGE);
+				} else {
+					LocalTime apertura = null;
+					LocalTime cierre = null;
+					try {
+						apertura = LocalTime.parse(estApertura.getText().toString());
+						cierre = LocalTime.parse(estCierre.getText().toString());
+						EstadoEstacion estado = estEstado.getItemAt(estEstado.getSelectedIndex());
+						Estacion nueva = new Estacion(null, estNombre.getText().toString(), apertura, cierre, estado);
+						try {
+							admin.addEstacion(nueva);
+							labelErrores.setForeground(Color.GREEN);
+							JOptionPane.showMessageDialog(this, "La estacion se registro correctamente","Info",JOptionPane.INFORMATION_MESSAGE);
+							estNombre.setText("");
+							estApertura.setText("");
+							estCierre.setText("");
+						} catch (ClassNotFoundException | SQLException e1) {
+							JOptionPane.showMessageDialog(this, "Ocurrio un error al registrar la estacion","Error",JOptionPane.ERROR_MESSAGE);
+					}
+					}catch(DateTimeParseException f) {
+						JOptionPane.showMessageDialog(this, "La fecha ingresada es incorrecta, verifica que el formato sea hh:mm","Error",JOptionPane.ERROR_MESSAGE);
+					}
+			}
+		});
 	}
 }
