@@ -97,7 +97,7 @@ public class FlujoMaximo extends JPanel {
 		try {
 			this.cargarEstaciones(comboBox);
 		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println("Error al cargas las estaciones");
+			JOptionPane.showMessageDialog(this, "Ocurrio un error al cargar las estaciones.","Error",JOptionPane.ERROR_MESSAGE);
 		}
   		
   		
@@ -134,7 +134,6 @@ public class FlujoMaximo extends JPanel {
   								try {
   									estaciones = new AdministradorDeEstaciones().getEstaciones("");
   									List<LineaDeTransporte> lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
-  									//System.out.println(admin2.caminoPedido(estaciones, lineas, origen, destino, Pedido.MAXIMOPESO));
   									Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
   									List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
   									ParserDelegator workaround = new ParserDelegator();
