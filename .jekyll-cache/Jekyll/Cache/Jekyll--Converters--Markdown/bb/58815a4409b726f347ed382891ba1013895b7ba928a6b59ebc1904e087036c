@@ -1,0 +1,31 @@
+I"<h1 id="ventas-de-boletos">Ventas de Boletos</h1>
+
+<h3 id="venta">Venta</h3>
+
+<p>El cliente puede comprar un boleto seleccionando el camino deseado. En principio deberá insertar un Email válido, su nombre, y de que estación a que estacíon quiere ir.</p>
+
+<p><img src="https://i.ibb.co/2qBhVb9/venderboleto.png" alt="Venta de Boleto" /></p>
+
+<h3 id="en-mantenimiento">En mantenimiento</h3>
+
+<p>En el caso que seleccione una estación que esté en mantenimiento, se le informa al usuario dicha situación.</p>
+
+<p><img src="https://i.ibb.co/2ctxpJp/venderboletoerror.png" alt="Error en venta" /></p>
+
+<h3 id="selección-de-camino">Selección de camino</h3>
+
+<p>El usuario puede elegir un camino siguiendo los criterios de:</p>
+<ul>
+  <li>Más barato.</li>
+  <li>Más rápido.</li>
+  <li>Menor distancia.</li>
+</ul>
+
+<p><img src="https://i.ibb.co/tQFNtPs/venderboletocamino.png" alt="Selección de camino" /></p>
+
+<p>Una vez seleccionado, para obtener los datos, debe presionar <strong><em>Ver mapa</em></strong>, lo cual le permitirá ver los caminos posibles y tener, en la ventana original el precio y camino a seguir según lo indicado.</p>
+
+<p><img src="https://i.ibb.co/XVVnvPZ/venderboletomapa.png" alt="Boleto mapa" /></p>
+
+<p>El usuario puede entonces confirmar la venta del boleto.</p>
+:ET

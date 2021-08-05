@@ -1,100 +1,106 @@
 {"0": {
+    "doc": "Acerca De",
+    "title": "Acerca De",
+    "content": "# Acerca de Este es un trabajo práctico grupal, la resolución está hecha por los siguientes integrantes: * Fontana Valentín * Argañaras Irina * Assenza Tomás ",
+    "url": "/DIED-STM/docs/AcercaDe.html",
+    "relUrl": "/docs/AcercaDe.html"
+  },"1": {
     "doc": "Agregar Estación",
     "title": "Agregar Estación",
     "content": "# Agregar estación El usuario tiene la posibilidad de indicar: * Nombre. * Horario de apertura de la estación. * Horario de cierre de la estación. * Estado ![Registrar estacion](https://i.ibb.co/HH1Y5J1/Registrar-Estacion.png) Una vez agregada, se muestra el mapa correspondiente y se indica que se pudo agregar satisfactoriamente. ![Registrar estacion con mapa](https://i.ibb.co/CtxWmKs/Registrar-Estacion-Mapa.png) ",
     "url": "/DIED-STM/docs/AgregarEstaciones.html",
     "relUrl": "/docs/AgregarEstaciones.html"
-  },"1": {
+  },"2": {
     "doc": "Agregar Linea de Transporte",
     "title": "Agregar Linea de Transporte",
     "content": "# Agregar línea de transporte El usuario tiene la posibilidad de brindar un nombre a la línea, un color y si se encuentra en estado activa o inactiva. Las rutas de la línea se agregarán más adelante ![Agregado de una linea de transporte](https://i.ibb.co/D7bpRsS/linea14.png) ",
     "url": "/DIED-STM/docs/AgregarLineaDeTransporte.html",
     "relUrl": "/docs/AgregarLineaDeTransporte.html"
-  },"2": {
+  },"3": {
     "doc": "Aplicación",
     "title": "Aplicación",
     "content": "# Aplicación ## Descripción general La aplicación se encuentra diseñada en el lenguaje Java con los elementos para la interfaz gráfica dados por la biblioteca gráfica Swing y aprovecha el funcionamiento de grafos y algoritmos de recorrridos de grafos. ## Contexto El trabajo práctico se basa en un sistema de línea de transporte. El problema general a resolver era la selección de que tipo de camino utilizar para cada propósito, y la implementación de algunos algoritmos dados en la cátedra como PageRank. ",
     "url": "/DIED-STM/docs/Aplicacion.html",
     "relUrl": "/docs/Aplicacion.html"
-  },"3": {
+  },"4": {
     "doc": "Base de Datos",
     "title": "Base de Datos",
     "content": "# Conexión a Base de Datos Se utilizó el motor de base de datos 'MySql' y por medio del driver jdbc propio, se estableció la conexión a la BD. Por otro lado, por medio del DriverManager se consigue la conexión pasándole el URL, Usuario y Contraseña de la base de datos. ```java public Connection crearConexion() throws SQLException, ClassNotFoundException { Connection conn = null; Class.forName(\"com.mysql.cj.jdbc.Driver\"); conn = DriverManager.getConnection(URL, USER, PASS); return conn; } ``` **Aclaración: en el binario compilado se puso a 'usuario' y 'contrasena' como usuario y contraseña predeterminado a una base de datos en localhost. Eso se debe configurar manualmente con los scripts insertados en el repositorio** ",
     "url": "/DIED-STM/docs/Base%20de%20Datos.html",
     "relUrl": "/docs/Base%20de%20Datos.html"
-  },"4": {
+  },"5": {
     "doc": "Camino Minimo",
     "title": "Camino Minimo",
     "content": "# Cálculo del camino mínimo El cálculo del camino mínimo es igual para los tres tipos de caminos, solo variando el dato que se analiza al inicializar la matriz de adyacencias del grafo. Para comenzar, se realiza la matriz de adyacencia analizando el siguiente patrón: ``` Para todas las estacionesA -> Para todas las estacionesB -> Para todas las líneas de transporte -> Si existe conexión directa de estacionA a estacionB -> Actualizar valor en la matriz. ``` Luego, mediante el algoritmo de dijkstra se busca el mínimo camino según la matriz de adyacencia generada previamente. Sabemos que el algoritmo de dijkstra genera un vector con el padre de cada nodo en el recorrido mínimo generado. Entonces, finalmente lo que se hace, es generar una lista recorriendo de atrás para adelante los índices encontrados en este vector \"padre\" ```java int ultimaIteracion = -1; while(!iteracion.equals(origen.id)) { if(ultimaIteracion == iteracion) return null; int thisIteracion = iteracion; ultimaIteracion = thisIteracion; retorno.addFirst(estaciones.stream() .filter(estacion -> estacion.id.equals(Integer.valueOf(thisIteracion))) .findFirst() .get()); iteracion = padre.get(iteracion); } retorno.addFirst(origen); return retorno.stream().collect(Collectors.toList()); ``` ",
     "url": "/DIED-STM/docs/CaminoMinimo.html",
     "relUrl": "/docs/CaminoMinimo.html"
-  },"5": {
+  },"6": {
     "doc": "Consultar Estaciones",
     "title": "Consultar Estaciones",
     "content": "El usuario puede hacer consultas sobre el total de las estaciones. En principio puede ir a Estaciones->Consultar estaciones para acceder a las opciones de: * Visualizar todas las estaciones. * Modificar una estación. * Eliminar una estación. * Ver el flujo máximo entre una estación A y una estación B. * Ver los mantenimientos en una estación. ![Consulta todas las estaciones](https://i.ibb.co/R3HLgsF/Estacion-Todas-Estaciones.png) ## Flujo máximo La aplicación cuenta con un algoritmo de detección de Flujo Máximo entre A y B. Para seleccionar la estación A se clickea en la tabla la estación deseada, y luego se presiona en Flujo Máximo, lo cual permite seleccionar una estacion B. ![Consulta estacion 5 flujo max](https://i.ibb.co/LPgTC0t/Estacion-Flujo5.png) Luego, se mostrará todos los caminos posibles de la estación A a la estación B, y cual es el camino que se debe elegir para aprovechar el flujo máximo (en el ejemplo de la captura solo había un camino posible). ![Consulta estacion 5 flujo max con respuesta](https://i.ibb.co/zRbbFcV/Analiza-E5.png) ",
     "url": "/DIED-STM/docs/ConsultarEstaciones.html",
     "relUrl": "/docs/ConsultarEstaciones.html"
-  },"6": {
+  },"7": {
     "doc": "Consultar lineas de transporte",
     "title": "Consultar lineas de transporte",
     "content": "# Consultar líneas de transporte El usuario tiene la posibilidad de: * Visualizar todas las líneas de transporte. * Modificar una línea. * Eliminar una línea. * Registrar/Ver trayectos de una línea. ![Visualiza líneas de transporte](https://i.ibb.co/Dt0NzsZ/Ver-Lineas.png) ## Registrar/Ver trayectos de una línea Esta opción permite ver trayectos y agregar una ruta a una línea dada. ![Registra trayectos](https://i.ibb.co/Jk4BmTL/Registrar-Trayecto-Lineas.png) Una vez que el usuario quiere agregar una ruta, debe indicar: * Estación origen. * Estación destino. * Cantidad de pasajeros. * Estado. * Costo. ![Agrega ruta](https://i.ibb.co/zQb1XTc/Agregar-Ruta-Lineas.png) ",
     "url": "/DIED-STM/docs/ConsultarLineasDeTransporte.html",
     "relUrl": "/docs/ConsultarLineasDeTransporte.html"
-  },"7": {
+  },"8": {
     "doc": "Estaciones",
     "title": "Estaciones",
     "content": "# Estaciones Existen distintos funciones sobre las estaciones descriptas en las subpáginas de la izquierda. ",
     "url": "/DIED-STM/docs/Estaciones.html",
     "relUrl": "/docs/Estaciones.html"
-  },"8": {
+  },"9": {
     "doc": "Flujo Maximo",
     "title": "Flujo Maximo",
     "content": "# Cálculo del Flujo Máximo Sabemos que el algoritmo de Ford-Fulkerson consigue (en un subgrafoAB) el flujo máximo requerido sobre un grafo. Este puede ser implementado sobre un DFS o BFS. Generalmente BFS puede tener una mejor complejidad total (aunque sea igual en Big O), pero no alteraba demasiado los tiempos por lo que no consideramos que sea una buena estrategia siendo que todo el trabajo práctico aprovechaba el algoritmo de búsqueda en profundidad. El pseudo-código del algoritmo general sería: ``` 1. Recorrer DFS actualizando valores (restando flujo). 2. Actualizar la lista si el flujo encontrado es mayor al anterior. 3. Revisar si existe un nuevo retorno de DFS (volver a paso 1, o finalizar). ``` ",
     "url": "/DIED-STM/docs/FlujoMaximo.html",
     "relUrl": "/docs/FlujoMaximo.html"
-  },"9": {
+  },"10": {
     "doc": "Funcionamiento",
     "title": "Funcionamiento",
     "content": "# Funcionamiento de la aplicación La aplicación cuenta con algoritmos específicos para cumplir cada función. En las subpáginas de la izquierda se encuentran explicados. ",
     "url": "/DIED-STM/docs/Funcionamiento.html",
     "relUrl": "/docs/Funcionamiento.html"
-  },"10": {
+  },"11": {
     "doc": "Lineas de Transporte",
     "title": "Lineas de Transporte",
     "content": "# Líneas de Transporte Existen distintos funciones sobre las líneas de transportes descriptas en las subpáginas de la izquierda. ",
     "url": "/DIED-STM/docs/LineasDeTransportes.html",
     "relUrl": "/docs/LineasDeTransportes.html"
-  },"11": {
+  },"12": {
     "doc": "PageRank",
     "title": "PageRank",
     "content": "# Cálculo del PageRank El cálculo del PageRank es obtenido mediante una consulta de SQL que encuentra todas las estaciones con rutas que la contengan como destino (con grado negativo mayor a cero) y se ordenan las mismas según la cantidad de rutas que llegan a ella de manera descendente (es decir que la estación que se encuentra en puesto 1 es a la que llega mayor cantidad de rutas). ```sql SELECT * FROM estacion AS est, (SELECT destino, count(*) AS cant FROM ruta GROUP BY destino) AS aux WHERE est.id = aux.destino ORDER BY aux.cant DESC; ``` ",
     "url": "/DIED-STM/docs/OrdenamientoPageRank.html",
     "relUrl": "/docs/OrdenamientoPageRank.html"
-  },"12": {
+  },"13": {
     "doc": "PageRank",
     "title": "PageRank",
     "content": "# PageRank Desde estaciones->PageRank se puede calcular el PageRank de las estaciones disponibles en el sistema. ![Consulta de page rank](https://i.ibb.co/cbfFn0W/pagerank.png\") **Aclaración: el PageRank solo mostrará estaciones que le lleguen caminos** ",
     "url": "/DIED-STM/docs/PageRank.html",
     "relUrl": "/docs/PageRank.html"
-  },"13": {
+  },"14": {
     "doc": "Próximo Mantenimiento",
     "title": "Próximo Mantenimiento",
     "content": "# Próximo mantenimiento En próximo mantenimiento se puede visualizar cual será el próximo mantenimiento a realizar en una estación. ![Proximo mantenimiento](https://i.ibb.co/9pmcLZG/Proximo-Mantenimiento.png) Una vez realizado el mantenimiento se procede a modificar la estación para poder cambiar el estado de la misma. ![Modificar estacion](https://i.ibb.co/swQytsj/modificarestacion.png) ",
     "url": "/DIED-STM/docs/ProximoMantenimiento.html",
     "relUrl": "/docs/ProximoMantenimiento.html"
-  },"14": {
+  },"15": {
     "doc": "Venta de Boletos",
     "title": "Venta de Boletos",
     "content": "# Ventas de Boletos ### Venta El cliente puede comprar un boleto seleccionando el camino deseado. En principio deberá insertar un Email válido, su nombre, y de que estación a que estacíon quiere ir. ![Venta de Boleto](https://i.ibb.co/2qBhVb9/venderboleto.png) ### En mantenimiento En el caso que seleccione una estación que esté en mantenimiento, se le informa al usuario dicha situación. ![Error en venta](https://i.ibb.co/2ctxpJp/venderboletoerror.png) ### Selección de camino El usuario puede elegir un camino siguiendo los criterios de: * Más barato. * Más rápido. * Menor distancia. ![Selección de camino](https://i.ibb.co/tQFNtPs/venderboletocamino.png) Una vez seleccionado, para obtener los datos, debe presionar ***Ver mapa***, lo cual le permitirá ver los caminos posibles y tener, en la ventana original el precio y camino a seguir según lo indicado. ![Boleto mapa](https://i.ibb.co/XVVnvPZ/venderboletomapa.png) El usuario puede entonces confirmar la venta del boleto. ",
     "url": "/DIED-STM/docs/VentaDeBoleto.html",
     "relUrl": "/docs/VentaDeBoleto.html"
-  },"15": {
+  },"16": {
     "doc": "Visualización de grafos",
     "title": "Visualización de grafos",
     "content": "# Visualización de grafos Para visualizar el mapa con el grafo se utilizó la clase 'GraphStream' que permite realizar automáticamente el dibujo agregando nodos y aristas con su disposición en cada componente conexa automáticamente. Seteo de propiedad: ```java System.setProperty(\"org.graphstream.ui\", \"swing\"); ``` Disposición y muestra del grafo: ```java graph.setAutoCreate(true); graph.setStrict(true); Viewer viewer = graph.display(); ``` Permitir cerrar ventana sin cerrar aplicación: ```java viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY); ``` ",
     "url": "/DIED-STM/docs/VisualizacionDeGrafo.html",
     "relUrl": "/docs/VisualizacionDeGrafo.html"
-  },"16": {
+  },"17": {
     "doc": "Trabajo Práctico",
     "title": "Trabajo Práctico",
     "content": "# Died-STM ## Descripcion Trabajo práctico integrador para la materia Diseño e Implementación de Estructuras de Datos - UTN FRSF - 2021. El trabajo presentado consta de la resolución de los 6 incisos con su integración en una base de datos y la visualización de una interfaz gráfica de usuario diseñada desde la biblioteca gráfica Swing. ![Venta de boleto](https://i.ibb.co/2qBhVb9/venderboleto.png) ",

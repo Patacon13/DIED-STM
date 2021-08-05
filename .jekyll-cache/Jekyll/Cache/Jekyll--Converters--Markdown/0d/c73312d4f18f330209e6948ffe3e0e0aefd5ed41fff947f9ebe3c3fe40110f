@@ -1,0 +1,8 @@
+I"c<h1 id="aplicación">Aplicación</h1>
+
+<h2 id="descripción-general">Descripción general</h2>
+<p>La aplicación se encuentra diseñada en el lenguaje Java con los elementos para la interfaz gráfica dados por la biblioteca gráfica Swing y aprovecha el funcionamiento de grafos y algoritmos de recorrridos de grafos.</p>
+
+<h2 id="contexto">Contexto</h2>
+<p>El trabajo práctico se basa en un sistema de línea de transporte. El problema general a resolver era la selección de que tipo de camino utilizar para cada propósito, y la implementación de algunos algoritmos dados en la cátedra como PageRank.</p>
+:ET

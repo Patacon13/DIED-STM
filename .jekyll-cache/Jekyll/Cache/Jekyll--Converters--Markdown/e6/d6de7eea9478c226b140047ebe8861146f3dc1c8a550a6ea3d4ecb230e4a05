@@ -1,0 +1,17 @@
+I"2<h1 id="agregar-estación">Agregar estación</h1>
+
+<p>El usuario tiene la posibilidad de indicar:</p>
+
+<ul>
+  <li>Nombre.</li>
+  <li>Horario de apertura de la estación.</li>
+  <li>Horario de cierre de la estación.</li>
+  <li>Estado</li>
+</ul>
+
+<p><img src="https://i.ibb.co/HH1Y5J1/Registrar-Estacion.png" alt="Registrar estacion" /></p>
+
+<p>Una vez agregada, se muestra el mapa correspondiente y se indica que se pudo agregar satisfactoriamente.</p>
+
+<p><img src="https://i.ibb.co/CtxWmKs/Registrar-Estacion-Mapa.png" alt="Registrar estacion con mapa" /></p>
+:ET

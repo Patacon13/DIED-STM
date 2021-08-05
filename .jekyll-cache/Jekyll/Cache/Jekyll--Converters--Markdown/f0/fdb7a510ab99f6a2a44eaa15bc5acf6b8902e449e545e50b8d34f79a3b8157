@@ -1,0 +1,74 @@
+I"	<h1 id="died-stm">DIED-STM</h1>
+
+<h2 id="descripcion">Descripcion</h2>
+
+<p>Trabajo práctico integrador para la materia Diseño e Implementación de Estructuras de Datos - UTN FRSF - 2021.</p>
+
+<p>El trabajo presentado consta de la resolución de los 6 incisos con su integración en una base de datos y la visualización de una interfaz gráfica de usuario diseñada desde la biblioteca gráfica Swing.</p>
+
+<h2 id="compilacion">Compilacion</h2>
+
+<p>Por ser el IDE recomendado por la cátedra, el proyecto está configurado para ser fácilmente compilado y construido en Eclipse (por las rutas relativas a las librerías).</p>
+
+<h3 id="compilación">Compilación</h3>
+
+<ol>
+  <li>Instalar dependencias e IDE</li>
+</ol>
+
+<h4 id="en-ubuntu-2004">En Ubuntu 20.04</h4>
+
+<p>En una terminal:</p>
+<pre><code class="language-sh=">sudo apt update
+sudo apt install snapd
+
+sudo apt install git
+sudo apt install openjdk-11-jdk
+
+sudo snap install eclipse --classic 
+</code></pre>
+
+<p>Aclaración: la ultima version estable otorgada por snap es del 2019. Para instalar una versión posterior estable se debe usar el instalador oficial https://www.eclipse.org/downloads/</p>
+
+<h4 id="en-windows">En Windows</h4>
+<p>Abrir una terminal (Windows Terminal, CMD, Powershell, etc.) con Chocolatey (https://chocolatey.org/install) previamente instalado.</p>
+
+<pre><code class="language-sh=">choco install openjdk11
+choco install git
+choco install eclipse
+</code></pre>
+
+<ol>
+  <li>Clonar proyecto</li>
+</ol>
+
+<p>En una terminal:</p>
+<pre><code class="language-sh=">git clone &lt;LINKDELREPO&gt;
+</code></pre>
+
+<ol>
+  <li>Importar proyecto</li>
+</ol>
+
+<p>En eclipse:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>File-&gt;Open Projects from File System
+Directory... *Seleccionar directorio*
+Finish
+</code></pre></div></div>
+
+<ol>
+  <li>Ejecutar</li>
+</ol>
+
+<p>En eclipse:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Run-&gt;Run Configurations
+Doble click en Java Application
+Search...
+Seleccionar gui.ventana
+Run
+</code></pre></div></div>
+
+<p><strong>Aclaración importante: Si se ejecuta el binario, se debe tener una base de datos en localhost con puerto 3306 con usuario ‘usuario’ y contraseña ‘contrasena’</strong></p>
+:ET

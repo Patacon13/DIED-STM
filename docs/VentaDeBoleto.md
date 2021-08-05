@@ -2,6 +2,7 @@
 title: Venta de Boletos
 parent: Aplicación
 has_children: false
+nav_order: 1
 ---
 # Ventas de Boletos
 
