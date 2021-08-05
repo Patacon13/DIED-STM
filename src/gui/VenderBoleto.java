@@ -26,12 +26,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import javax.swing.JRadioButton;
-
 public class VenderBoleto extends JPanel {
 	private JTextField clienteEmail;
 	private JTextField clienteNombre;
 
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -156,6 +156,8 @@ public class VenderBoleto extends JPanel {
 		} else if(origen.getEstado() == EstadoEstacion.EN_MANTENIMIENTO || destino.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
 			JOptionPane.showMessageDialog(this, "La estacion de origen o destino se encuentra en mantenimiento.","Error",JOptionPane.ERROR_MESSAGE);
 		
+		} else if(!email.matches(".+\\@.+\\..+")) {
+			JOptionPane.showMessageDialog(this, "El email no es válido.","Error",JOptionPane.ERROR_MESSAGE);
 		} else {
 			 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
 			 ventana.getContentPane().removeAll(); //Remover componentes
