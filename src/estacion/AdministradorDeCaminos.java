@@ -295,7 +295,6 @@ public class AdministradorDeCaminos {
 	 * @param estacionesEnIteracionActual
 	 */
 	private void dfs(Estacion origen, Estacion destino, List<Estacion> estaciones, Deque<Pair<Estacion, LineaDeTransporte>> estacionesEnIteracionActual) {
-		//System.out.println("Estaciones it actual " + estacionesEnIteracionActual);
 		if(!origen.equals(destino)) {
 			recorridosDFS.put(origen, Boolean.TRUE);
 			for(Estacion vecina : estaciones) {

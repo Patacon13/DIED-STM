@@ -7,7 +7,6 @@ import javax.swing.SwingUtilities;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.view.Viewer;
 
 import boleto.AdministradorDeBoletos;
@@ -26,7 +25,6 @@ import java.util.Deque;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.sql.SQLException;

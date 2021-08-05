@@ -3,14 +3,10 @@ package gui;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
-import javax.swing.text.html.parser.ParserDelegator;
-
 import estacion.AdministradorDeCaminos;
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
-import estacion.Pedido;
 import lineaDeTransporte.AdministradorDeLineasDeTransporte;
-import lineaDeTransporte.ColorLineaDeTransporte;
 import lineaDeTransporte.LineaDeTransporte;
 import pair.Pair;
 
@@ -124,10 +120,8 @@ public class FlujoMaximo extends JPanel {
   					if(!origen.equals(destino)) {
   					boton.setEnabled(false);
   					lblNewLabel_1.setText("Caminos posibles: ");
-  					ArrayList<Estacion> lista = new ArrayList<Estacion>();
-  			    	AdministradorDeCaminos admin = new AdministradorDeCaminos();	
-  			    	AdministradorDeCaminos admin2 = new AdministradorDeCaminos();	
-  					Thread thread = new Thread(){
+  					AdministradorDeCaminos admin = new AdministradorDeCaminos();	
+  			    	Thread thread = new Thread(){
   						    public void run(){
   						    
   						    	List<Estacion> estaciones;
@@ -136,7 +130,6 @@ public class FlujoMaximo extends JPanel {
   									List<LineaDeTransporte> lineas = new AdministradorDeLineasDeTransporte().getLineasDeTransporte("");
   									Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
   									List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
-  									ParserDelegator workaround = new ParserDelegator();
   									String texto = "";
   									texto = texto + "<html>";
   									Iterator<Pair<Estacion, LineaDeTransporte>> it;

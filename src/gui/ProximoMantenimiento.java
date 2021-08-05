@@ -1,12 +1,10 @@
 package gui;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
@@ -16,7 +14,6 @@ import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
 import estacion.EstadoEstacion;
 import tareaDeMantenimiento.AdministradorDeTareas;
-import tareaDeMantenimiento.TareaDeMantenimiento;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,7 +24,6 @@ import javax.swing.JFrame;
 
 import java.awt.Insets;
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Font;
 
 public class ProximoMantenimiento extends JPanel {
@@ -37,7 +33,6 @@ public class ProximoMantenimiento extends JPanel {
 	public ProximoMantenimiento() {
 		construirInterfaz();
 		
-		AdministradorDeTareas admin = new AdministradorDeTareas();
 		AdministradorDeEstaciones admin2 = new AdministradorDeEstaciones();
 			 Queue<Estacion> estaciones = new PriorityQueue<Estacion>();
 			 try {

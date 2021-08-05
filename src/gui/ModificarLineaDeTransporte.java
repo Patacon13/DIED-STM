@@ -8,27 +8,18 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import estacion.AdministradorDeEstaciones;
-import estacion.Estacion;
-import estacion.EstadoEstacion;
 import lineaDeTransporte.AdministradorDeLineasDeTransporte;
 import lineaDeTransporte.ColorLineaDeTransporte;
 import lineaDeTransporte.EstadoLinea;
 import lineaDeTransporte.LineaDeTransporte;
-import tareaDeMantenimiento.AdministradorDeTareas;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 

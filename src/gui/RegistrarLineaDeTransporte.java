@@ -7,29 +7,20 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import estacion.Estacion;
-import estacion.EstadoEstacion;
+
 import lineaDeTransporte.AdministradorDeLineasDeTransporte;
 import lineaDeTransporte.ColorLineaDeTransporte;
 import lineaDeTransporte.EstadoLinea;
 import lineaDeTransporte.LineaDeTransporte;
 
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 
 public class RegistrarLineaDeTransporte extends JPanel {
 	private JTextField linNombre;

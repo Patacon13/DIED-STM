@@ -25,8 +25,6 @@ import java.awt.Insets;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.JRadioButton;
 

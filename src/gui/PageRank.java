@@ -6,15 +6,11 @@ import javax.swing.JTable;
 
 import java.awt.BorderLayout;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
 import estacion.EstadoEstacion;
-import tareaDeMantenimiento.AdministradorDeTareas;
-import tareaDeMantenimiento.TareaDeMantenimiento;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -22,7 +18,6 @@ import java.awt.GridBagConstraints;
 
 import java.awt.Insets;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 

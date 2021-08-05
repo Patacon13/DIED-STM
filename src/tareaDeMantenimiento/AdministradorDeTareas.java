@@ -38,7 +38,6 @@ private Conexion con = new Conexion();
 		PreparedStatement pstm = conn.prepareStatement("UPDATE mantenimiento SET fechafin=? WHERE estacion=? AND fechafin IS NULL");
 		pstm.setDate(1, Date.valueOf(fin));
 		pstm.setInt(2, nueva.getId());
-		Integer c = pstm.executeUpdate();
 		pstm.close();
 		conn.close();
 	}
