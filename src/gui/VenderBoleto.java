@@ -161,7 +161,7 @@ public class VenderBoleto extends JPanel {
 		} else {
 			 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
 			 ventana.getContentPane().removeAll(); //Remover componentes
-			 ventana.add(new VenderBoleto2(origen, destino, nombre, email), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
+			 ventana.add(new VenderBoletoMapa(origen, destino, nombre, email), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
 			 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
 		}
 		});

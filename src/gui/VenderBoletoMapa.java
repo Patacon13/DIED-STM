@@ -46,13 +46,13 @@ import java.awt.Color;
 
 
 
-public class VenderBoleto2 extends JPanel {
+public class VenderBoletoMapa extends JPanel {
 	
     AdministradorDeCaminos admin = new AdministradorDeCaminos();
     AdministradorDeEstaciones admin2 = new AdministradorDeEstaciones();
     AdministradorDeLineasDeTransporte admin3 = new AdministradorDeLineasDeTransporte();
 
-	public VenderBoleto2(Estacion origen, Estacion destino, String nombre, String email) {
+	public VenderBoletoMapa(Estacion origen, Estacion destino, String nombre, String email) {
 
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{20, 145, 0, 0, 0, 140, 0, 0, 96, 0, 0};
