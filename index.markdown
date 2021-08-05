@@ -20,7 +20,7 @@ Por ser el IDE recomendado por la cátedra, el proyecto está configurado para s
 
 ### Compilación
 
-0. Instalar dependencias e IDE
+* Instalar dependencias e IDE
 
 #### En Ubuntu 20.04
 
@@ -46,14 +46,14 @@ choco install git
 choco install eclipse
 ```
 
-1. Clonar proyecto
+* Clonar proyecto
 
 En una terminal:
 ```sh
 git clone <LINKDELREPO>
 ```
 
-2. Importar proyecto
+* Importar proyecto
 
 En eclipse:
 
@@ -63,7 +63,7 @@ Directory... *Seleccionar directorio*
 Finish
 ```
 
-3. Ejecutar
+* Ejecutar
 
 En eclipse:
 
@@ -75,4 +75,4 @@ Seleccionar gui.ventana
 Run
 ```
 
-**Aclaración importante: Si se ejecuta el binario, se debe tener una base de datos en localhost con puerto 3306 con usuario 'usuario' y contraseña 'contrasena'**
+*	*Aclaración importante: Si se ejecuta el binario, se debe tener una base de datos en localhost con puerto 3306 con usuario 'usuario' y contraseña 'contrasena'**
