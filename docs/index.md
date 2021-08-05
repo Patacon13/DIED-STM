@@ -4,7 +4,7 @@ has_children: false
 nav_order: 2
 ---
 
-# Died-STM
+# Trabajo Práctico
 
 ## Descripcion
 
