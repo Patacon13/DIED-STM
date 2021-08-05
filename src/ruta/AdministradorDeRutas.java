@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import conexionMySQL.Conexion2;
+import conexionMySQL.Conexion;
 import estacion.AdministradorDeEstaciones;
 import estacion.Estacion;
 import lineaDeTransporte.EstadoLinea;
 import lineaDeTransporte.LineaDeTransporte;
 
 public class AdministradorDeRutas {
-	private Conexion2 con = new Conexion2();
+	private Conexion con = new Conexion();
 
 	public ArrayList<Ruta> getRutas(LineaDeTransporte l) throws SQLException, ClassNotFoundException {
 		Connection conn = con.crearConexion();

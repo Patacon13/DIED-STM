@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import conexionMySQL.Conexion2;
+import conexionMySQL.Conexion;
 import tareaDeMantenimiento.TareaDeMantenimiento;
 
 public class Estacion implements Comparable<Estacion>{
-	private Conexion2 con = new Conexion2();
+	private Conexion con = new Conexion();
 	protected Integer id;
 	protected String nombre;
 	protected LocalTime horarioApertura;

@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import conexionMySQL.Conexion2;
+import conexionMySQL.Conexion;
 
 
 
 public class AdministradorDeBoletos {
 	public List<Boleto> boletos = new ArrayList<>();
-	Conexion2 con = new Conexion2();
+	Conexion con = new Conexion();
 
 
 	public Integer addBoleto(Boleto b) throws ClassNotFoundException, SQLException{
