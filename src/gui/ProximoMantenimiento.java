@@ -64,10 +64,12 @@ public class ProximoMantenimiento extends JPanel {
 					panel.add(table, BorderLayout.CENTER);
 					
 					boton.addActionListener(e->{
+						if(aMantener != null) {
 					   	 JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(this); //Obtener  Jframe donde está el Jpanel
 						 ventana.getContentPane().removeAll(); //Remover componentes
 						 ventana.add(new ModificarEstacion(aMantener), BorderLayout.CENTER); //Agregar 2da interfaz de vender boleto
 						 SwingUtilities.updateComponentTreeUI(ventana); //Actualizar componentes de la ventana
+						}
 					});
 					
 			} catch (ClassNotFoundException | SQLException e) {
