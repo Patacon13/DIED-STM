@@ -46,8 +46,8 @@ public class ProximoMantenimiento extends JPanel {
 					DefaultTableModel modelo = new DefaultTableModel(null,columnas){
 					    public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
 					};
-
-						if(aMantener.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
+						
+						if(aMantener == null || aMantener.getEstado() == EstadoEstacion.EN_MANTENIMIENTO) {
 							Object[] estacion = {"-", "-", "-", "-", "-"};
 							   modelo.addRow(estacion);
 						} else {
