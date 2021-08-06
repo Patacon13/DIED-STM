@@ -53,7 +53,9 @@ public class RegistrarRuta extends JPanel {
 		rRegistrar.addActionListener(e-> {
 			Integer  pasajeros = null, duracion = null;
 			Double costo = null, distancia = null;
-			if(rDistancia.getText().toString().length() == 0 || rPasajeros.getText().toString().length() == 0 || rDuracion.getText().toString().length() == 0 || rCosto.getText().toString().length() == 0) {
+			Estacion origen =  rOrigen.getItemAt(rOrigen.getSelectedIndex());
+			Estacion destino = rOrigen.getItemAt(rDestino.getSelectedIndex());
+			if(origen == null || destino == null ||rDistancia.getText().toString().length() == 0 || rPasajeros.getText().toString().length() == 0 || rDuracion.getText().toString().length() == 0 || rCosto.getText().toString().length() == 0) {
 				 JOptionPane.showMessageDialog(this,"Dejaste algún campo vacio.","Error",JOptionPane.ERROR_MESSAGE);
 			} else {
 			try {
@@ -61,8 +63,7 @@ public class RegistrarRuta extends JPanel {
 				pasajeros = Integer.parseInt(rPasajeros.getText().toString());
 				duracion = Integer.parseInt(rDuracion.getText().toString());
 				costo = Double.parseDouble(rCosto.getText().toString());
-				Estacion origen =  rOrigen.getItemAt(rOrigen.getSelectedIndex());
-				Estacion destino = rOrigen.getItemAt(rDestino.getSelectedIndex());
+
 				EstadoLinea estado = rEstado.getItemAt(rEstado.getSelectedIndex());
 
 				Ruta nueva = new Ruta(null, origen, destino, distancia, duracion, pasajeros, estado, costo, linea.getId());

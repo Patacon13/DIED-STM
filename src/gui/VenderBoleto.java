@@ -149,7 +149,7 @@ public class VenderBoleto extends JPanel {
 		String email = clienteEmail.getText().toString();
 		Estacion origen = estOrigen.getItemAt(estOrigen.getSelectedIndex());
 		Estacion destino = estDestino.getItemAt(estDestino.getSelectedIndex());
-		if(nombre.length() == 0 || email.length() == 0) {
+		if(nombre.length() == 0 || email.length() == 0 || origen == null || destino == null) {
 			JOptionPane.showMessageDialog(this, "Algun campo está sin completar, revisalo.","Error",JOptionPane.ERROR_MESSAGE);
 		} else if(origen.equals(destino)){
 			JOptionPane.showMessageDialog(this, "La estacion de origen no puede ser igual a la de destino.","Error",JOptionPane.ERROR_MESSAGE);
