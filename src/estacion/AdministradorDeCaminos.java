@@ -267,8 +267,8 @@ public class AdministradorDeCaminos {
 					int retornoDFS = dfs(vecina, destino, estaciones, Math.min(flux, grafoDFS.get(origen).get(vecina).first.intValue()));
 					if(retornoDFS != -1) {
 						estacionesMaximoFlujoAux.add(origen);
+						flujoEncontradoEnDFS = Math.min(flujoEncontradoEnDFS, grafoDFS.get(origen).get(vecina).first.intValue());
 						grafoDFS.get(origen).put(vecina, new Pair<Double, LineaDeTransporte>((grafoDFS.get(origen).get(vecina).first - retornoDFS), grafoDFS.get(origen).get(vecina).second));
-						flujoEncontradoEnDFS = Math.min(flujoEncontradoEnDFS, grafo.get(origen).get(vecina).first.intValue());
 						return retornoDFS;
 					}
 				
