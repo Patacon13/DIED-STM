@@ -349,8 +349,8 @@ public class AdministradorDeCaminos {
 		while(retornoDFS != -1) {
 			recorridosDFS.clear();
 			recorridosDFS = new HashMap<>();
+			flujoMaximo += flujoEncontradoEnDFS;
 			if(flujoMaximo < flujoEncontradoEnDFS) {
-				flujoMaximo = flujoEncontradoEnDFS;
 				estacionesMaximoFlujo = estacionesMaximoFlujoAux;
 			}
 			flujoEncontradoEnDFS = 1000000;
