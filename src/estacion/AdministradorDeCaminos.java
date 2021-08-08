@@ -27,8 +27,6 @@ public class AdministradorDeCaminos {
 	private List<Boolean> visitado;
 	private int flujoEncontradoEnDFS = 100000;
 	private HashMap<Estacion, Boolean> recorridosDFS;
-	private List<Estacion> estacionesMaximoFlujo;
-	private List<Estacion> estacionesMaximoFlujoAux;
 	private List<Deque<Pair<Estacion, LineaDeTransporte>>> estacionesDeAaB;
 	
 		
@@ -266,7 +264,6 @@ public class AdministradorDeCaminos {
 					
 					int retornoDFS = dfs(vecina, destino, estaciones, Math.min(flux, grafoDFS.get(origen).get(vecina).first.intValue()));
 					if(retornoDFS != -1) {
-						estacionesMaximoFlujoAux.add(origen);
 						flujoEncontradoEnDFS = Math.min(flujoEncontradoEnDFS, grafoDFS.get(origen).get(vecina).first.intValue());
 						grafoDFS.get(origen).put(vecina, new Pair<Double, LineaDeTransporte>((grafoDFS.get(origen).get(vecina).first - retornoDFS), grafoDFS.get(origen).get(vecina).second));
 						return retornoDFS;
@@ -278,7 +275,6 @@ public class AdministradorDeCaminos {
 			
 		}
 		else {
-			estacionesMaximoFlujoAux.add(origen);
 			return flux;
 		}
 		return -1;
@@ -341,23 +337,16 @@ public class AdministradorDeCaminos {
 	 */
 	private int fordFulkerson(List<Estacion> estacionesIngreso, List<LineaDeTransporte> lineas, List<Estacion> estaciones, Estacion origen, Estacion destino) throws ClassNotFoundException, SQLException {
 		recorridosDFS = new HashMap<>();
-		estacionesMaximoFlujoAux = new ArrayList<>();
 		grafoDFS = copyGrafo(estacionesIngreso);
 		int retornoDFS = dfs(origen, destino, estaciones, 100000);
 		int flujoMaximo = 0;
-		estacionesMaximoFlujo = estacionesMaximoFlujoAux;
 		while(retornoDFS != -1) {
 			recorridosDFS.clear();
 			recorridosDFS = new HashMap<>();
 			flujoMaximo += flujoEncontradoEnDFS;
-			if(flujoMaximo < flujoEncontradoEnDFS) {
-				estacionesMaximoFlujo = estacionesMaximoFlujoAux;
-			}
 			flujoEncontradoEnDFS = 1000000;
-			estacionesMaximoFlujoAux = new ArrayList<>();
 			retornoDFS = dfs(origen, destino, estaciones, 100000);
 		}
-		Collections.reverse(estacionesMaximoFlujo);
 		return flujoMaximo;
 	}
 	
@@ -435,14 +424,6 @@ public class AdministradorDeCaminos {
 		HashMap<Estacion,HashMap<Estacion,Pair<Double,LineaDeTransporte>>> grafoFloyd = floydwarshall(copyGrafo(estaciones), estaciones);
 		List<Estacion> listaDeEstaciones = estacionesAB(grafoFloyd, origen, destino, estaciones);
 		return fordFulkerson(estaciones, lineas, listaDeEstaciones, origen, destino);
-	}
-	
-	/**
-	 * Devuelve las estaciones con maximo flujo. Se debe ejecutar previamente mayorPesoDeAaB.
-	 * @return
-	 */
-	public List<Estacion> getEstacionesMaximoFlujo() {
-		return estacionesMaximoFlujo;
 	}
 	
 	

@@ -157,7 +157,7 @@ public class FlujoMaximo extends JPanel {
   									res.setText(texto);
   									res.repaint();
   									labelValor.setText(labelValor.getText() + " " + valor + " pasajeros");
-  									estacionesFMax.setText(estacionesFMax.getText() + admin.getEstacionesMaximoFlujo());
+  									//estacionesFMax.setText(estacionesFMax.getText() + admin.getEstacionesMaximoFlujo());
   									} else {
   										SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "No existe camino entre las estaciones elegidas."));
   									}
