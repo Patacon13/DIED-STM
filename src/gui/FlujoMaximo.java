@@ -26,6 +26,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Color;
+import javax.swing.JScrollPane;
+import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 
 public class FlujoMaximo extends JPanel {
 	Boolean calculo = Boolean.FALSE;
@@ -49,7 +52,7 @@ public class FlujoMaximo extends JPanel {
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		JLabel lblNewLabel = new JLabel("Flujo m\u00E1ximo");
@@ -73,33 +76,29 @@ public class FlujoMaximo extends JPanel {
   		progressBar.setForeground(new Color(60, 179, 113));
   		progressBar.setStringPainted(true);
   		GridBagConstraints gbc_progressBar = new GridBagConstraints();
+  		gbc_progressBar.ipadx = 60;
   		gbc_progressBar.insets = new Insets(0, 0, 5, 5);
   		gbc_progressBar.gridx = 3;
   		gbc_progressBar.gridy = 4;
   		add(progressBar, gbc_progressBar);
   		
-  		JLabel lblNewLabel_1 = new JLabel("");
-  		GridBagConstraints gbc_labelValor = new GridBagConstraints();
-  		gbc_labelValor.insets = new Insets(0, 0, 5, 5);
-  		gbc_labelValor.gridx = 3;
-  		gbc_labelValor.gridy = 7;
-  		add(lblNewLabel_1, gbc_labelValor);
+  		JScrollPane scrollPane = new JScrollPane();
+  		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+  		gbc_scrollPane.gridwidth = 3;
+  		gbc_scrollPane.gridheight = 3;
+  		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+  		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+  		gbc_scrollPane.gridx = 2;
+  		gbc_scrollPane.gridy = 5;
+  		add(scrollPane, gbc_scrollPane);
   		
-  		JLabel res = new JLabel("");
-  		res.setFont(new Font("Tahoma", Font.PLAIN, 10));
-  		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-  		gbc_lblNewLabel_1.gridwidth = 5;
-  		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
-  		gbc_lblNewLabel_1.gridx = 1;
-  		gbc_lblNewLabel_1.gridy = 8;
-  		add(res, gbc_lblNewLabel_1);
+  		JLabel lblNewLabel_1 = new JLabel("Caminos posibles: ");
+  		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+  		scrollPane.setColumnHeaderView(lblNewLabel_1);
   		
-  		JLabel labelValor = new JLabel("Flujo maximo: ");
-  		GridBagConstraints gbc_labelValor1 = new GridBagConstraints();
-  		gbc_labelValor1.insets = new Insets(0, 0, 5, 5);
-  		gbc_labelValor1.gridx = 3;
-  		gbc_labelValor1.gridy = 9;
-  		add(labelValor, gbc_labelValor1);
+  		JLabel resultado2 = new JLabel("");
+  		resultado2.setFont(new Font("Tahoma", Font.PLAIN, 9));
+  		scrollPane.setViewportView(resultado2);
 		try {
 			this.cargarEstaciones(comboBox);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -114,22 +113,24 @@ public class FlujoMaximo extends JPanel {
   		gbc_boton.gridy = 3;
   		add(boton, gbc_boton);
   		
-  		JLabel estacionesFMax = new JLabel("Camino: ");
-  		GridBagConstraints gbc_estacionesFMax = new GridBagConstraints();
-  		gbc_estacionesFMax.insets = new Insets(0, 0, 5, 5);
-  		gbc_estacionesFMax.gridx = 3;
-  		gbc_estacionesFMax.gridy = 10;
-  		add(estacionesFMax, gbc_estacionesFMax);
+
+  		
+  	
+  		JLabel labelValor = new JLabel("Flujo maximo: ");
+  		GridBagConstraints gbc_labelValor1 = new GridBagConstraints();
+  		gbc_labelValor1.insets = new Insets(0, 0, 5, 5);
+  		gbc_labelValor1.gridx = 3;
+  		gbc_labelValor1.gridy = 8;
+  		add(labelValor, gbc_labelValor1);
+  		
   		
   				boton.addActionListener(e->{
   					progressBar.setValue(0);
-  					res.setText("");
   					labelValor.setText("Flujo maximo: ");
-  					estacionesFMax.setText("Camino: ");
+
   					Estacion destino = comboBox.getItemAt(comboBox.getSelectedIndex());
   					if(!origen.equals(destino)) {
   					boton.setEnabled(false);
-  					lblNewLabel_1.setText("Caminos posibles: ");	
   			    	Thread thread = new Thread(){
   						    public void run(){
   						    
@@ -142,10 +143,12 @@ public class FlujoMaximo extends JPanel {
   									
   									Integer valor = admin.mayorPesoDeAaB(estaciones, lineas, origen, destino);
   									List<Deque<Pair<Estacion, LineaDeTransporte>>> resultado = admin.getCaminos(estaciones, origen, destino);
-  									String texto = "";
-  									texto = texto + "<html>";
+  									
+  									String texto = "<html>";
   									Iterator<Pair<Estacion, LineaDeTransporte>> it;
+  									
   									if(resultado.size() != 0) {
+  										
   									for(int i=0; i<resultado.size(); i++) {
   										it = resultado.get(i).iterator();
   										while(it.hasNext()) {
@@ -154,10 +157,10 @@ public class FlujoMaximo extends JPanel {
   										texto = texto + "FIN <br></br>";
   									}
   									texto = texto + "</html>";
-  									res.setText(texto);
-  									res.repaint();
+  									resultado2.setText(texto);
+  									resultado2.repaint();
+
   									labelValor.setText(labelValor.getText() + " " + valor + " pasajeros");
-  									estacionesFMax.setText(estacionesFMax.getText() + admin.getEstacionesMaximoFlujo());
   									} else {
   										SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(FlujoMaximo.this, "No existe camino entre las estaciones elegidas."));
   									}
