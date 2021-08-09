@@ -266,6 +266,9 @@ public class AdministradorDeCaminos {
 					if(retornoDFS != -1) {
 						flujoEncontradoEnDFS = Math.min(flujoEncontradoEnDFS, grafoDFS.get(origen).get(vecina).first.intValue());
 						grafoDFS.get(origen).put(vecina, new Pair<Double, LineaDeTransporte>((grafoDFS.get(origen).get(vecina).first - retornoDFS), grafoDFS.get(origen).get(vecina).second));
+						if(grafoDFS.get(vecina) == null) grafoDFS.put(vecina, new HashMap<>());
+						if(grafoDFS.get(vecina).get(origen) == null) grafoDFS.get(vecina).put(origen, new Pair<Double, LineaDeTransporte>(Double.valueOf(0), null));
+						grafoDFS.get(vecina).put(origen, new Pair<Double, LineaDeTransporte>((grafoDFS.get(vecina).get(origen).first + retornoDFS), grafoDFS.get(vecina).get(origen).second));
 						return retornoDFS;
 					}
 				
