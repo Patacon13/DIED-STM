@@ -8,12 +8,17 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import conexionMySQL.Conexion;
+import pair.Pair;
 import tareaDeMantenimiento.AdministradorDeTareas;
 
 
 public class AdministradorDeEstaciones {
+	private Map<Integer, Double> pageRank = new HashMap<Integer, Double>();
+	private Map<Integer, Double> pageRankIt = new HashMap<Integer, Double>();
 	private Conexion con = new Conexion();
 	
 	public Integer addEstacion(Estacion e) throws ClassNotFoundException, SQLException{
@@ -39,6 +44,10 @@ public class AdministradorDeEstaciones {
 		pstm.close();
 		conn.close();
 		return c;
+	}
+	
+	public Map<Integer, Double> getPageRank() {
+		return this.pageRank;
 	}
 	
 	public Integer modifyEstacion(Estacion vieja, Estacion nueva) throws SQLException, ClassNotFoundException {
@@ -112,22 +121,68 @@ public class AdministradorDeEstaciones {
 		return retorno;
 	}
 	
-	public ArrayList<Estacion> pageRank() throws SQLException, ClassNotFoundException{
+	
+	private ArrayList<Integer> idEstacionesQueLlegan(Integer idEstacion) throws SQLException, ClassNotFoundException{
+			Connection conn = con.crearConexion();
+			PreparedStatement ps = conn.prepareStatement("SELECT origen FROM ruta WHERE destino=?");
+			ps.setInt(1, idEstacion);
+			ResultSet estaciones = ps.executeQuery();
+			ArrayList<Integer> retorno = new ArrayList<Integer>();
+			while(estaciones.next()){
+				retorno.add(estaciones.getInt(1));
+			}
+			estaciones.close();
+			ps.close();
+			conn.close();
+			return retorno;
+	}
+	
+	public void pageRank() throws SQLException, ClassNotFoundException{
 		Connection conn = new Conexion().crearConexion();
 		PreparedStatement ps;
 		ResultSet estaciones;
-		ArrayList<Estacion> retorno = new ArrayList<Estacion>();
-		ps = conn.prepareStatement("SELECT * FROM estacion AS est, (SELECT destino, count(*) AS cant FROM ruta GROUP BY destino) AS aux WHERE est.id = aux.destino ORDER BY aux.cant DESC;");
+		ArrayList<Estacion> lista = this.getEstaciones("");
+		for(Estacion est : lista) {
+			pageRank.put(est.getId(), 1.0);
+		}
+		for(Estacion est : lista) {
+			pageRankIt.put(est.getId(), 0.0);
+		}
 		
-		estaciones = ps.executeQuery();
+		for(int i=0; i<pageRank.size(); i++) {
+			for(Estacion est: lista) {
+				pageRankInt(est.getId());
+			}
+			pageRankIt.forEach((k,v) -> {
+				pageRank.put(k, v);
+			});
+		}
+	}
+	
+	private void pageRankInt(Integer id) throws ClassNotFoundException, SQLException {
+		Double d = 0.5;
+		Double sumaPageRank = 0.0;
+		for(Integer idEst : this.idEstacionesQueLlegan(id)) {
+			sumaPageRank+= pageRank.get(idEst) / Double.valueOf(cantQueSalen(idEst));
+		}
+		pageRankIt.put(id, d + d*sumaPageRank);
+	}
+
+	private Integer cantQueSalen(Integer idEst) throws SQLException, ClassNotFoundException {
+		Connection conn = con.crearConexion();
+		PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM ruta WHERE origen=? GROUP BY origen");
+		ps.setInt(1, idEst);
+		ResultSet estaciones = ps.executeQuery();
+		Integer retorno = 0;
 		while(estaciones.next()){
-			retorno.add(new Estacion(estaciones.getInt(1), estaciones.getString(2), estaciones.getTime(3).toLocalTime(), estaciones.getTime(4).toLocalTime(), EstadoEstacion.valueOf(estaciones.getString(5))));
+			retorno = estaciones.getInt(1);
 		}
 		estaciones.close();
 		ps.close();
 		conn.close();
 		return retorno;
 	}
+	
 	
 
 	

@@ -20,6 +20,11 @@ import java.awt.Insets;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,7 +44,7 @@ public class PageRank extends JPanel {
 		
 		construirInterfaz();
 		
-		//Construir tabla
+
 		try {
 			modelo = construirTabla();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -56,7 +61,6 @@ public class PageRank extends JPanel {
 		panel.add(js);
 	   }
 	
-
 	public void construirInterfaz() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 20, 360, 40, 0, 0, 0};
@@ -92,30 +96,37 @@ public class PageRank extends JPanel {
 	}
 
 
-	
+
 	private  DefaultTableModel construirTabla() throws ClassNotFoundException, SQLException{
 		
 		//Setear columnas
-		String[] columnas = {"Rank", "ID Estacion", "Nombre",
-	            "H. Apertura",
-	            "H. Cierre", "Estado"};
+		String[] columnas = {"RANK", "ID Estacion", "Nombre", "PageRank" };
 		
 		//Construir modelo de la tabla vacia
 		DefaultTableModel modelo = new DefaultTableModel(null,columnas){
 		    public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
 		};
+		admin.pageRank();
+		Map<Integer, Double> estaciones = admin.getPageRank();
+		final Map<Integer, Double> ordenado = estaciones.entrySet()
+                .stream()
+                .sorted((Map.Entry.<Integer, Double>comparingByValue().reversed()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 		
-		ArrayList<Estacion> estaciones = admin.pageRank();
-		for(int i=0; i<estaciones.size(); i++) {
-			   int ID = estaciones.get(i).getId();
-			   String nombre = estaciones.get(i).getNombre();
-			   LocalTime hApertura = estaciones.get(i).getHorarioApertura();
-			   LocalTime hCierre = estaciones.get(i).getHorarioCierre();
-			   EstadoEstacion est = estaciones.get(i).getEstado();
-			   Object[] estacion = {i+1, ID, nombre, hApertura, hCierre, est};
+		
+		Iterator<Map.Entry<Integer, Double>> entries = ordenado.entrySet().iterator();
+		Integer c= 1;
+		while (entries.hasNext()) {
+			Entry<Integer, Double> entry = entries.next();
+			   int ID = entry.getKey();
+			   String nombre = admin.getEstacion(entry.getKey()).getNombre();
+			   Double pageRank = entry.getValue();
+			   Object[] estacion = {c, ID, nombre, pageRank};
 			   modelo.addRow(estacion);
-		}	
+			   c++;
+		};	
 		return modelo;
 	
 	}
+
 }
